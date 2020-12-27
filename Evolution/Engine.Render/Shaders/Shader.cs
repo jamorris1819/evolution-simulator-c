@@ -17,6 +17,7 @@ namespace Engine.Render.Shaders
         {
             ProgramId = programId;
             _uniforms = new Dictionary<ShaderUniforms, int>();
+
         }
 
         public void Bind()

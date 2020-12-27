@@ -3,13 +3,15 @@ using OpenTK.Graphics.ES30;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
 
 namespace Engine.Render.Shaders
 {
     public class ShaderManager
     {
         private Dictionary<Enums.ShaderType, Shader> _shaders;
+
+        public IList<Shader> All { get => _shaders.Values.ToList(); }
 
         public ShaderManager()
         {
@@ -38,7 +40,13 @@ namespace Engine.Render.Shaders
                 throw new Exception("Error linking shaders");
             }
 
-            _shaders.Add(type, new Shader(program));
+            var shader = new Shader(program);
+
+            shader.AddUniform(ShaderUniforms.View, GL.GetUniformLocation(program, "uView"));
+            shader.AddUniform(ShaderUniforms.Projection, GL.GetUniformLocation(program, "uProjection"));
+            shader.AddUniform(ShaderUniforms.Model, GL.GetUniformLocation(program, "uModel"));
+
+            _shaders.Add(type, shader);
         }
 
         public Shader GetShader(Enums.ShaderType type) => _shaders[type];

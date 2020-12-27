@@ -21,6 +21,8 @@ namespace Evolution
         private SystemManager _systemManager;
         private IEventBus _eventBus;
 
+        Camera cam;
+
         public GameScene()
         {
             _eventBus = new EventBus();
@@ -40,6 +42,8 @@ namespace Evolution
             var rc = new RenderComponent(rect);
             e.AddComponent(rc);
             _entityManager.AddEntity(e);
+
+            cam = new MoveCamera(1920, 1080, _eventBus, s);
         }
 
         public override void OnFocusChanged(EventArgs e)
@@ -60,6 +64,7 @@ namespace Evolution
         public override void OnUpdateFrame(FrameEventArgs e)
         {
             _systemManager.Update();
+            cam.Update(0.016);
         }
     }
 }

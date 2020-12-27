@@ -29,10 +29,11 @@ namespace Engine.Render
             if (!MaskMatch(entity)) return;
 
             RenderComponent comp = entity.GetComponent<RenderComponent>();
-            var def = Matrix4.Identity;
+            var def = Matrix4.CreateTranslation(new Vector3(0, 0, 0));
 
             var shader = _shaderManager.GetShader(comp.Shader);
             shader.Bind();
+            shader.SetUniformMat4(Shaders.Enums.ShaderUniforms.Model, def);
 
             GL.BindVertexArray(comp.VertexArrayObject.VAO[0]);
             GL.DrawElements(PrimitiveType.Triangles, comp.VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero);
