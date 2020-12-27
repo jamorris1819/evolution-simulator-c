@@ -56,9 +56,12 @@ namespace Engine.Render
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
-            base.OnRenderFrame(args);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
 
             Renderer(args);
+
+            Context.SwapBuffers();
+            base.OnRenderFrame(args);
         }
     }
 }

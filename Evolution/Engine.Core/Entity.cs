@@ -13,6 +13,8 @@ namespace Engine.Core
 
         public string Name { get => _name; }
 
+        public ComponentType Mask { get => _mask; }
+
         public Entity(string name)
         {
             _name = name;

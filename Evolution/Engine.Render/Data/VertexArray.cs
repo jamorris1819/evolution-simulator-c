@@ -9,7 +9,7 @@ namespace Engine.Render.Data
     public abstract class VertexArray
     {
         public Vertex[] Vertices { get; protected set; }
-        public int[] Indices { get; protected set; }
+        public ushort[] Indices { get; protected set; }
 
         public VertexArray()
         {
@@ -27,6 +27,6 @@ namespace Engine.Render.Data
         }
 
         protected void GenerateIndices()
-            => Indices = Enumerable.Range(0, Vertices.Length).ToArray();
+            => Indices = Enumerable.Range(0, Vertices.Length).Select(x => (ushort)x).ToArray();
     }
 }
