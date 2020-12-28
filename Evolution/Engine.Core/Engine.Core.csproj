@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="OpenTK" Version="4.4.0" />
     <PackageReference Include="Redbus" Version="1.0.8" />
   </ItemGroup>
 

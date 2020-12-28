@@ -1,9 +1,7 @@
 ﻿using OpenTK.Windowing.Common;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Engine.Render.Scenes
+namespace Engine.Render
 {
     public abstract class BaseScene
     {

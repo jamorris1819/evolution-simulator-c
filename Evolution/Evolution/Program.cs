@@ -1,4 +1,5 @@
-﻿using Engine.Render;
+﻿using Engine;
+using Engine.Render;
 using OpenTK.Windowing.Desktop;
 using System;
 
@@ -8,17 +9,12 @@ namespace Evolution
     {
         static void Main(string[] args)
         {
-            var g = new GameWindowSettings();
-            var e = new NativeWindowSettings();
-
-            e.Size = new OpenTK.Mathematics.Vector2i(1920, 1080);
-
-            using (SceneManager sc = new SceneManager(g, e))
+            using (Game game = new Game())
             {
-                GameScene scene = new GameScene();
-                sc.PushScene(scene);
+                WorldScene ws = new WorldScene(game);
+                game.AddScene(ws);
 
-                sc.Run();
+                game.Run();
             }
         }
     }

@@ -1,15 +1,16 @@
 ﻿
-using Engine.Render.Scenes;
+using Engine.Core.Managers;
 using OpenTK.Graphics.ES30;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+using Redbus.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Engine.Render
 {
-    public class SceneManager : GameWindow
+    public partial class SceneManager : GameWindow
     {
         public delegate void SceneDelegate(EventArgs e);
         public delegate void SceneDelegateFrame(FrameEventArgs e);
@@ -19,12 +20,17 @@ namespace Engine.Render
 
         private Stack<BaseScene> _scenes;
 
+        private InputManager _inputManager;
+        private IEventBus _eventBus;
+
         public BaseScene CurrentScene { get => _scenes.Peek(); }
 
-        public SceneManager(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
+        public SceneManager(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings, IEventBus eventBus)
             : base(gameWindowSettings, nativeWindowSettings)
         {
             _scenes = new Stack<BaseScene>();
+            _eventBus = eventBus;
+            _inputManager = new InputManager(eventBus);
         }
 
         public void PushScene(BaseScene scene)
