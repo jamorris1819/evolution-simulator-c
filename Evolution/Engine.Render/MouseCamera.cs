@@ -43,6 +43,8 @@ namespace Engine.Render
 
             TargetScale *= (float)zoom;
             //TargetPosition += new OpenTK.Mathematics.Vector2(dx, dy) * PixelsPerMetreInv / Scale;
+
+            // todo: figure this out
         }
     }
 }
