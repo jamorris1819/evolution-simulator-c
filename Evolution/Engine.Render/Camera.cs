@@ -11,17 +11,31 @@ namespace Engine.Render
 {
     public abstract class Camera
     {
-        private IEventBus _eventBus;
-        private ShaderManager _shaderManager;
-        private int _width;
-        private int _height;
-        private Vector2 _lastPosition;
+        protected IEventBus _eventBus;
+        protected ShaderManager _shaderManager;
+        protected int _width;
+        protected int _height;
+        private int ppm;
 
-        public int PixelsPerMetre { get; set; } = 64;
+        public int PixelsPerMetre
+        {
+            get => ppm;
+            set
+            {
+                ppm = value;
+                PixelsPerMetreInv = 1.0f / value;
+            }
+        }
 
-        public Vector2 Position { get; protected set; }
+        public float PixelsPerMetreInv { get; private set; }
 
-        public float Scale { get; protected set; } = 1.0f;
+        public Vector2 Position { get; private set; }
+
+        public float Scale { get; private set; } = 1.0f;
+
+        protected Vector2 TargetPosition { get; set; }
+
+        protected float TargetScale { get; set; } = 1.0f;
 
         public Matrix4 Projection { get; private set; }
 
@@ -33,12 +47,17 @@ namespace Engine.Render
             _height = height;
             _eventBus = eventBus;
             _shaderManager = shaderManager;
+            PixelsPerMetre = 64;
         }
 
         public virtual void Update(double deltaTime)
         {
+            Scale = Scale + (TargetScale - Scale) * (float)deltaTime * 10.0f;
+            Position = Position + (TargetPosition - Position) * (float)deltaTime * new Vector2(10, 10);
+
             //if (_lastPosition != Position)
             //{
+
                 UpdateShaders();
             //}
         }

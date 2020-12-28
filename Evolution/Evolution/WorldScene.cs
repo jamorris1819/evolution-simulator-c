@@ -24,7 +24,7 @@ namespace Evolution
             e.AddComponent(rc);
             EntityManager.AddEntity(e);
 
-            cam = new MoveCamera(1920, 1080, EventBus, Game.ShaderManager);
+            cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 
             EventBus.Subscribe<MouseDragEvent>((e) => Console.WriteLine($"Mouse drag {e.Button} {e.Location} {e.Delta}"));
         }

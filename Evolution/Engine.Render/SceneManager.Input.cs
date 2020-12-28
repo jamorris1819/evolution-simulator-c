@@ -25,5 +25,12 @@ namespace Engine.Render
             base.OnMouseMove(e);
             _inputManager.OnMouseMove(e);
         }
+
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            if (e.Offset.LengthSquared == 0) return;
+            _inputManager.OnMouseWheel(e);
+        }
     }
 }

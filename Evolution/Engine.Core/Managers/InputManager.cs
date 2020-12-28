@@ -17,11 +17,13 @@ namespace Engine.Core.Managers
         private IEventBus _eventBus;
         private List<MouseButton> _mouseButtonsDown;
         private Vector2 _mousePosition;
+        private Vector2 _mouseScroll;
 
         public InputManager(IEventBus eventBus)
         {
             _eventBus = eventBus;
             _mouseButtonsDown = new List<MouseButton>(4);
+            _mouseScroll = new Vector2(0, 0);
         }
 
         public void OnMouseDown(MouseButtonEventArgs e)
@@ -36,6 +38,17 @@ namespace Engine.Core.Managers
             {
                 _mouseButtonsDown.Add(e.Button);
             }
+        }
+
+        public void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            _eventBus.Publish(new MouseWheelEvent()
+            {
+                Offset = e.Offset - _mouseScroll,
+                Location = _mousePosition
+            });
+
+            _mouseScroll = e.Offset;
         }
 
         public void OnMouseUp(MouseButtonEventArgs e)
@@ -57,7 +70,7 @@ namespace Engine.Core.Managers
             _eventBus.Publish(new MouseMoveEvent()
             {
                 Location = e.Position,
-                Delta = e.Delta
+                Delta = e.Delta * new Vector2(1, -1)
             });
 
             _mousePosition = e.Position;
@@ -66,7 +79,7 @@ namespace Engine.Core.Managers
             {
                 Button = x,
                 Location = e.Position,
-                Delta = e.Delta
+                Delta = e.Delta * new Vector2(1, -1)
             }).ToList();
 
             for(int i = 0; i < dragEvents.Count; i++)
