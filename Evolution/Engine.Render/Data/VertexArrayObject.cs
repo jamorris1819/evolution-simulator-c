@@ -7,6 +7,7 @@ namespace Engine.Render.Data
     internal class VertexArrayObject
     {
         public bool Initialised { get; set; }
+        public bool Reload { get; set; }
         public bool Enabled { get; set; }
         public VertexArray VertexArray { get; set; }
         public int[] VAO { get; set; }

@@ -35,5 +35,15 @@ namespace Engine.Render
 
             VertexArrayObject = iVAO;
         }
+
+        public void UpdateInstanceSettings(InstanceSettings settings)
+        {
+            if (VertexArrayObject is InstancedVertexArrayObject iVAO)
+            {
+                iVAO.Positions = settings.Instances.Select(x => x.Position).ToArray();
+                iVAO.Colours = settings.Instances.Select(x => x.Colour).ToArray();
+                iVAO.Reload = true;
+            }
+        }
     }
 }

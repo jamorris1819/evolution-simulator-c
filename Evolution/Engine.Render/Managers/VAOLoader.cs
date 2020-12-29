@@ -21,12 +21,29 @@ namespace Engine.Render.Managers
             GL.BindVertexArray(vao.VAO[0]);
             AllocateMemory(vao);
 
-            // maybe this could be stored in the vertex array object temporarily?
+            // maybe this could be stored in the vertex array object temporarily? or be passed by ref?
             float[] vertexData = GenerateVertexData(vao);
             LoadToMemory(vao, vertexData);
             AssignAttributes(vao);
 
             vao.Initialised = true;
+        }
+
+        public void Reload(VertexArrayObject vao)
+        {
+            if (!vao.Initialised)
+            {
+                Load(vao);
+                return;
+            }
+
+            if (!vao.Reload) return;
+
+            GL.BindVertexArray(vao.VAO[0]);
+            float[] vertexData = GenerateVertexData(vao);
+            LoadToMemory(vao, vertexData);
+
+            vao.Reload = false;
         }
 
         private void GenerateArrays(VertexArrayObject vao)

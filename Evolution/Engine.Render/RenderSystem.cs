@@ -59,6 +59,10 @@ namespace Engine.Render
             {
                 InitialiseVAO(comp.VertexArrayObject);
             }
+            if(comp.VertexArrayObject.Reload)
+            {
+                _vaoLoader.Reload(comp.VertexArrayObject);
+            }
         }
 
         private void InitialiseVAO(VertexArrayObject vao)

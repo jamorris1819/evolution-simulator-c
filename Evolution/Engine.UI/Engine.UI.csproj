@@ -1,20 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ImGui.NET" Version="1.78.0" />
+    <PackageReference Include="OpenTK" Version="4.4.0" />
+    <PackageReference Include="OpenTK.Input" Version="4.4.0" />
+    <PackageReference Include="Redbus" Version="1.0.8" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Engine.Core\Engine.Core.csproj" />
-    <ProjectReference Include="..\Engine.Render\Engine.Render.csproj" />
-    <ProjectReference Include="..\Engine.Terrain\Engine.Terrain.csproj" />
-    <ProjectReference Include="..\Engine.UI\Engine.UI.csproj" />
-    <ProjectReference Include="..\Engine\Engine.csproj" />
   </ItemGroup>
 
 </Project>
