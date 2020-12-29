@@ -5,6 +5,7 @@ using Engine.Core.Events.Input.Mouse;
 using Engine.Render;
 using Engine.Render.Data;
 using Engine.Render.Data.Primitives;
+using Engine.Terrain;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using Redbus.Interfaces;
@@ -17,35 +18,34 @@ namespace Evolution
     public class WorldScene : GameScene
     {
         Camera cam;
+        ITerrainGenerator terrainGenerator;
 
         public WorldScene(Game game) : base(game)
         {
-            Entity e = new Entity("test");
-            var rect = new Rectangle(1, 1);
-            rect.SetColour(new Vector3(1, 1, 1));
+            terrainGenerator = new HexTerrainGenerator();
+            terrainGenerator.Generate(100);
+            var shape = terrainGenerator.TerrainShape;
 
-            List<Vector2> positions = new List<Vector2>();
-            for(int x = 0; x < 1000; x++)
-            {
-                for(int y= 0; y< 1000; y++)
-                {
-                    positions.Add(new Vector2(x, y));
-                }
-            }
+            Entity e = new Entity("Terrain");
+            Random random = new Random();
+
+            var units = terrainGenerator.GetTerrain();
 
             var settings = new InstanceSettings()
             {
-                Instances = positions.Select(x =>
+                Instances = units.Select(x =>
                 
                     new Instance()
                     {
-                        Position = x,
-                        Colour = new Vector3(x.X / 1000, x.Y / 1000, x.X + x.Y / 2000)
+                        Position = x.Position,
+                        Colour = new Vector3((float)random.NextDouble(),
+                                    (float)random.NextDouble(),
+                                    (float)random.NextDouble())
                     }
                 ).ToArray()
             };
 
-            var rc = new RenderComponent(rect, settings);
+            var rc = new RenderComponent(shape, settings);
             rc.Shader = Engine.Render.Shaders.Enums.ShaderType.StandardInstanced;
             e.AddComponent(rc);
             EntityManager.AddEntity(e);

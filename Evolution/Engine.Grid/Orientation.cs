@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Engine.Grid
 {
-    struct Orientation
+    public struct Orientation
     {
         public double f0 { get; private set; }
         public double f1 { get; private set; }

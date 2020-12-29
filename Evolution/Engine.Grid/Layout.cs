@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Engine.Grid
 {
-    struct Layout
+    public struct Layout
     {
         private Orientation orientation;
         private Vector2 size;

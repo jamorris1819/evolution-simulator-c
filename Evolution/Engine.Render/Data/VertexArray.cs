@@ -11,11 +11,6 @@ namespace Engine.Render.Data
         public Vertex[] Vertices { get; protected set; }
         public ushort[] Indices { get; protected set; }
 
-        public VertexArray()
-        {
-            Generate();
-        }
-
         public abstract void Generate();
 
         public void SetColour(Vector3 colour)

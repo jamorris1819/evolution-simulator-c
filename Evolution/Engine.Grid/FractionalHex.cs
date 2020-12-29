@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Engine.Grid
 {
-    struct FractionalHex
+    public struct FractionalHex
     {
         public double Q { get; private set; }
         public double R { get; private set; }
