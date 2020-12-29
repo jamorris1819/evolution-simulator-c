@@ -58,5 +58,10 @@ namespace Engine.Grid
         {
             return HashCode.Combine(Q, R, S);
         }
+
+        public override string ToString()
+        {
+            return $"Hex ({Q}, {R}, {S})";
+        }
     }
 }

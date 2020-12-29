@@ -8,6 +8,7 @@ namespace Engine.Terrain
     public interface ITerrainGenerator
     {
         VertexArray TerrainShape { get; }
+        Layout Layout { get; }
 
         void Generate(int size);
         IList<TerrainUnit> GetTerrain(); 

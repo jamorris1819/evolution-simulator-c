@@ -27,7 +27,7 @@ namespace Engine.Render
             Console.WriteLine(e.Offset);
             float zoom = (float)Math.Exp(e.Offset.Y * 0.2);
 
-            if (Scale * zoom < 0.01) return;
+            //if (Scale * zoom < 0.01) return;
 
             float newWidth = _width / (Scale * zoom);
             float newHeight = _height / (Scale * zoom);

@@ -10,18 +10,17 @@ namespace Engine.Terrain
     public class HexTerrainGenerator : ITerrainGenerator
     {
         private IList<TerrainUnit> _terrain;
-        private Layout _layout;
-        private Map _map;
+
+        public Layout Layout { get; private set; }
 
         public VertexArray TerrainShape { get; private set; }
 
         public HexTerrainGenerator()
         {
             _terrain = new List<TerrainUnit>();
-            _layout = new Layout(Orientation.Layout_Pointy, new OpenTK.Mathematics.Vector2(4, 4));
-            _map = new Map();
+            Layout = new Layout(Orientation.Layout_Pointy, new OpenTK.Mathematics.Vector2(4, 4));
 
-            TerrainShape = new Polygon(_layout.GetHexPoints());
+            TerrainShape = new Polygon(Layout.GetHexPoints());
             TerrainShape.Generate();
         }
 
@@ -34,7 +33,7 @@ namespace Engine.Terrain
             {
                 _terrain.Add(new TerrainUnit()
                 {
-                    Position = _layout.HexToPixel(hex)
+                    Position = Layout.HexToPixel(hex)
                 });
             }
         }

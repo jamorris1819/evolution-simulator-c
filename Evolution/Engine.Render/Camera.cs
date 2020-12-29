@@ -75,6 +75,25 @@ namespace Engine.Render
             }
         }
 
+        public Vector2 ScreenToWorld(Vector2 vec)
+        {
+            var inv = Projection.Inverted();
+
+            var vIn = new Vector3(
+                (vec.X / _width) - 0.5f,
+                -1.0f * ((vec.Y / _height) - 0.5f),
+                1.0f);
+
+            Vector4 pos = new Vector4(vIn, 1.0f) * inv;
+            pos.W = 1.0f / pos.W;
+
+            pos.X *= pos.W;
+            pos.Y *= pos.W;
+            pos.Z *= pos.W;
+
+            return new Vector2(pos.X, pos.Y) - new Vector2(Position.X / 2.0f, Position.Y / 2.0f);
+        }
+
         protected void CreateProjection()
         {
             float zoomWidth = (float)_width / Scale;

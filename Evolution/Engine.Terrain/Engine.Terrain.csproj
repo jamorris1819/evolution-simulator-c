@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotnetNoise" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Engine.Grid\Engine.Grid.csproj" />
     <ProjectReference Include="..\Engine.Render\Engine.Render.csproj" />
   </ItemGroup>

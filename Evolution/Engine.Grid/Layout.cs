@@ -33,8 +33,8 @@ namespace Engine.Grid
         {
             var o = orientation;
             Vector2 pt = new Vector2((pos.X - origin.X) / size.X, (pos.Y - origin.Y) / size.Y);
-            double q = o.b0 * pt.X + o.b1 * pt.Y;
-            double r = o.b2 * pt.X + o.b3 * pt.Y;
+            double q = (o.b0 * pt.X + o.b1 * pt.Y) * 2.0;
+            double r = (o.b2 * pt.X + o.b3 * pt.Y) * 2.0;
 
             return new FractionalHex(q, r, -q - r);
         }

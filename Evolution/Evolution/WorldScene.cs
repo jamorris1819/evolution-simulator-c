@@ -23,7 +23,7 @@ namespace Evolution
         public WorldScene(Game game) : base(game)
         {
             terrainGenerator = new HexTerrainGenerator();
-            terrainGenerator.Generate(100);
+            terrainGenerator.Generate(25);
             var shape = terrainGenerator.TerrainShape;
 
             Entity e = new Entity("Terrain");
@@ -52,7 +52,13 @@ namespace Evolution
 
             cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 
-            EventBus.Subscribe<MouseDragEvent>((e) => Console.WriteLine($"Mouse drag {e.Button} {e.Location} {e.Delta}"));
+            EventBus.Subscribe<MouseDownEvent>((e) =>
+            {
+                var pos = cam.ScreenToWorld(e.Location);
+                var hex = terrainGenerator.Layout.PixelToHex(pos).Round();
+                Console.WriteLine($"{pos} -> {hex}");
+            });
+            //EventBus.Subscribe<MouseDragEvent>((e) => Console.WriteLine($"Mouse drag {e.Button} {e.Location} {e.Delta}"));
         }
 
         public override void OnUpdateFrame(FrameEventArgs e)

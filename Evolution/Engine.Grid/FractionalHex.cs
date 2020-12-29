@@ -33,5 +33,10 @@ namespace Engine.Grid
 
             return new Hex(q, r, s);
         }
+
+        public override string ToString()
+        {
+            return $"FractionalHex ({Q}, {R}, {S})";
+        }
     }
 }
