@@ -36,7 +36,7 @@ namespace Engine.Render.Managers
 
             GL.BindVertexArray(vao.VAO[0]);
 
-            GL.GenBuffers(2, vao.VBO);
+            GL.GenBuffers(vao.VBO.Length, vao.VBO);
 
             GL.BindVertexArray(0);
         }
@@ -70,6 +70,15 @@ namespace Engine.Render.Managers
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, vao.VBO[1]);
             GL.BufferData(BufferTarget.ElementArrayBuffer, vao.VertexArray.Indices.Length * sizeof(ushort), IntPtr.Zero, BufferUsageHint.StaticDraw);
+
+            if (vao is InstancedVertexArrayObject iVAO)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[2]);
+                GL.BufferData(BufferTarget.ArrayBuffer, iVAO.Positions.Length * 2 * sizeof(float), IntPtr.Zero, BufferUsageHint.StaticDraw);
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[3]);
+                GL.BufferData(BufferTarget.ArrayBuffer, iVAO.Colours.Length * 3 * sizeof(float), IntPtr.Zero, BufferUsageHint.StaticDraw);
+            }
         }
 
         private void LoadToMemory(VertexArrayObject vao, float[] vertexData)
@@ -91,6 +100,27 @@ namespace Engine.Render.Managers
             {
                 throw new Exception("Index data not loaded correctly");
             }
+
+            if (vao is InstancedVertexArrayObject iVAO)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[2]);
+                GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, iVAO.Positions.Length * 2 * sizeof(float), iVAO.Positions);
+                GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out size);
+
+                if (iVAO.Positions.Length * 2 * sizeof(float) != size)
+                {
+                    throw new Exception("Instance position data not loaded correctly");
+                }
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[3]);
+                GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, iVAO.Colours.Length * 3 * sizeof(float), iVAO.Colours);
+                GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out size);
+
+                if (iVAO.Colours.Length * 3 * sizeof(float) != size)
+                {
+                    throw new Exception("Instance colour data not loaded correctly");
+                }
+            }
         }
 
         private void AssignAttributes(VertexArrayObject vao)
@@ -104,6 +134,19 @@ namespace Engine.Render.Managers
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, Vertex.BytesPerVertex * sizeof(float), 2 * sizeof(float));
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            if (vao is InstancedVertexArrayObject iVAO)
+            {
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[2]);
+                GL.EnableVertexAttribArray(2); // instance position
+                GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), IntPtr.Zero);
+                GL.VertexAttribDivisor(2, 1);
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[3]);
+                GL.EnableVertexAttribArray(3); // instance colour
+                GL.VertexAttribPointer(3, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), IntPtr.Zero);
+                GL.VertexAttribDivisor(3, 1);
+            }
         }
     }
 }

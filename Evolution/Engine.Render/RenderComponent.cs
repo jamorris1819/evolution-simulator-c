@@ -3,6 +3,7 @@ using Engine.Render.Data;
 using Engine.Render.Shaders.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Engine.Render
@@ -22,6 +23,17 @@ namespace Engine.Render
         {
             VertexArray = va;
             VertexArrayObject = new VertexArrayObject(va);
+        }
+
+        public RenderComponent(VertexArray va, InstanceSettings settings)
+        {
+            VertexArray = va;
+
+            var iVAO = new InstancedVertexArrayObject(va);
+            iVAO.Positions = settings.Instances.Select(x => x.Position).ToArray();
+            iVAO.Colours = settings.Instances.Select(x => x.Colour).ToArray();
+
+            VertexArrayObject = iVAO;
         }
     }
 }

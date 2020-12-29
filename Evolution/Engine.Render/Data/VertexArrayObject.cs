@@ -12,17 +12,19 @@ namespace Engine.Render.Data
         public int[] VAO { get; set; }
         public int[] VBO { get; set; }
 
-        public VertexArrayObject() : this(null)
-        {
-        }
+        public VertexArrayObject() : this(null, 2) { }
 
-        public VertexArrayObject(VertexArray va)
+        public VertexArrayObject(int bufferCount) : this(null, bufferCount) { }
+
+        public VertexArrayObject(VertexArray va) : this(va, 2) { }
+
+        public VertexArrayObject(VertexArray va, int bufferCount)
         {
             Enabled = true;
             Initialised = false;
 
             VAO = new int[1];
-            VBO = new int[2];
+            VBO = new int[bufferCount];
 
             VertexArray = va;
         }

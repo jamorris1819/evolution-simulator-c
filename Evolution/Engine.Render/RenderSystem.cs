@@ -36,7 +36,16 @@ namespace Engine.Render
             shader.SetUniformMat4(Shaders.Enums.ShaderUniforms.Model, def);
 
             GL.BindVertexArray(comp.VertexArrayObject.VAO[0]);
-            GL.DrawElements(PrimitiveType.Triangles, comp.VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero);
+
+            if (comp.VertexArrayObject is InstancedVertexArrayObject iVAO)
+            {
+                GL.DrawElementsInstanced(PrimitiveType.Triangles, iVAO.VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero, iVAO.Positions.Length);
+            }
+            else
+            {
+                GL.DrawElements(PrimitiveType.Triangles, comp.VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero);
+            }
+
             GL.BindVertexArray(0);
         }
 
