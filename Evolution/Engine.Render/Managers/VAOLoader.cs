@@ -45,12 +45,11 @@ namespace Engine.Render.Managers
         {
             int numOfVertices = vao.VertexArray.Vertices.Length;
 
-            int databits = 5; // todo: count vertex data
-            float[] vertexData = new float[numOfVertices * databits];
+            float[] vertexData = new float[numOfVertices * Vertex.BytesPerVertex];
 
             for(int i = 0; i < numOfVertices; i++)
             {
-                int offset = databits * i;
+                int offset = Vertex.BytesPerVertex * i;
 
                 Vertex v = vao.VertexArray.Vertices[i];
 
@@ -67,7 +66,7 @@ namespace Engine.Render.Managers
         private void AllocateMemory(VertexArrayObject vao)
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[0]);
-            GL.BufferData(BufferTarget.ArrayBuffer, vao.VertexArray.Vertices.Length * 5 * sizeof(float), IntPtr.Zero, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, vao.VertexArray.Vertices.Length * Vertex.BytesPerVertex * sizeof(float), IntPtr.Zero, BufferUsageHint.StaticDraw);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, vao.VBO[1]);
             GL.BufferData(BufferTarget.ElementArrayBuffer, vao.VertexArray.Indices.Length * sizeof(ushort), IntPtr.Zero, BufferUsageHint.StaticDraw);
@@ -99,10 +98,10 @@ namespace Engine.Render.Managers
             GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[0]);
 
             GL.EnableVertexAttribArray(0); // vertex position
-            GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), IntPtr.Zero); // change 5
+            GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, Vertex.BytesPerVertex * sizeof(float), IntPtr.Zero);
 
             GL.EnableVertexAttribArray(1); // colour position
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 2 * sizeof(float)); // change 5
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, Vertex.BytesPerVertex * sizeof(float), 2 * sizeof(float));
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
