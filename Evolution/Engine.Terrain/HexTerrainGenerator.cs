@@ -1,6 +1,8 @@
 ﻿using Engine.Grid;
 using Engine.Render.Data;
 using Engine.Render.Data.Primitives;
+using Engine.Terrain.Noise;
+using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +12,7 @@ namespace Engine.Terrain
     public class HexTerrainGenerator : ITerrainGenerator
     {
         private IList<TerrainUnit> _terrain;
+        private HeightGenerator _heightGenerator;
 
         public Layout Layout { get; private set; }
 
@@ -18,6 +21,7 @@ namespace Engine.Terrain
         public HexTerrainGenerator()
         {
             _terrain = new List<TerrainUnit>();
+            _heightGenerator = new HeightGenerator();
             Layout = new Layout(Orientation.Layout_Pointy, new OpenTK.Mathematics.Vector2(4, 4));
 
             TerrainShape = new Polygon(Layout.GetHexPoints());
@@ -31,9 +35,11 @@ namespace Engine.Terrain
             
             foreach(Hex hex in units)
             {
+                var pos = Layout.HexToPixel(hex);
                 _terrain.Add(new TerrainUnit()
                 {
-                    Position = Layout.HexToPixel(hex)
+                    Position = pos,
+                    Colour = new Vector3(_heightGenerator.Generate(pos.X, pos.Y))
                 });
             }
         }

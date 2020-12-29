@@ -8,5 +8,6 @@ namespace Engine.Terrain
     public struct TerrainUnit
     {
         public Vector2 Position { get; set; }
+        public Vector3 Colour { get; set; }
     }
 }

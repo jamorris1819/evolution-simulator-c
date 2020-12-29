@@ -35,12 +35,11 @@ namespace Evolution
             {
                 Instances = units.Select(x =>
                 
+
                     new Instance()
                     {
                         Position = x.Position,
-                        Colour = new Vector3((float)random.NextDouble(),
-                                    (float)random.NextDouble(),
-                                    (float)random.NextDouble())
+                        Colour = x.Colour
                     }
                 ).ToArray()
             };
