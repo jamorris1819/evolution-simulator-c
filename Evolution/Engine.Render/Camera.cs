@@ -70,6 +70,7 @@ namespace Engine.Render
             for(int i = 0; i < _shaderManager.All.Count; i++)
             {
                 Shader shader = _shaderManager.All[i];
+                shader.Bind();
                 shader.SetUniformMat4(Shaders.Enums.ShaderUniforms.View, position);
                 shader.SetUniformMat4(Shaders.Enums.ShaderUniforms.Projection, Projection);
             }

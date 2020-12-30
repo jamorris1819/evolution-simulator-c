@@ -27,7 +27,7 @@ namespace Evolution
 
         public WorldScene(Game game) : base(game)
         {
-            ui = new ImGuiController(game.EventBus, 1920, 1080);
+            ui = new ImGuiController(1920, 1080);
 
             terrainGenerator = new HexTerrainGenerator();
             terrainGenerator.Generate(25);
@@ -70,7 +70,7 @@ namespace Evolution
         public override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
-            //test();
+            test();
             ui.Render();
         }
 
@@ -93,7 +93,7 @@ namespace Evolution
         {
             base.OnUpdateFrame(e);
             cam.Update(0.01666);
-            ui.Update(null, 0.01666f);
+            ui.Update(null, (float)e.Time);
             if (counter > 15) return;
             counter += e.Time;
             rc.UpdateInstanceSettings(new InstanceSettings()
@@ -104,7 +104,7 @@ namespace Evolution
                     new Instance()
                     {
                         Position = x.Position,
-                        Colour = new Vector3((float)Math.Sin(counter))
+                        Colour = new Vector3((float)Math.Abs(Math.Cos(counter)))
                     }
                 ).ToArray()
             });
