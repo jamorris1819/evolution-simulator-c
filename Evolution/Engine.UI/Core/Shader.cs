@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Engine.UI
+namespace Engine.UI.Core
 {
     struct UniformFieldInfo
     {

@@ -1,5 +1,6 @@
 ﻿using Engine.Render;
 using Engine.Render.Shaders;
+using Engine.UI;
 using OpenTK.Windowing.Desktop;
 using Redbus;
 using Redbus.Interfaces;
@@ -15,6 +16,8 @@ namespace Engine
 
         public ShaderManager ShaderManager { get; }
 
+        public UIManager UIManager { get; }
+
         public Game()
         {
             var gameWindowSettings = new GameWindowSettings();
@@ -26,6 +29,8 @@ namespace Engine
             ShaderManager = new ShaderManager();
 
             _sceneManager = new SceneManager(gameWindowSettings, nativeWindowSettings, EventBus);
+            UIManager = new UIManager(_sceneManager);
+            _sceneManager.SetUIManager(UIManager);
         }
 
         public void Run()

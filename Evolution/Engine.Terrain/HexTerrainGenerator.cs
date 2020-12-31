@@ -5,6 +5,7 @@ using Engine.Terrain.Noise;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Engine.Terrain
@@ -18,11 +19,15 @@ namespace Engine.Terrain
 
         public VertexArray TerrainShape { get; private set; }
 
-        public HexTerrainGenerator()
+        public List<NoiseConfiguration> HeightNoise { get; private set; }
+
+        public HexTerrainGenerator(NoiseConfiguration[] heightNoise)
         {
             _terrain = new List<TerrainUnit>();
             _heightGenerator = new HeightGenerator();
-            Layout = new Layout(Orientation.Layout_Pointy, new OpenTK.Mathematics.Vector2(4, 4));
+            Layout = new Layout(Orientation.Layout_Pointy, new Vector2(4, 4));
+
+            HeightNoise = heightNoise.ToList();
 
             TerrainShape = new Polygon(Layout.GetHexPoints());
             TerrainShape.Generate();
@@ -32,14 +37,16 @@ namespace Engine.Terrain
         {
             _terrain = new List<TerrainUnit>();
             var units = Map.GenerateHexagon(size);
-            
-            foreach(Hex hex in units)
+
+            var positions = units.Select(x => Layout.HexToPixel(x)).ToArray();
+            var heights = NoiseCombinator.Generate(HeightNoise, positions.ToArray(), 8).ToArray();
+
+            for (int i = 0; i < positions.Count(); i++)
             {
-                var pos = Layout.HexToPixel(hex);
                 _terrain.Add(new TerrainUnit()
                 {
-                    Position = pos,
-                    Colour = new Vector3(_heightGenerator.Generate(pos.X, pos.Y))
+                    Position = positions[i],
+                    Colour = new Vector3(heights[i])
                 });
             }
         }

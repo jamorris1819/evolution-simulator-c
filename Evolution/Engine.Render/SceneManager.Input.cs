@@ -1,4 +1,6 @@
-﻿using OpenTK.Windowing.Common;
+﻿using ImGuiNET;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using System;
 using System.Collections.Generic;
@@ -8,8 +10,11 @@ namespace Engine.Render
 {
     public partial class SceneManager : GameWindow
     {
+        private Vector2 _mouseScroll;
+
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
+            if (ImGui.GetIO().WantCaptureMouse) return;
             base.OnMouseDown(e);
             _inputManager.OnMouseDown(e);
         }
@@ -28,9 +33,23 @@ namespace Engine.Render
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
+            if (ImGui.GetIO().WantCaptureMouse)
+            {
+                _uiManager.MouseScroll(e.Offset - _mouseScroll);
+                _mouseScroll = e.Offset;
+                return;
+            }
+
             base.OnMouseWheel(e);
             if (e.Offset.LengthSquared == 0) return;
             _inputManager.OnMouseWheel(e);
+        }
+
+
+        protected override void OnTextInput(TextInputEventArgs e)
+        {
+            base.OnTextInput(e);
+            _uiManager.PressChar((char)e.Unicode);
         }
     }
 }

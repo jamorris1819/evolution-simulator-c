@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 
-namespace Engine.UI
+namespace Engine.UI.Core
 {
     public enum TextureCoordinate
     {

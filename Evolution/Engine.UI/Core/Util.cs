@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
-namespace Engine.UI
+namespace Engine.UI.Core
 {
     static class Util
     {

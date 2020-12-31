@@ -94,7 +94,7 @@ namespace Engine.Render.Managers
                 GL.BufferData(BufferTarget.ArrayBuffer, iVAO.Positions.Length * 2 * sizeof(float), IntPtr.Zero, BufferUsageHint.StaticDraw);
 
                 GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[3]);
-                GL.BufferData(BufferTarget.ArrayBuffer, iVAO.Colours.Length * 3 * sizeof(float), IntPtr.Zero, BufferUsageHint.StaticDraw);
+                GL.BufferData(BufferTarget.ArrayBuffer, iVAO.Colours.Length * 3 * sizeof(float), IntPtr.Zero, BufferUsageHint.DynamicDraw);
             }
         }
 

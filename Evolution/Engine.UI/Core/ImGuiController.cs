@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace Engine.UI
+namespace Engine.UI.Core
 {
     /// <summary>
     /// A modified version of Veldrid.ImGui's ImGuiRenderer.
@@ -119,7 +119,7 @@ void main()
             GL.EnableVertexArrayAttrib(_vertexArray, 0);
             GL.VertexArrayAttribBinding(_vertexArray, 0, 0);
             GL.VertexArrayAttribFormat(_vertexArray, 0, 2, VertexAttribType.Float, false, 0);
-            
+
             Util.CheckGLError("End of ImGui setup");
             GL.EnableVertexArrayAttrib(_vertexArray, 1);
             GL.VertexArrayAttribBinding(_vertexArray, 1, 0);
