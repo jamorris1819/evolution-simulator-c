@@ -1,4 +1,5 @@
-﻿using Engine.Terrain.Data;
+﻿using Engine.Terrain;
+using Engine.Terrain.Data;
 using Engine.Terrain.Events;
 using Engine.Terrain.Noise;
 using Engine.UI;
@@ -15,23 +16,27 @@ namespace Evolution.UI
     public class TerrainWindow : UIWindow
     {
         private int _heightNoiseSelected;
+        private TerrainManager _manager;
         private TerrainProfile _profile;
         private IEventBus _eventBus;
         private bool _isolate;
 
         private static string[] NoiseTypes;
         private static string[] FractalTypes;
+        private static string[] RenderTypes;
 
         private NoiseConfiguration CurrentHeightNoise
         {
             get => _profile.HeightNoise[_heightNoiseSelected];
         }
 
-        public TerrainWindow(string name, TerrainProfile profile, IEventBus eventBus) : base(name)
+        public TerrainWindow(string name, TerrainManager manager, IEventBus eventBus) : base(name)
         {
             NoiseTypes = new[] { "Value", "Value Fractal", "Perlin", "Perlin Fractal", "Simplex", "Simplex Fractal", "Cellular", "White Noise", "Cubic", "Cubic Fractal" };
             FractalTypes = new[] { "FBM", "Billow", "Rigid Multi" };
-            _profile = profile;
+            RenderTypes = new[] { "Default", "Height", "Temperature" };
+            _manager = manager;
+            _profile = _manager.Profile;
             _eventBus = eventBus;
         }
 
@@ -102,7 +107,12 @@ namespace Evolution.UI
             bool changeMade = false;
             ImGui.BeginGroup();
             ImGui.BeginChild("item view", new System.Numerics.Vector2(0, -ImGui.GetFrameHeightWithSpacing()), true);
-            
+
+            ImGui.Text("Global height map settings");
+            ImGui.Separator();
+            changeMade |= ImGui.Combo("Render Type", ref _manager.RenderModeInt, RenderTypes, RenderTypes.Length);
+            changeMade |= ImGui.DragFloat("Sea level", ref _profile.SeaLevel, 0.01f, 0.0f, 1.0f);
+
             ImGui.Text($"Editing height map layer: {CurrentHeightNoise.Name}");
             ImGui.Separator();
 

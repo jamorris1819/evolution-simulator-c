@@ -13,6 +13,8 @@ namespace Engine.Terrain.Data
         public Dictionary<string, int> Hash { get; private set; }
         public Dictionary<string, float[]> Cache { get; private set; }
 
+        private static float scaler = 1 / 32.0f;
+
         public NoiseCombinatorSet(NoiseConfiguration[] configs)
         {
             Hash = new Dictionary<string, int>();
@@ -37,7 +39,10 @@ namespace Engine.Terrain.Data
 
                     for (int j = 0; j < points.Length; j++)
                     {
-                        calculatedHeights[j] = generator.GetNoise((points[j].X + noise.Offset.X) * noise.Scale, (points[j].Y + noise.Offset.Y) * noise.Scale);
+                        calculatedHeights[j] = generator.GetNoise(
+                            (points[j].X + noise.Offset.X) * scaler,
+                            (points[j].Y + noise.Offset.Y)  * scaler);
+                        calculatedHeights[j] *= noise.Scale;
                     }
                     Hash[noise.Name] = noise.GetHashCode();
                     Cache[noise.Name] = calculatedHeights;
@@ -47,9 +52,16 @@ namespace Engine.Terrain.Data
 
                 for (int j = 0; j < points.Length; j++)
                 {
-                    float sign = noise.Invert ? -1f : 1f;
-                    if (noise.Mask) heights[j] *= calculatedHeights[j] * sign;
-                    else heights[j] += calculatedHeights[j] * sign;
+                    if (noise.Invert)
+                    {
+                        if (noise.Mask) heights[j] *= 1.0f - calculatedHeights[j];
+                        else heights[j] += 1.0f - calculatedHeights[j];
+                    }
+                    else
+                    {
+                        if (noise.Mask) heights[j] *= calculatedHeights[j];
+                        else heights[j] += calculatedHeights[j];
+                    }
                 }
             }
 

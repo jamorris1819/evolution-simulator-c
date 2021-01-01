@@ -8,6 +8,7 @@ namespace Engine.Terrain.Data
 {
     public class TerrainProfile
     {
+        public float SeaLevel;
         public Vector2 Size { get; set; }
         public List<NoiseConfiguration> HeightNoise { get; set; }
     }
