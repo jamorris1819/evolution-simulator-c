@@ -3,55 +3,49 @@ using Engine.Render.Data;
 using Engine.Render.Data.Primitives;
 using Engine.Terrain.Noise;
 using OpenTK.Mathematics;
+using Redbus.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Engine.Terrain
+namespace Engine.Terrain.Generator
 {
-    public class HexTerrainGenerator : ITerrainGenerator
+    public class HexTerrainGenerator : TerrainGenerator
     {
         private IList<TerrainUnit> _terrain;
-        private HeightGenerator _heightGenerator;
 
-        public Layout Layout { get; private set; }
 
-        public VertexArray TerrainShape { get; private set; }
-
-        public List<NoiseConfiguration> HeightNoise { get; private set; }
-
-        public HexTerrainGenerator(NoiseConfiguration[] heightNoise)
+        public HexTerrainGenerator(IEventBus eb) : base(eb)
         {
             _terrain = new List<TerrainUnit>();
-            _heightGenerator = new HeightGenerator();
             Layout = new Layout(Orientation.Layout_Pointy, new Vector2(4, 4));
-
-            HeightNoise = heightNoise.ToList();
 
             TerrainShape = new Polygon(Layout.GetHexPoints());
             TerrainShape.Generate();
         }
 
-        public void Generate(int size)
+        public override void Generate(int size)
         {
+            _previousSize = size;
+
             _terrain = new List<TerrainUnit>();
             var units = Map.GenerateHexagon(size);
 
             var positions = units.Select(x => Layout.HexToPixel(x)).ToArray();
-            var heights = NoiseCombinator.Generate(HeightNoise, positions.ToArray(), 8).ToArray();
+            var heights = NoiseCombinator.Generate(HeightNoise, positions.ToArray()).ToArray();
 
             for (int i = 0; i < positions.Count(); i++)
             {
                 _terrain.Add(new TerrainUnit()
                 {
                     Position = positions[i],
-                    Colour = new Vector3(heights[i])
+                    Height = heights[i]
                 });
             }
         }
 
-        public IList<TerrainUnit> GetTerrain()
+        public override IList<TerrainUnit> GetTerrain()
         {
             return _terrain;
         }

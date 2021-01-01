@@ -5,7 +5,8 @@ using Engine.Core.Events.Input.Mouse;
 using Engine.Render;
 using Engine.Render.Data;
 using Engine.Render.Data.Primitives;
-using Engine.Terrain;
+using Engine.Terrain.Events;
+using Engine.Terrain.Generator;
 using Engine.Terrain.Noise;
 using Engine.UI.Core;
 using Evolution.UI;
@@ -30,8 +31,7 @@ namespace Evolution
 
         public WorldScene(Game game) : base(game)
         {
-
-            terrainGenerator = new HexTerrainGenerator(new[] { new NoiseConfiguration("default"), new NoiseConfiguration("default2") });
+            terrainGenerator = new HexTerrainGenerator(Game.EventBus);
             game.UIManager.Windows.Add(new TerrainWindow("Terrain Generation", terrainGenerator.HeightNoise, Game.EventBus));
 
             var settings = GenerateTerrain();
@@ -64,17 +64,17 @@ namespace Evolution
 
         private InstanceSettings GenerateTerrain()
         {
-            terrainGenerator.Generate(25);
+            terrainGenerator.Generate(30);
             var units = terrainGenerator.GetTerrain();
             var settings = new InstanceSettings()
             {
                 Instances = units.Select(x =>
-                
+
 
                     new Instance()
                     {
                         Position = x.Position,
-                        Colour = x.Colour
+                        Colour = new Vector3(x.Height)
                     }
                 ).ToArray()
             };

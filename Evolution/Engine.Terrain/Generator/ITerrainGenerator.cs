@@ -4,7 +4,7 @@ using Engine.Terrain.Noise;
 using System;
 using System.Collections.Generic;
 
-namespace Engine.Terrain
+namespace Engine.Terrain.Generator
 {
     public interface ITerrainGenerator
     {
@@ -13,6 +13,6 @@ namespace Engine.Terrain
         List<NoiseConfiguration> HeightNoise { get; }
 
         void Generate(int size);
-        IList<TerrainUnit> GetTerrain(); 
+        IList<TerrainUnit> GetTerrain();
     }
 }

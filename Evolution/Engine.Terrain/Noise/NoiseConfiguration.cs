@@ -9,6 +9,7 @@ namespace Engine.Terrain.Noise
     public class NoiseConfiguration
     {
         public string Name = "Default";
+        public bool Visible = true;
         public bool Invert = false;
         public int Seed = 0;
         public float Scale = 1.0f;
@@ -20,6 +21,7 @@ namespace Engine.Terrain.Noise
         public float Gain = 0.1f;
         public Vector2 Offset;
         public bool Mask;
+        public bool Round;
 
         public NoiseConfiguration() { }
 

@@ -1,4 +1,4 @@
-﻿using Engine.Terrain;
+﻿using Engine.Terrain.Events;
 using Engine.Terrain.Noise;
 using Engine.UI;
 using ImGuiNET;
@@ -16,6 +16,7 @@ namespace Evolution.UI
         private int _heightNoiseSelected;
         private List<NoiseConfiguration> _heightNoise;
         private IEventBus _eventBus;
+        private bool _isolate;
 
         private static string[] NoiseTypes;
         private static string[] FractalTypes;
@@ -53,7 +54,7 @@ namespace Evolution.UI
 
                 if (change)
                 {
-                    _eventBus.Publish(new TerrainUpdateEvent());
+                    UpdateTerrain();
                 }
 
                 ImGui.EndTabItem();
@@ -65,24 +66,32 @@ namespace Evolution.UI
 
             if(ImGui.Button("Create"))
             {
-                _heightNoise.Add(new NoiseConfiguration("new"));
+                var noise = new NoiseConfiguration("new");
+                _heightNoise.Add(noise);
+                _eventBus.Publish(new TerrainNoiseAddedEvent() { Noise = noise });
+                UpdateTerrain();
             }
             ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Button, ButtonColour.Red);
             ImGui.Button("Remove");
             ImGui.PopStyleColor();
+
+            ImGui.SameLine();
+
+            if (ImGui.Checkbox("Isolate selected layer", ref _isolate)) UpdateIsolatedLayer();
         }
 
         private void RenderHeightMapTab_LeftPane()
         {
             ImGui.BeginChild("left pane", new System.Numerics.Vector2(173, 0), true);
 
-            
-
             for (int i = 0; i < _heightNoise.Count; i++)
             {
                 if (ImGui.Selectable(_heightNoise[i].Name, i == _heightNoiseSelected))
+                {
                     _heightNoiseSelected = i;
+                    UpdateIsolatedLayer();
+                }
             }
             ImGui.EndChild();
         }
@@ -116,6 +125,7 @@ namespace Evolution.UI
             changeMade |= ImGui.SliderFloat2("Offset", ref CurrentNoise.Offset, -1000, 1000);
             changeMade |= ImGui.Checkbox("Inverse", ref CurrentNoise.Invert);
             changeMade |= ImGui.Checkbox("Mask", ref CurrentNoise.Mask);
+            changeMade |= ImGui.Checkbox("Round", ref CurrentNoise.Round);
 
             ImGui.EndChild();
             ImGui.EndGroup();
@@ -126,6 +136,19 @@ namespace Evolution.UI
         private void RenderClimateTab()
         {
             
+        }
+
+        private void UpdateTerrain() => _eventBus.Publish(new TerrainUpdateEvent());
+
+        private void UpdateIsolatedLayer()
+        {
+            for (int i = 0; i < _heightNoise.Count; i++)
+            {
+                bool vis = !_isolate || i == _heightNoiseSelected;
+                _heightNoise[i].Visible = vis;
+            }
+
+            UpdateTerrain();
         }
     }
 }
