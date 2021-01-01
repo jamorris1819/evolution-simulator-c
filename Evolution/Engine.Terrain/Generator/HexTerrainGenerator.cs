@@ -25,22 +25,21 @@ namespace Engine.Terrain.Generator
             TerrainShape.Generate();
         }
 
-        public override void Generate(int size)
+        public override void Generate()
         {
-            _previousSize = size;
 
             _terrain = new List<TerrainUnit>();
-            var units = Map.GenerateHexagon(size);
-
+            var units = Map.GenerateHexagon((int)TerrainProfile.Size.X);
             var positions = units.Select(x => Layout.HexToPixel(x)).ToArray();
-            var heights = NoiseCombinator.Generate(HeightNoise, positions.ToArray()).ToArray();
+
+            var map = Combinator.Generate(TerrainProfile, positions);
 
             for (int i = 0; i < positions.Count(); i++)
             {
                 _terrain.Add(new TerrainUnit()
                 {
                     Position = positions[i],
-                    Height = heights[i]
+                    Height = map.Heights[i]
                 });
             }
         }

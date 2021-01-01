@@ -1,5 +1,6 @@
 ﻿using Engine.Grid;
 using Engine.Render.Data;
+using Engine.Terrain.Data;
 using Engine.Terrain.Noise;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace Engine.Terrain.Generator
     {
         VertexArray TerrainShape { get; }
         Layout Layout { get; }
-        List<NoiseConfiguration> HeightNoise { get; }
-
-        void Generate(int size);
+        TerrainProfile TerrainProfile { get; }
+        void Generate();
+        void SetProfile(TerrainProfile profile);
         IList<TerrainUnit> GetTerrain();
     }
 }

@@ -1,6 +1,8 @@
 ﻿using DotnetNoise;
+using Engine.Terrain.Data;
 using OpenTK.Mathematics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +10,29 @@ using static DotnetNoise.FastNoise;
 
 namespace Engine.Terrain.Noise
 {
-    public static class NoiseCombinator
+    public class NoiseCombinator
     {
-        private static float scaler = 1 / 32.0f;
+        public NoiseCombinatorSet HeightSet;
+
+        public NoiseCombinator(TerrainProfile profile)
+        {
+            HeightSet = new NoiseCombinatorSet(profile.HeightNoise.ToArray());
+        }
+
+        public GeneratedTerrainProfile Generate(TerrainProfile profile, Vector2[] points)
+        {
+            var generatedProfile = new GeneratedTerrainProfile();
+
+            float[] heights = HeightSet.Generate(profile.HeightNoise.ToArray(), points);
+            
+
+            generatedProfile.Heights = heights;
+
+
+            return generatedProfile;
+        }
+
+        /*private static float scaler = 1 / 32.0f;
 
         public static float[] Generate(NoiseConfiguration config, Vector2[] points)
         {
@@ -72,22 +94,9 @@ namespace Engine.Terrain.Noise
                     normalisedDist = 1.0f - normalisedDist;
                     results[i] *= (float)normalisedDist;
                 }
-            }*/
+            }
 
             return results;
-        }
-
-        private static FastNoise GetNoise(NoiseConfiguration config)
-        {
-            return new FastNoise(config.Seed)
-            {
-                UsedNoiseType = (NoiseType)config.Type,
-                FractalTypeMethod = (FractalType)config.FractalType,
-                Frequency = config.Frequency,
-                Octaves = config.Octaves,
-                Lacunarity = config.Lacunarity,
-                Gain = config.Gain
-            };
-        }
+        }*/
     }
 }

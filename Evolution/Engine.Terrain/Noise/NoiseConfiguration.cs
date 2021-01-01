@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Engine.Core.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
@@ -28,6 +29,11 @@ namespace Engine.Terrain.Noise
         public NoiseConfiguration(string name)
         {
             Name = name;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.GetHashCodeOnProperties(new[] { nameof(Name) });
         }
     }
 }

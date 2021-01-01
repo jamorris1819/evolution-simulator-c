@@ -1,4 +1,5 @@
-﻿using Engine.Terrain.Events;
+﻿using Engine.Terrain.Data;
+using Engine.Terrain.Events;
 using Engine.Terrain.Noise;
 using Engine.UI;
 using ImGuiNET;
@@ -14,23 +15,23 @@ namespace Evolution.UI
     public class TerrainWindow : UIWindow
     {
         private int _heightNoiseSelected;
-        private List<NoiseConfiguration> _heightNoise;
+        private TerrainProfile _profile;
         private IEventBus _eventBus;
         private bool _isolate;
 
         private static string[] NoiseTypes;
         private static string[] FractalTypes;
 
-        private NoiseConfiguration CurrentNoise
+        private NoiseConfiguration CurrentHeightNoise
         {
-            get => _heightNoise[_heightNoiseSelected];
+            get => _profile.HeightNoise[_heightNoiseSelected];
         }
 
-        public TerrainWindow(string name, IEnumerable<NoiseConfiguration> configs, IEventBus eventBus) : base(name)
+        public TerrainWindow(string name, TerrainProfile profile, IEventBus eventBus) : base(name)
         {
             NoiseTypes = new[] { "Value", "Value Fractal", "Perlin", "Perlin Fractal", "Simplex", "Simplex Fractal", "Cellular", "White Noise", "Cubic", "Cubic Fractal" };
             FractalTypes = new[] { "FBM", "Billow", "Rigid Multi" };
-            _heightNoise = configs.ToList();
+            _profile = profile;
             _eventBus = eventBus;
         }
 
@@ -67,7 +68,7 @@ namespace Evolution.UI
             if(ImGui.Button("Create"))
             {
                 var noise = new NoiseConfiguration("new");
-                _heightNoise.Add(noise);
+                _profile.HeightNoise.Add(noise);
                 _eventBus.Publish(new TerrainNoiseAddedEvent() { Noise = noise });
                 UpdateTerrain();
             }
@@ -85,9 +86,9 @@ namespace Evolution.UI
         {
             ImGui.BeginChild("left pane", new System.Numerics.Vector2(173, 0), true);
 
-            for (int i = 0; i < _heightNoise.Count; i++)
+            for (int i = 0; i < _profile.HeightNoise.Count; i++)
             {
-                if (ImGui.Selectable(_heightNoise[i].Name, i == _heightNoiseSelected))
+                if (ImGui.Selectable(_profile.HeightNoise[i].Name, i == _heightNoiseSelected))
                 {
                     _heightNoiseSelected = i;
                     UpdateIsolatedLayer();
@@ -102,30 +103,30 @@ namespace Evolution.UI
             ImGui.BeginGroup();
             ImGui.BeginChild("item view", new System.Numerics.Vector2(0, -ImGui.GetFrameHeightWithSpacing()), true);
             
-            ImGui.Text($"Editing height map layer: {CurrentNoise.Name}");
+            ImGui.Text($"Editing height map layer: {CurrentHeightNoise.Name}");
             ImGui.Separator();
 
-            changeMade |= ImGui.Combo("Noise type", ref CurrentNoise.Type, NoiseTypes, NoiseTypes.Length);
-            changeMade |= ImGui.InputText("Layer name", ref CurrentNoise.Name, 32u);
-            changeMade |= ImGui.DragInt("Seed", ref CurrentNoise.Seed);
-            changeMade |= ImGui.DragFloat("Scale", ref CurrentNoise.Scale);
-            changeMade |= ImGui.SliderFloat("Frequency", ref CurrentNoise.Frequency, 0.0f, 2.0f);
+            changeMade |= ImGui.Combo("Noise type", ref CurrentHeightNoise.Type, NoiseTypes, NoiseTypes.Length);
+            changeMade |= ImGui.InputText("Layer name", ref CurrentHeightNoise.Name, 32u);
+            changeMade |= ImGui.DragInt("Seed", ref CurrentHeightNoise.Seed);
+            changeMade |= ImGui.DragFloat("Scale", ref CurrentHeightNoise.Scale);
+            changeMade |= ImGui.SliderFloat("Frequency", ref CurrentHeightNoise.Frequency, 0.0f, 2.0f);
 
             ImGui.Separator();
 
-            if(((NoiseType)CurrentNoise.Type).ToString().ToLower().Contains("fractal"))
+            if(((NoiseType)CurrentHeightNoise.Type).ToString().ToLower().Contains("fractal"))
             {
-                changeMade |= ImGui.Combo("Fractal type", ref CurrentNoise.FractalType, FractalTypes, FractalTypes.Length);
-                changeMade |= ImGui.SliderInt("Octaves", ref CurrentNoise.Octaves, 1, 12);
-                changeMade |= ImGui.DragFloat("Lacunarity", ref CurrentNoise.Lacunarity, 0.1f, 0.0f, 0.2f);
-                changeMade |= ImGui.DragFloat("Gain", ref CurrentNoise.Gain, 0.1f, 0.0f, 0.2f);
+                changeMade |= ImGui.Combo("Fractal type", ref CurrentHeightNoise.FractalType, FractalTypes, FractalTypes.Length);
+                changeMade |= ImGui.SliderInt("Octaves", ref CurrentHeightNoise.Octaves, 1, 12);
+                changeMade |= ImGui.DragFloat("Lacunarity", ref CurrentHeightNoise.Lacunarity, 0.1f, 0.0f, 0.2f);
+                changeMade |= ImGui.DragFloat("Gain", ref CurrentHeightNoise.Gain, 0.1f, 0.0f, 0.2f);
                 ImGui.Separator();
             }
 
-            changeMade |= ImGui.SliderFloat2("Offset", ref CurrentNoise.Offset, -1000, 1000);
-            changeMade |= ImGui.Checkbox("Inverse", ref CurrentNoise.Invert);
-            changeMade |= ImGui.Checkbox("Mask", ref CurrentNoise.Mask);
-            changeMade |= ImGui.Checkbox("Round", ref CurrentNoise.Round);
+            changeMade |= ImGui.SliderFloat2("Offset", ref CurrentHeightNoise.Offset, -1000, 1000);
+            changeMade |= ImGui.Checkbox("Inverse", ref CurrentHeightNoise.Invert);
+            changeMade |= ImGui.Checkbox("Mask", ref CurrentHeightNoise.Mask);
+            changeMade |= ImGui.Checkbox("Round", ref CurrentHeightNoise.Round);
 
             ImGui.EndChild();
             ImGui.EndGroup();
@@ -138,14 +139,17 @@ namespace Evolution.UI
             
         }
 
-        private void UpdateTerrain() => _eventBus.Publish(new TerrainUpdateEvent());
+        private void UpdateTerrain() => _eventBus.Publish(new TerrainUpdateEvent()
+        {
+            Profile = _profile
+        });
 
         private void UpdateIsolatedLayer()
         {
-            for (int i = 0; i < _heightNoise.Count; i++)
+            for (int i = 0; i < _profile.HeightNoise.Count; i++)
             {
                 bool vis = !_isolate || i == _heightNoiseSelected;
-                _heightNoise[i].Visible = vis;
+                _profile.HeightNoise[i].Visible = vis;
             }
 
             UpdateTerrain();

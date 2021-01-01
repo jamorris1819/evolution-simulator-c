@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Engine.Core\Engine.Core.csproj" />
     <ProjectReference Include="..\Engine.Grid\Engine.Grid.csproj" />
     <ProjectReference Include="..\Engine.Render\Engine.Render.csproj" />
   </ItemGroup>
