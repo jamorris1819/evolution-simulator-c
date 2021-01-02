@@ -1,25 +1,9 @@
 ﻿using Engine;
-using Engine.Core;
-using Engine.Core.Events;
-using Engine.Core.Events.Input.Mouse;
 using Engine.Render;
-using Engine.Render.Data;
-using Engine.Render.Data.Primitives;
 using Engine.Terrain;
-using Engine.Terrain.Biomes;
-using Engine.Terrain.Data;
-using Engine.Terrain.Events;
 using Engine.Terrain.Generator;
-using Engine.Terrain.Noise;
-using Engine.UI.Core;
 using Evolution.UI;
-using ImGuiNET;
-using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
-using Redbus.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Evolution
 {
@@ -35,7 +19,7 @@ namespace Evolution
             _terrainManager = new TerrainManager(EntityManager, new HexTerrainGenerator(Game.EventBus), Game.EventBus);
             _terrainManager.Initialise();
 
-            game.UIManager.Windows.Add(new TerrainWindow("Terrain Generation", _terrainManager, Game.EventBus));
+            game.UIManager.Windows.Add(new TerrainWindow(_terrainManager, Game.EventBus));
 
             cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 

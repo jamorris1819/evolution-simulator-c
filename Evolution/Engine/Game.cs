@@ -29,7 +29,7 @@ namespace Engine
             ShaderManager = new ShaderManager();
 
             _sceneManager = new SceneManager(gameWindowSettings, nativeWindowSettings, EventBus);
-            UIManager = new UIManager(_sceneManager);
+            UIManager = new UIManager(_sceneManager, EventBus);
             _sceneManager.SetUIManager(UIManager);
         }
 

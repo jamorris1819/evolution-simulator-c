@@ -41,7 +41,7 @@ namespace Engine.Terrain.Data
                     {
                         calculatedHeights[j] = generator.GetNoise(
                             (points[j].X + noise.Offset.X) * scaler,
-                            (points[j].Y + noise.Offset.Y)  * scaler);
+                            (points[j].Y + noise.Offset.Y)  * scaler) + 0.5f;
                         calculatedHeights[j] *= noise.Scale;
                     }
                     Hash[noise.Name] = noise.GetHashCode();

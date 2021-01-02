@@ -30,7 +30,7 @@ namespace Evolution.UI
             get => _profile.HeightNoise[_heightNoiseSelected];
         }
 
-        public TerrainWindow(string name, TerrainManager manager, IEventBus eventBus) : base(name)
+        public TerrainWindow(TerrainManager manager, IEventBus eventBus) : base("Terrain Window")
         {
             NoiseTypes = new[] { "Value", "Value Fractal", "Perlin", "Perlin Fractal", "Simplex", "Simplex Fractal", "Cellular", "White Noise", "Cubic", "Cubic Fractal" };
             FractalTypes = new[] { "FBM", "Billow", "Rigid Multi" };
@@ -42,32 +42,27 @@ namespace Evolution.UI
 
         protected override void RenderWindow()
         {
-            if (ImGui.BeginTabBar("##Tabs"))
-            {
-                RenderHeightMapTab();
-            }
+            RenderHeightMap();
         }
 
-        private void RenderHeightMapTab()
+        private void RenderHeightMap()
         {
-            if (ImGui.BeginTabItem("Height map"))
+            if (ImGui.CollapsingHeader("Height map"))
             {
-                RenderHeightMapTab_ManageButtons();
+                RenderHeightMap_ManageButtons();
 
-                RenderHeightMapTab_LeftPane();
+                RenderHeightMap_LeftPane();
                 ImGui.SameLine();
-                bool change = RenderHeightMapTab_RightPane();
+                bool change = RenderHeightMap_RightPane();
 
                 if (change)
                 {
                     UpdateTerrain();
                 }
-
-                ImGui.EndTabItem();
             }
         }
 
-        private void RenderHeightMapTab_ManageButtons()
+        private void RenderHeightMap_ManageButtons()
         {
 
             if(ImGui.Button("Create"))
@@ -87,7 +82,7 @@ namespace Evolution.UI
             if (ImGui.Checkbox("Isolate selected layer", ref _isolate)) UpdateIsolatedLayer();
         }
 
-        private void RenderHeightMapTab_LeftPane()
+        private void RenderHeightMap_LeftPane()
         {
             ImGui.BeginChild("left pane", new System.Numerics.Vector2(173, 0), true);
 
@@ -102,7 +97,7 @@ namespace Evolution.UI
             ImGui.EndChild();
         }
 
-        private bool RenderHeightMapTab_RightPane()
+        private bool RenderHeightMap_RightPane()
         {
             bool changeMade = false;
             ImGui.BeginGroup();

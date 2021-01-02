@@ -1,6 +1,9 @@
 ﻿using Engine.UI.Core;
+using Engine.UI.Popups;
+using Engine.UI.Popups.Events;
 using ImGuiNET;
 using OpenTK.Windowing.Desktop;
+using Redbus.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -12,19 +15,28 @@ namespace Engine.UI
     {
         private GameWindow _gameWindow;
         private ImGuiController _controller;
+        private IEventBus _eventBus;
+
+        private ConfirmationPopup _confirmationPopup;
 
         public List<UIWindow> Windows { get; set; }
 
-        public UIManager(GameWindow gameWindow)
+        public UIManager(GameWindow gameWindow, IEventBus eventBus)
         {
             _gameWindow = gameWindow;
+            _eventBus = eventBus;
             Windows = new List<UIWindow>();
             _controller = new ImGuiController(gameWindow.Size.X, gameWindow.Size.Y);
             CreateStyle();
+
+            _confirmationPopup = new ConfirmationPopup();
+
+            _eventBus.Subscribe<ConfirmationEvent>(x => _confirmationPopup.Show(x.Properties));
         }
 
         public void Render()
         {
+            _confirmationPopup.Render();
             for(int i = 0; i < Windows.Count; i++)
             {
                 Windows[i].Render();
