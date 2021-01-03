@@ -35,14 +35,7 @@ namespace Engine.Terrain.Generator
         public TerrainGenerator(IEventBus eventBus)
         {
             _eventBus = eventBus;
-            SetProfile(new TerrainProfile()
-            {
-                HeightNoise = new List<NoiseConfiguration>()
-                {
-                    new NoiseConfiguration("base")
-                },
-                Size = new System.Numerics.Vector2(30, 30)
-            });
+            SetProfile(TerrainProfile.Default);
             Combinator = new NoiseCombinator(TerrainProfile);
             //eventBus.Subscribe<TerrainNoiseAddedEvent>(x => HeightNoise.Add(x.Noise));
 

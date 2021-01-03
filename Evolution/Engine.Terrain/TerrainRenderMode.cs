@@ -8,6 +8,7 @@ namespace Engine.Terrain
     {
         Default = 0,
         HeightMap = 1,
-        Temperature = 2
+        Temperature = 2,
+        Rainfall = 3
     }
 }

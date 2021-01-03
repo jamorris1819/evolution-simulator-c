@@ -1,9 +1,13 @@
-﻿using Engine;
+﻿using DotnetNoise;
+using Engine;
 using Engine.Render;
 using Engine.Terrain;
 using Engine.Terrain.Generator;
 using Evolution.UI;
 using OpenTK.Windowing.Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Evolution
 {
@@ -23,18 +27,18 @@ namespace Evolution
 
             cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 
-           /* EventBus.Subscribe<MouseDownEvent>((e) =>
-            {
-                var pos = cam.ScreenToWorld(e.Location);
-                var hex = terrainGenerator.Layout.PixelToHex(pos).Round();
-                Console.WriteLine($"{pos} -> {hex}");
-            });
+            /* EventBus.Subscribe<MouseDownEvent>((e) =>
+             {
+                 var pos = cam.ScreenToWorld(e.Location);
+                 var hex = terrainGenerator.Layout.PixelToHex(pos).Round();
+                 Console.WriteLine($"{pos} -> {hex}");
+             });
 
-            EventBus.Subscribe<TerrainUpdateEvent>(x =>
-            {
-                var set = GenerateTerrain(x.Profile);
-                rc.UpdateInstanceSettings(set);
-            });*/
+             EventBus.Subscribe<TerrainUpdateEvent>(x =>
+             {
+                 var set = GenerateTerrain(x.Profile);
+                 rc.UpdateInstanceSettings(set);
+             });*/
         }
 
         public override void OnRenderFrame(FrameEventArgs e)

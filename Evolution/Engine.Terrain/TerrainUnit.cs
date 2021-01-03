@@ -9,6 +9,7 @@ namespace Engine.Terrain
     {
         public Vector2 Position { get; set; }
         public float Height { get; set; }
+        public float Rainfall { get; set; }
         public float Temperature { get; set; }
     }
 }

@@ -71,7 +71,7 @@ namespace Engine.Render
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
-            GL.ClearColor(0, 0, 0, 1);
+            GL.ClearColor(3 / 255.0f, 94 / 255.0f, 123 / 255.0f, 1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
 
             Renderer(args);

@@ -1,4 +1,5 @@
-﻿using Engine.Grid;
+﻿using DotnetNoise;
+using Engine.Grid;
 using Engine.Render.Data;
 using Engine.Render.Data.Primitives;
 using Engine.Terrain.Noise;
@@ -14,12 +15,14 @@ namespace Engine.Terrain.Generator
     public class HexTerrainGenerator : TerrainGenerator
     {
         private IList<TerrainUnit> _terrain;
+        private FastNoise _noise;
 
 
         public HexTerrainGenerator(IEventBus eb) : base(eb)
         {
             _terrain = new List<TerrainUnit>();
             Layout = new Layout(Orientation.Layout_Pointy, new Vector2(4, 4));
+            _noise = new FastNoise();
 
             TerrainShape = new Polygon(Layout.GetHexPoints());
             TerrainShape.Generate();
@@ -34,12 +37,27 @@ namespace Engine.Terrain.Generator
 
             var map = Combinator.Generate(TerrainProfile, positions);
 
+            map.Temperature = units.Select(CalculateTemperature).ToArray();
+
+            if (TerrainProfile.Island)
+            {
+                _noise = new FastNoise(TerrainProfile.IslandSeed);
+                var heightMask = units.Select(x => CalculateDropOff(x, (int)TerrainProfile.Size.X)).ToArray();
+
+                for (int i = 0; i < map.Heights.Length; i++)
+                {
+                    map.Heights[i] += heightMask[i];
+                }
+            }
+
             for (int i = 0; i < positions.Count(); i++)
             {
                 _terrain.Add(new TerrainUnit()
                 {
                     Position = positions[i],
-                    Height = map.Heights[i]
+                    Height = map.Heights[i],
+                    Rainfall = map.Rainfall[i],
+                    Temperature = map.Temperature[i]
                 });
             }
         }
@@ -47,6 +65,33 @@ namespace Engine.Terrain.Generator
         public override IList<TerrainUnit> GetTerrain()
         {
             return _terrain;
+        }
+
+        private float CalculateTemperature(Hex hex)
+        {
+            return 1.0f - Math.Abs((float)hex.R / TerrainProfile.Size.X) - 0.1f * (float)Math.Sin(hex.Q * 0.071f);
+            //return 1.0f - ((hex.R + TerrainProfile.Size.X) / (TerrainProfile.Size.X * 2)) - 0.025f * (float)Math.Sin(hex.Q * 0.071f);
+        }
+
+        private float CalculateDropOff(Hex hex, int size)
+        {
+            var len = hex.Length() + _noise.GetPerlin(hex.Q, hex.R, hex.S) * TerrainProfile.IslandEdgeDistortion;
+
+            if(len < 70)
+            {
+                string a = "";
+            }
+
+            float dropDistance = TerrainProfile.DropOffPoint;
+            if (len < size * dropDistance) return 0;
+
+            float steepness = TerrainProfile.DropOffSteepness;
+            float dist = size * (1 - dropDistance);
+            float adjustedLen = len - size * dropDistance;
+
+
+            float dropoff = (adjustedLen / dist);
+            return -Math.Max(dropoff, 0) * steepness;
         }
     }
 }

@@ -59,13 +59,14 @@ namespace Engine.Terrain
             _generator.SetProfile(profile);
             _generator.Generate();
             var units = _generator.GetTerrain();
+            Random random = new Random();
             var settings = new InstanceSettings()
             {
                 Instances = units.Select(x =>
                     new Instance()
                     {
                         Position = x.Position,
-                        Colour = PaintTerrain(x)
+                        Colour = PaintTerrain(x) + new Vector3((float)random.NextDouble() * 0.025f)
                     }
                 ).ToArray()
             };
@@ -78,9 +79,19 @@ namespace Engine.Terrain
             switch (RenderMode)
             {
                 case TerrainRenderMode.Default:
-                    return BiomeColour.Lookup(BiomePainter.Determine(unit.Height, Profile.SeaLevel));
-                default:
+                    return BiomeColour.Lookup(BiomePainter.Determine(unit.Height, Profile.SeaLevel, Profile.TideLevel,
+                         unit.Rainfall, unit.Temperature));
+                case TerrainRenderMode.HeightMap:
                     return new Vector3(unit.Height > Profile.SeaLevel ? unit.Height : 0);
+                case TerrainRenderMode.Rainfall:
+                    var rain = new Vector3(64, 86, 244) / 255.0f;
+                    var height = new Vector3(unit.Height);
+                    if (unit.Height < Profile.SeaLevel) return new Vector3(0);
+                    return height +  new Vector3(unit.Rainfall * rain);
+                case TerrainRenderMode.Temperature:
+                    return new Vector3(unit.Temperature);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(unit));
             }
         }
 

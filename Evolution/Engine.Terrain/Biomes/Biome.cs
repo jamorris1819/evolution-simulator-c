@@ -7,6 +7,16 @@ namespace Engine.Terrain.Biomes
     public enum Biome
     {
         Water,
-        Grass
+        DeepWater,
+        IceSheet,
+        Sand,
+        RainForest,
+        Savanna,
+        HotDesert,
+        TemperateForest,
+        TemperateGrassland,
+        Desert,
+        Taiga,
+        Tundra
     }
 }
