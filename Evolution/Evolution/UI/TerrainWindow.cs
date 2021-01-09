@@ -235,7 +235,7 @@ namespace Evolution.UI
                 ImGui.Separator();
             }
 
-            changeMade |= ImGui.SliderFloat2("Offset", ref CurrentHeightNoise.Offset, -1000, 1000);
+            changeMade |= ImGui.SliderFloat3("Offset", ref CurrentHeightNoise.Offset, -1000, 1000);
             changeMade |= ImGui.Checkbox("Inverse", ref CurrentHeightNoise.Invert);
             changeMade |= ImGui.Checkbox("Mask", ref CurrentHeightNoise.Mask);
             changeMade |= ImGui.Checkbox("Round", ref CurrentHeightNoise.Round);
@@ -289,7 +289,7 @@ namespace Evolution.UI
                 ImGui.Separator();
             }
 
-            changeMade |= ImGui.SliderFloat2("Offset", ref _profile.RainfallNoise.Offset, -1000, 1000);
+            changeMade |= ImGui.SliderFloat3("Offset", ref _profile.RainfallNoise.Offset, -1000, 1000);
             changeMade |= ImGui.Checkbox("Inverse", ref _profile.RainfallNoise.Invert);
             changeMade |= ImGui.Checkbox("Mask", ref _profile.RainfallNoise.Mask);
             changeMade |= ImGui.Checkbox("Round", ref _profile.RainfallNoise.Round);

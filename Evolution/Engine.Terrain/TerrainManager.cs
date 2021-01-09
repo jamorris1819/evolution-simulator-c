@@ -66,7 +66,7 @@ namespace Engine.Terrain
                     new Instance()
                     {
                         Position = x.Position,
-                        Colour = PaintTerrain(x) + new Vector3((float)random.NextDouble() * 0.025f)
+                        Colour = PaintTerrain(x) + new Vector3(Math.Max(x.Height * 0.25f, 0)) + new Vector3((float)random.NextDouble() * 0.025f)
                     }
                 ).ToArray()
             };

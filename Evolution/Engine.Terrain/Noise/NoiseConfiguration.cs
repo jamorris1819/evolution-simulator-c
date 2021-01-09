@@ -20,7 +20,7 @@ namespace Engine.Terrain.Noise
         public int Octaves = 4;
         public float Lacunarity = 0.1f;
         public float Gain = 0.1f;
-        public Vector2 Offset;
+        public Vector3 Offset;
         public bool Mask;
         public bool Round;
 

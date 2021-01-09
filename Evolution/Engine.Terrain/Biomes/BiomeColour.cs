@@ -22,7 +22,8 @@ namespace Engine.Terrain.Biomes
                 case Biome.Tundra:
                     return Colour(235, 244, 243);
                 case Biome.RainForest:
-                    return Colour(5, 71, 42);
+                    return Colour(114, 84, 40); //Colour(5, 71, 42);
+
                 case Biome.Savanna:
                     return Colour(209, 163, 110);
                 case Biome.HotDesert:

@@ -32,11 +32,15 @@ namespace Engine.Terrain.Data
 
             for(int i = 0; i < configs.Length; i++)
             {
-                if (Hash.ContainsKey(configs[i].Name)) continue;
+                if (Hash.ContainsValue(configs[i].GetHashCode())) continue;
                 else toAdd.Add(configs[i].Name);
             }
 
-            toRemove = Hash.Where(x => !configs.Any(y => x.Key == y.Name)).Select(x => x.Key).ToList();
+            for (int i = 0; i < _configs.Count; i++)
+            {
+                if (Hash.ContainsValue(_configs[i].GetHashCode())) continue;
+                else toRemove.Add(_configs[i].Name);
+            }
 
             for(int i = 0; i < toRemove.Count; i++)
             {
@@ -72,7 +76,8 @@ namespace Engine.Terrain.Data
                     {
                         calculatedHeights[j] = generator.GetNoise(
                             (points[j].X + noise.Offset.X) * scaler,
-                            (points[j].Y + noise.Offset.Y)  * scaler);
+                            (points[j].Y + noise.Offset.Y) * scaler,
+                            noise.Offset.Z);
                         calculatedHeights[j] *= noise.Scale;
                     }
                     Hash[noise.Name] = noise.GetHashCode();
