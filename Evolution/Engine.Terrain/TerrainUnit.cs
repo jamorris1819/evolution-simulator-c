@@ -1,4 +1,5 @@
-﻿using OpenTK.Mathematics;
+﻿using Engine.Terrain.Biomes;
+using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,6 @@ namespace Engine.Terrain
         public float Height { get; set; }
         public float Rainfall { get; set; }
         public float Temperature { get; set; }
+        public Biome Biome { get; set; }
     }
 }

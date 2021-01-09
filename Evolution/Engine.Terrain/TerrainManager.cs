@@ -6,6 +6,7 @@ using Engine.Terrain.Biomes;
 using Engine.Terrain.Data;
 using Engine.Terrain.Events;
 using Engine.Terrain.Generator;
+using Engine.Terrain.Painters;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System;
@@ -36,6 +37,8 @@ namespace Engine.Terrain
 
         public TerrainProfile Profile => _generator.TerrainProfile;
 
+        public TerrainUnit[] Units { get; private set; }
+
         public TerrainManager(EntityManager em, ITerrainGenerator gen, IEventBus eb)
         {
             _entityManager = em;
@@ -58,11 +61,11 @@ namespace Engine.Terrain
         {
             _generator.SetProfile(profile);
             _generator.Generate();
-            var units = _generator.GetTerrain();
+            Units = _generator.GetTerrain().ToArray();
             Random random = new Random();
             var settings = new InstanceSettings()
             {
-                Instances = units.Select(x =>
+                Instances = Units.Select(x =>
                     new Instance()
                     {
                         Position = x.Position,
@@ -76,23 +79,8 @@ namespace Engine.Terrain
 
         private Vector3 PaintTerrain(TerrainUnit unit)
         {
-            switch (RenderMode)
-            {
-                case TerrainRenderMode.Default:
-                    return BiomeColour.Lookup(BiomePainter.Determine(unit.Height, Profile.SeaLevel, Profile.TideLevel,
-                         unit.Rainfall, unit.Temperature));
-                case TerrainRenderMode.HeightMap:
-                    return new Vector3(unit.Height > Profile.SeaLevel ? unit.Height : 0);
-                case TerrainRenderMode.Rainfall:
-                    var rain = new Vector3(64, 86, 244) / 255.0f;
-                    var height = new Vector3(unit.Height);
-                    if (unit.Height < Profile.SeaLevel) return new Vector3(0);
-                    return height +  new Vector3(unit.Rainfall * rain);
-                case TerrainRenderMode.Temperature:
-                    return new Vector3(unit.Temperature);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(unit));
-            }
+            ITerrainPainter painter = TerrainPainterFactory.GetPainter(RenderMode);
+            return painter.GetColour(unit);
         }
 
         private void OnTerrainUpdate(TerrainUpdateEvent e)

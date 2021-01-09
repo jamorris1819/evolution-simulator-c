@@ -16,6 +16,7 @@ namespace Engine.Render
         private IEventBus _eventBus;
         private ShaderManager _shaderManager;
         private VAOLoader _vaoLoader;
+        private Camera _cam;
 
         public RenderSystem(IEventBus eventBus, ShaderManager shaderManager)
         {

@@ -2,6 +2,7 @@
 using Engine.Grid;
 using Engine.Render.Data;
 using Engine.Render.Data.Primitives;
+using Engine.Terrain.Biomes;
 using Engine.Terrain.Noise;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
@@ -57,7 +58,8 @@ namespace Engine.Terrain.Generator
                     Position = positions[i],
                     Height = map.Heights[i],
                     Rainfall = map.Rainfall[i],
-                    Temperature = map.Temperature[i]
+                    Temperature = map.Temperature[i],
+                    Biome = BiomePainter.Determine(map.Heights[i], TerrainProfile.SeaLevel, TerrainProfile.TideLevel, map.Rainfall[i], map.Temperature[i])
                 });
             }
         }
