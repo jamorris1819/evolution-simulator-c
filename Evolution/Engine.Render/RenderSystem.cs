@@ -1,5 +1,7 @@
 ﻿using Engine.Core;
+using Engine.Core.Components;
 using Engine.Render.Data;
+using Engine.Render.Events;
 using Engine.Render.Managers;
 using Engine.Render.Shaders;
 using OpenTK.Graphics.ES30;
@@ -16,13 +18,19 @@ namespace Engine.Render
         private IEventBus _eventBus;
         private ShaderManager _shaderManager;
         private VAOLoader _vaoLoader;
-        private Camera _cam;
+        private Camera _camera;
+
+        private float _scale;
 
         public RenderSystem(IEventBus eventBus, ShaderManager shaderManager)
         {
             _eventBus = eventBus;
             _shaderManager = shaderManager;
             _vaoLoader = new VAOLoader();
+            _scale = 1;
+
+            eventBus.Subscribe<CameraZoomEvent>(x => _scale = x.Scale);
+            eventBus.Subscribe<CameraChangeEvent>(x => _camera = x.Camera);
         }
 
         public override void OnRender(Entity entity)
@@ -30,7 +38,13 @@ namespace Engine.Render
             if (!MaskMatch(entity)) return;
 
             RenderComponent comp = entity.GetComponent<RenderComponent>();
-            var def = Matrix4.CreateTranslation(new Vector3(0, 0, 0));
+            PositionComponent posComp = entity.GetComponent<PositionComponent>();
+
+            if (!InView(posComp.Position)) return;
+
+            if (comp.MinZoom > _scale) return;
+
+            var def = Matrix4.CreateTranslation(new Vector3(posComp.Position.X, posComp.Position.Y, 0));
 
             var shader = _shaderManager.GetShader(comp.Shader);
             shader.Bind();
@@ -69,6 +83,15 @@ namespace Engine.Render
         private void InitialiseVAO(VertexArrayObject vao)
         {
             _vaoLoader.Load(vao);
+        }
+
+        private bool InView(Vector2 pos)
+        {
+            var screenPosMin = _camera.ScreenToWorld(new Vector2(0, 0));
+            var screenPosMax = _camera.ScreenToWorld(new Vector2(1920, 1080));
+
+            return (pos.X >= screenPosMin.X && pos.Y <= screenPosMin.Y)
+                && (pos.X <= screenPosMax.X && pos.Y >= screenPosMax.Y);
         }
     }
 }

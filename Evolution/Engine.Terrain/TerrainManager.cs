@@ -1,5 +1,7 @@
 ﻿using Engine.Core;
+using Engine.Core.Components;
 using Engine.Core.Managers;
+using Engine.Grid;
 using Engine.Render;
 using Engine.Render.Data;
 using Engine.Terrain.Biomes;
@@ -10,6 +12,7 @@ using Engine.Terrain.Painters;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +40,9 @@ namespace Engine.Terrain
 
         public TerrainProfile Profile => _generator.TerrainProfile;
 
-        public TerrainUnit[] Units { get; private set; }
+        public Dictionary<Hex, TerrainUnit> Units { get; private set; }
+
+        public Layout Layout => _generator.Layout;
 
         public TerrainManager(EntityManager em, ITerrainGenerator gen, IEventBus eb)
         {
@@ -54,6 +59,7 @@ namespace Engine.Terrain
             _renderComponent = new RenderComponent(_generator.TerrainShape, GenerateTerrain(Profile));
             _renderComponent.Shader = Render.Shaders.Enums.ShaderType.StandardInstanced;
             entity.AddComponent(_renderComponent);
+            entity.AddComponent(new PositionComponent());
             _entityManager.AddEntity(entity);
         }
 
@@ -61,11 +67,17 @@ namespace Engine.Terrain
         {
             _generator.SetProfile(profile);
             _generator.Generate();
-            Units = _generator.GetTerrain().ToArray();
+            Units = new Dictionary<Hex, TerrainUnit>();
+            var units = _generator.GetTerrain(); //.Select(x => new KeyValuePair<int, TerrainUnit>(x.GetHashCode(), x));
+            for(int i = 0; i < units.Count; i++)
+            {
+                Units.Add(units[i].Hex, units[i]);
+            }
+
             Random random = new Random();
             var settings = new InstanceSettings()
             {
-                Instances = Units.Select(x =>
+                Instances = units.Select(x =>
                     new Instance()
                     {
                         Position = x.Position,

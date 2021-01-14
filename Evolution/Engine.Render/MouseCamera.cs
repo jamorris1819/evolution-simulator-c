@@ -1,4 +1,5 @@
 ﻿using Engine.Core.Events.Input.Mouse;
+using Engine.Render.Events;
 using Engine.Render.Shaders;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using Redbus.Interfaces;
@@ -45,6 +46,7 @@ namespace Engine.Render
             //TargetPosition += new OpenTK.Mathematics.Vector2(dx, dy) * PixelsPerMetreInv / Scale;
 
             // todo: figure this out
+            _eventBus.Publish(new CameraZoomEvent() { Scale = TargetScale });
         }
     }
 }

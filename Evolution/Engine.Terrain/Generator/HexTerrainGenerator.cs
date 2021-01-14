@@ -55,10 +55,12 @@ namespace Engine.Terrain.Generator
             {
                 _terrain.Add(new TerrainUnit()
                 {
+                    Hex = units.ElementAt(i),
                     Position = positions[i],
                     Height = map.Heights[i],
                     Rainfall = map.Rainfall[i],
                     Temperature = map.Temperature[i],
+                    GrowingPoints = new List<Vector2>(),
                     Biome = BiomePainter.Determine(map.Heights[i], TerrainProfile.SeaLevel, TerrainProfile.TideLevel, map.Rainfall[i], map.Temperature[i])
                 });
             }
