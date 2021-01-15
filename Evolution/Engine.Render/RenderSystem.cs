@@ -50,7 +50,9 @@ namespace Engine.Render
             shader.Bind();
             shader.SetUniformMat4(Shaders.Enums.ShaderUniforms.Model, def);
 
-            GL.BindVertexArray(comp.VertexArrayObject.VAO[0]);
+            comp.VertexArrayObject.Render();
+
+           /* GL.BindVertexArray(comp.VertexArrayObject.VAO[0]);
 
             if (comp.VertexArrayObject is InstancedVertexArrayObject iVAO)
             {
@@ -61,7 +63,7 @@ namespace Engine.Render
                 GL.DrawElements(PrimitiveType.Triangles, comp.VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero);
             }
 
-            GL.BindVertexArray(0);
+            GL.BindVertexArray(0);*/
         }
 
         public override void OnUpdate(Entity entity)
@@ -72,12 +74,13 @@ namespace Engine.Render
             
             if(!comp.VertexArrayObject.Initialised)
             {
-                InitialiseVAO(comp.VertexArrayObject);
+                comp.VertexArrayObject.Initialise(_shaderManager.All);
+                comp.VertexArrayObject.Load();
             }
-            if(comp.VertexArrayObject.Reload)
+            /*if(comp.VertexArrayObject.Reload)
             {
                 _vaoLoader.Reload(comp.VertexArrayObject);
-            }
+            }*/
         }
 
         private void InitialiseVAO(VertexArrayObject vao)

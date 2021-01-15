@@ -12,7 +12,6 @@ namespace Engine.Render.Data
         public float[] Rotations { get; set; }
         public bool[] Visible { get; set; }
 
-        public InstancedVertexArrayObject() : base(4) { }
-        public InstancedVertexArrayObject(VertexArray va) : base(va, 4) { }
+        public InstancedVertexArrayObject(VertexArray va) : base(va) { }
     }
 }

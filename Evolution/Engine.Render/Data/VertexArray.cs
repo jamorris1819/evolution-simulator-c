@@ -1,23 +1,24 @@
-﻿using OpenTK.Mathematics;
+﻿using Engine.Render.Attributes;
+using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Engine.Render.Data
 {
-    public class VertexArray
+    public struct VertexArray
     {
-        public Vertex[] Vertices { get; protected set; }
-        public ushort[] Indices { get; protected set; }
+        public Vertex[] Vertices { get; set; }
 
-        public virtual void Generate() { }
+        public ushort[] Indices { get; set; }
 
         public void SetColour(Vector3 colour)
         {
-            foreach(Vertex vertex in Vertices)
+            for (int i = 0; i < Vertices.Length; i++)
             {
-                vertex.Colour = colour;
+                Vertices[i].Colour = colour;
             }
         }
 
@@ -75,16 +76,7 @@ namespace Engine.Render.Data
             Vertices = Vertices.Select(x => new Vertex(x.Position * scale)).ToArray();
         }
 
-        public VertexArray Copy()
-        {
-            return new VertexArray()
-            {
-                Vertices = Vertices,
-                Indices = Indices
-            };
-        }
-
-        protected void GenerateIndices()
+        public void GenerateIndices()
             => Indices = Enumerable.Range(0, Vertices.Length).Select(x => (ushort)x).ToArray();
     }
 }

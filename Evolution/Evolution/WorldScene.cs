@@ -36,7 +36,7 @@ namespace Evolution
             cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 
             EventBus.Publish(new CameraChangeEvent() { Camera = cam });
-
+/*
             var points = _terrainManager.Units.Values.Where(x => x.Biome == Biome.TemperateGrassland)
                                            .Select(x => x.Position).ToArray();
 
@@ -60,7 +60,7 @@ namespace Evolution
 
             var aridUnits = _terrainManager.Units.Values.Where(x => x.Biome == Biome.TemperateGrassland).SelectMany(x => x.GrowingPoints).ToList();
 
-
+            *
 
             /*var keep = items.Where(x =>
             {
@@ -68,7 +68,7 @@ namespace Evolution
                 var hash = hex.GetHashCode();
                 if (!_terrainManager.Units.ContainsKey(hash)) return false;
                 return _terrainManager.Units[hash].Biome == Biome.TemperateGrassland;
-            }).ToList();*/
+            }).ToList();
 
             for (int i = 0; i < aridUnits.Count; i++)
             {
@@ -76,7 +76,7 @@ namespace Evolution
 
                 plant.AddComponent(new PositionComponent(aridUnits[i] * 2));
                 EntityManager.AddEntity(plant);
-            }
+            }*/
 
              EventBus.Subscribe<MouseDownEvent>((e) =>
              {

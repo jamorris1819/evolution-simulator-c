@@ -15,21 +15,21 @@ namespace Evolution.Life
         {
             Entity entity = new Entity("plant");
 
-            var tri = new Triangle(2, 1);
-            tri.Generate();
+            var tri = Triangle.Generate(2, 1);
+            
 
             int count = 6;
             float step = (float)(Math.PI * 2) / count;
 
 
-            for (int i = 1; i < count; i++)
+            /*for (int i = 1; i < count; i++)
             {
                 var tri2 = new Triangle(2, 1);
                 tri2.Generate();
                 tri2.Rotate(i * step);
 
                 tri.Add(tri2);
-            }
+            }*/
 
             tri.Scale(0.1f);
 

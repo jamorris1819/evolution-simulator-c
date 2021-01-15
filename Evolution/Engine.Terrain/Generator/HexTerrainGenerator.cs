@@ -25,8 +25,7 @@ namespace Engine.Terrain.Generator
             Layout = new Layout(Orientation.Layout_Pointy, new Vector2(4, 4));
             _noise = new FastNoise();
 
-            TerrainShape = new Polygon(Layout.GetHexPoints());
-            TerrainShape.Generate();
+            TerrainShape = Polygon.Generate(Layout.GetHexPoints());
         }
 
         public override void Generate()

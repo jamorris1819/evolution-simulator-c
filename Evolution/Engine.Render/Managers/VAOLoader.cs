@@ -18,7 +18,7 @@ namespace Engine.Render.Managers
             if (vao.Initialised) throw new Exception("VertexArrayObject is already initialised");
 
             GenerateArrays(vao);
-            GL.BindVertexArray(vao.VAO[0]);
+            //GL.BindVertexArray(vao.VAO[0]);
             AllocateMemory(vao);
 
             // maybe this could be stored in the vertex array object temporarily? or be passed by ref?
@@ -26,7 +26,7 @@ namespace Engine.Render.Managers
             LoadToMemory(vao, vertexData);
             AssignAttributes(vao);
 
-            vao.Initialised = true;
+            //vao.Initialised = true;
         }
 
         public void Reload(VertexArrayObject vao)
@@ -39,7 +39,7 @@ namespace Engine.Render.Managers
 
             if (!vao.Reload) return;
 
-            GL.BindVertexArray(vao.VAO[0]);
+            //GL.BindVertexArray(vao.VAO[0]);
             float[] vertexData = GenerateVertexData(vao);
             LoadToMemory(vao, vertexData);
 
@@ -48,14 +48,14 @@ namespace Engine.Render.Managers
 
         private void GenerateArrays(VertexArrayObject vao)
         {
-            GL.GenVertexArrays(1, out int vertexArrayObj);
+            /*GL.GenVertexArrays(1, out int vertexArrayObj);
             vao.VAO[0] = vertexArrayObj;
 
             GL.BindVertexArray(vao.VAO[0]);
 
             GL.GenBuffers(vao.VBO.Length, vao.VBO);
 
-            GL.BindVertexArray(0);
+            GL.BindVertexArray(0);*/
         }
 
         private float[] GenerateVertexData(VertexArrayObject vao)
@@ -82,7 +82,7 @@ namespace Engine.Render.Managers
 
         private void AllocateMemory(VertexArrayObject vao)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[0]);
+            /*GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[0]);
             GL.BufferData(BufferTarget.ArrayBuffer, vao.VertexArray.Vertices.Length * Vertex.BytesPerVertex * sizeof(float), IntPtr.Zero, BufferUsageHint.StaticDraw);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, vao.VBO[1]);
@@ -95,12 +95,12 @@ namespace Engine.Render.Managers
 
                 GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[3]);
                 GL.BufferData(BufferTarget.ArrayBuffer, iVAO.Colours.Length * 3 * sizeof(float), IntPtr.Zero, BufferUsageHint.DynamicDraw);
-            }
+            }*/
         }
 
         private void LoadToMemory(VertexArrayObject vao, float[] vertexData)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[0]);
+            /*GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[0]);
             GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, vertexData.Length * sizeof(float), vertexData);
             GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out int size);
 
@@ -137,12 +137,12 @@ namespace Engine.Render.Managers
                 {
                     throw new Exception("Instance colour data not loaded correctly");
                 }
-            }
+            }*/
         }
 
         private void AssignAttributes(VertexArrayObject vao)
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[0]);
+            /*GL.BindBuffer(BufferTarget.ArrayBuffer, vao.VBO[0]);
 
             GL.EnableVertexAttribArray(0); // vertex position
             GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, Vertex.BytesPerVertex * sizeof(float), IntPtr.Zero);
@@ -163,7 +163,7 @@ namespace Engine.Render.Managers
                 GL.EnableVertexAttribArray(3); // instance colour
                 GL.VertexAttribPointer(3, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), IntPtr.Zero);
                 GL.VertexAttribDivisor(3, 1);
-            }
+            }*/
         }
     }
 }
