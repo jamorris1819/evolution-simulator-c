@@ -92,6 +92,12 @@ namespace Engine.Render.Data
                 int location = GL.GetAttribLocation(shader.ProgramId, attrib.Name);
                 GL.EnableVertexAttribArray(location);
                 GL.VertexAttribPointer(location, attrib.Size, attrib.Type, false, size * sizeof(float), cumulative * sizeof(float));
+
+                if(attrib.Instanced)
+                {
+                    GL.VertexAttribDivisor(attrib.Size, 1);
+                }
+
                 cumulative += attrib.Size;
             }
         }

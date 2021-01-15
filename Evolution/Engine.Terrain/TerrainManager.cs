@@ -56,8 +56,8 @@ namespace Engine.Terrain
         public void Initialise()
         {
             Entity entity = new Entity("Terrain");
-            _renderComponent = new RenderComponent(_generator.TerrainShape);
-            _renderComponent.Shader = Render.Shaders.Enums.ShaderType.Standard;
+            _renderComponent = new RenderComponent(_generator.TerrainShape, GenerateTerrain(Profile));
+            _renderComponent.Shader = Render.Shaders.Enums.ShaderType.StandardInstanced;
             entity.AddComponent(_renderComponent);
             entity.AddComponent(new PositionComponent());
             _entityManager.AddEntity(entity);

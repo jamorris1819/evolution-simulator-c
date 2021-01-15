@@ -31,10 +31,10 @@ namespace Engine.Render
         {
             VertexArray = va;
 
-            var iVAO = new InstancedVertexArrayObject(va);
-            iVAO.Positions = settings.Instances.Select(x => x.Position).ToArray();
-            iVAO.Colours = settings.Instances.Select(x => x.Colour).ToArray();
-
+            
+            var Positions = settings.Instances.Select(x => x.Position).ToArray();
+            var Colours = settings.Instances.Select(x => x.Colour).ToArray();
+            var iVAO = new InstancedVertexArrayObject(va, settings.Instances);
             VertexArrayObject = iVAO;
         }
 
@@ -42,8 +42,7 @@ namespace Engine.Render
         {
             if (VertexArrayObject is InstancedVertexArrayObject iVAO)
             {
-                iVAO.Positions = settings.Instances.Select(x => x.Position).ToArray();
-                iVAO.Colours = settings.Instances.Select(x => x.Colour).ToArray();
+                iVAO.Instances = settings.Instances;
                 iVAO.Reload = true;
             }
         }

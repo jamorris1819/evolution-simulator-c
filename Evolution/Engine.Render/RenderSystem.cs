@@ -40,9 +40,9 @@ namespace Engine.Render
             RenderComponent comp = entity.GetComponent<RenderComponent>();
             PositionComponent posComp = entity.GetComponent<PositionComponent>();
 
-            if (!InView(posComp.Position)) return;
+            //if (!InView(posComp.Position)) return;
 
-            if (comp.MinZoom > _scale) return;
+            //if (comp.MinZoom > _scale) return;
 
             var def = Matrix4.CreateTranslation(new Vector3(posComp.Position.X, posComp.Position.Y, 0));
 

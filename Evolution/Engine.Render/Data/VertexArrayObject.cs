@@ -18,7 +18,7 @@ namespace Engine.Render.Data
         public VertexArray VertexArray { get; set; }
         public IVertexBufferObject[] VBO { get; set; }
 
-        public IVertexAttribute[] Attributes { get; protected set; }
+        public IList<IBufferAttribute> Attributes { get; protected set; }
 
         public VertexArrayObject(VertexArray va)
         {
@@ -27,19 +27,19 @@ namespace Engine.Render.Data
 
             VertexArray = va;
 
-            Attributes = new[] {
-                new VertexAttribute<Vertex>(VertexArray.Vertices)
+            Attributes = new List<IBufferAttribute>() { 
+                new BufferAttribute<Vertex>(VertexArray.Vertices)
                 {
                     Indices = VertexArray.Indices
                 }
             };
-
-            VBO = Attributes.SelectMany(x => x.GenerateBufferObjects()).ToArray();
         }
 
         public void Initialise(IList<Shader> shaders)
         {
             if (Initialised) throw new Exception("The VAO is already initialised");
+
+            VBO = Attributes.SelectMany(x => x.GenerateBufferObjects()).ToArray();
 
             // Generate VAO buffer
             _handle = GL.GenVertexArray();

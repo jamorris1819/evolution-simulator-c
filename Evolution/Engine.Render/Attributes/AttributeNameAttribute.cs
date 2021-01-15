@@ -10,13 +10,16 @@ namespace Engine.Render.Attributes
 
         public int Size { get; private set; }
 
+        public bool Instanced { get; private set; }
+
         public VertexAttribPointerType Type { get; private set; }
 
-        public AttributeNameAttribute(string name, int size, VertexAttribPointerType type)
+        public AttributeNameAttribute(string name, int size, VertexAttribPointerType type, bool instanced = false)
         {
             Name = name;
             Size = size;
             Type = type;
+            Instanced = instanced;
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Engine.Render.Data
 {
-    public class VertexAttribute<T> : IVertexAttribute where T: struct
+    public class BufferAttribute<T> : IBufferAttribute where T: struct
     {
         public T[] Data { get; set; }
 
@@ -21,9 +21,9 @@ namespace Engine.Render.Data
 
         public BufferTarget BufferTarget { get; set; }
 
-        public VertexAttribute(T[] data) : this(data, BufferUsageHint.StaticDraw, BufferTarget.ArrayBuffer) { }
+        public BufferAttribute(T[] data) : this(data, BufferUsageHint.StaticDraw, BufferTarget.ArrayBuffer) { }
 
-        public VertexAttribute(T[] data, BufferUsageHint hint, BufferTarget target)
+        public BufferAttribute(T[] data, BufferUsageHint hint, BufferTarget target)
         {
             Data = data;
             BufferHint = hint;
