@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evolution", "Evolution\Evol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.Grid", "Engine.Grid\Engine.Grid.csproj", "{7E39E3C0-16E9-4679-B42F-675521DAF49D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Terrain", "Engine.Terrain\Engine.Terrain.csproj", "{C885D4FF-9B5F-460D-BE67-BA85696A8FFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.Terrain", "Engine.Terrain\Engine.Terrain.csproj", "{C885D4FF-9B5F-460D-BE67-BA85696A8FFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.UI", "Engine.UI\Engine.UI.csproj", "{3E71CD72-BEA7-468D-BA9A-3083C30E3E0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Engine.UI", "Engine.UI\Engine.UI.csproj", "{3E71CD72-BEA7-468D-BA9A-3083C30E3E0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Render.Core", "Engine.Render.Core\Engine.Render.Core.csproj", "{37B59056-C4FD-475C-BC2D-5AE3E20EF98F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{3E71CD72-BEA7-468D-BA9A-3083C30E3E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E71CD72-BEA7-468D-BA9A-3083C30E3E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E71CD72-BEA7-468D-BA9A-3083C30E3E0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37B59056-C4FD-475C-BC2D-5AE3E20EF98F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37B59056-C4FD-475C-BC2D-5AE3E20EF98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37B59056-C4FD-475C-BC2D-5AE3E20EF98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37B59056-C4FD-475C-BC2D-5AE3E20EF98F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

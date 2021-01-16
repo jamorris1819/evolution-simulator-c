@@ -1,12 +1,8 @@
-﻿using Engine.Render.Attributes;
-using OpenTK.Mathematics;
+﻿using OpenTK.Mathematics;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
-namespace Engine.Render.Data
+namespace Engine.Render.Core.Data
 {
     public struct VertexArray
     {

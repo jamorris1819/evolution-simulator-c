@@ -1,8 +1,8 @@
 ﻿using Engine.Core.Extensions;
-using Engine.Render.Attributes;
+using Engine.Render.Core.Attributes;
 using OpenTK.Mathematics;
 
-namespace Engine.Render.VAO.Instanced
+namespace Engine.Render.Core.VAO.Instanced
 {
     public struct Instance
     {

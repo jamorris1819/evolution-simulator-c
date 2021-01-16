@@ -1,13 +1,13 @@
-﻿using Engine.Render.Data;
-using Engine.Render.Shaders;
+﻿using Engine.Render.Core.Data;
+using Engine.Render.Core.Shaders;
 using OpenTK.Graphics.ES30;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Engine.Render.VAO
+namespace Engine.Render.Core.VAO
 {
-    internal class VertexArrayObject
+    public class VertexArrayObject
     {
         private int _handle;
         public bool Initialised { get; protected set; }

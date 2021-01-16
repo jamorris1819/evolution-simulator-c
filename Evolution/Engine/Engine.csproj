@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Engine.Core\Engine.Core.csproj" />
+    <ProjectReference Include="..\Engine.Render.Core\Engine.Render.Core.csproj" />
     <ProjectReference Include="..\Engine.Render\Engine.Render.csproj" />
   </ItemGroup>
 

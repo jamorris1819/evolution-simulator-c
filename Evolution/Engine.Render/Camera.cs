@@ -1,11 +1,8 @@
-﻿using Engine.Render.Shaders;
-using OpenTK.Graphics.ES30;
+﻿using Engine.Render.Core.Shaders;
+using Engine.Render.Core.Shaders.Enums;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Engine.Render
 {
@@ -71,8 +68,8 @@ namespace Engine.Render
             {
                 Shader shader = _shaderManager.All[i];
                 shader.Bind();
-                shader.SetUniformMat4(Shaders.Enums.ShaderUniforms.View, position);
-                shader.SetUniformMat4(Shaders.Enums.ShaderUniforms.Projection, Projection);
+                shader.SetUniformMat4(ShaderUniforms.View, position);
+                shader.SetUniformMat4(ShaderUniforms.Projection, Projection);
             }
         }
 

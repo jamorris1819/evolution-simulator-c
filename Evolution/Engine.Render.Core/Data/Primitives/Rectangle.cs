@@ -1,10 +1,6 @@
-﻿using Engine.Render.Data;
-using OpenTK.Mathematics;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using OpenTK.Mathematics;
 
-namespace Engine.Render.VAO.Primitives
+namespace Engine.Render.Core.Data.Primitives
 {
     public class Rectangle
     {

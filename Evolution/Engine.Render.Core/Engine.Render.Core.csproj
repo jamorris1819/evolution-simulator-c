@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Engine.Core\Engine.Core.csproj" />
-    <ProjectReference Include="..\Engine.Render.Core\Engine.Render.Core.csproj" />
-    <ProjectReference Include="..\Engine.UI\Engine.UI.csproj" />
   </ItemGroup>
 
 </Project>

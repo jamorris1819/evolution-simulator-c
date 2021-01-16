@@ -1,6 +1,6 @@
-﻿namespace Engine.Render.VAO
+﻿namespace Engine.Render.Core.VAO
 {
-    interface IBufferAttribute
+    public interface IBufferAttribute
     {
         public string Name { get; set; }
 

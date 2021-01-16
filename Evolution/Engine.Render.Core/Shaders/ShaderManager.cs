@@ -1,11 +1,11 @@
-﻿using Engine.Render.Shaders.Enums;
+﻿using Engine.Render.Core.Shaders.Enums;
 using OpenTK.Graphics.ES30;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Engine.Render.Shaders
+namespace Engine.Render.Core.Shaders
 {
     public class ShaderManager
     {

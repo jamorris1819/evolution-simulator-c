@@ -1,13 +1,8 @@
-﻿using Engine.Core;
-using Engine.Core.Events;
-using Engine.Core.Managers;
+﻿using Engine.Core.Managers;
 using Engine.Render;
-using Engine.Render.VAO.Primitives;
-using Engine.Render.Shaders;
+using Engine.Render.Core.Shaders.Enums;
 using OpenTK.Graphics.ES30;
-using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
-using Redbus;
 using Redbus.Interfaces;
 using System;
 
@@ -30,8 +25,8 @@ namespace Engine
             EntityManager = new EntityManager(EventBus);
             SystemManager = new SystemManager(EntityManager, EventBus);
 
-            Game.ShaderManager.CreateShader(Render.Shaders.Enums.ShaderType.Standard, "vshader.glsl", "fshader.glsl");
-            Game.ShaderManager.CreateShader(Render.Shaders.Enums.ShaderType.StandardInstanced, "vshaderinstanced.glsl", "fshader.glsl");
+            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.Standard, "vshader.glsl", "fshader.glsl");
+            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.StandardInstanced, "vshaderinstanced.glsl", "fshader.glsl");
 
             var renderSystem = new RenderSystem(EventBus, Game.ShaderManager);
             SystemManager.AddSystem(renderSystem);

@@ -1,11 +1,7 @@
 ﻿using Engine.Core;
 using Engine.Render;
-using Engine.Render.Data.Primitives;
-using Engine.Render.VAO;
+using Engine.Render.Core.Data.Primitives;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Evolution.Life
 {

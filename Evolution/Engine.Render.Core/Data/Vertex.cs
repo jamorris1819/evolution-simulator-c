@@ -1,10 +1,10 @@
-﻿using Engine.Render.Attributes;
+﻿using Engine.Render.Core.Attributes;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine.Render.Data
+namespace Engine.Render.Core.Data
 {
     public struct Vertex
     {

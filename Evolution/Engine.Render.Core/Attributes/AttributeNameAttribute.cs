@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.ES30;
 using System;
 
-namespace Engine.Render.Attributes
+namespace Engine.Render.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     internal class AttributeNameAttribute : Attribute

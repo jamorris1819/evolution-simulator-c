@@ -1,14 +1,13 @@
-﻿using Engine.Render.Attributes;
-using Engine.Render.Shaders;
+﻿using Engine.Render.Core.Attributes;
+using Engine.Render.Core.Shaders;
 using OpenTK.Graphics.ES30;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace Engine.Render.VAO
+namespace Engine.Render.Core.VAO
 {
     /// <summary>
     /// Handles the allocation and management of memory on the GPU

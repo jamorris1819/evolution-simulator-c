@@ -3,7 +3,8 @@ using Engine.Core.Components;
 using Engine.Core.Managers;
 using Engine.Grid;
 using Engine.Render;
-using Engine.Render.VAO.Instanced;
+using Engine.Render.Core.Shaders.Enums;
+using Engine.Render.Core.VAO.Instanced;
 using Engine.Terrain.Data;
 using Engine.Terrain.Events;
 using Engine.Terrain.Generator;
@@ -54,7 +55,7 @@ namespace Engine.Terrain
         {
             Entity entity = new Entity("Terrain");
             _renderComponent = new RenderComponent(_generator.TerrainShape, GenerateTerrain(Profile));
-            _renderComponent.Shader = Render.Shaders.Enums.ShaderType.StandardInstanced;
+            _renderComponent.Shader = ShaderType.StandardInstanced;
             entity.AddComponent(_renderComponent);
             entity.AddComponent(new PositionComponent());
             _entityManager.AddEntity(entity);

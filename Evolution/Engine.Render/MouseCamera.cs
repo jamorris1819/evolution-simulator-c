@@ -1,11 +1,9 @@
 ﻿using Engine.Core.Events.Input.Mouse;
+using Engine.Render.Core.Shaders;
 using Engine.Render.Events;
-using Engine.Render.Shaders;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using Redbus.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Engine.Render
 {

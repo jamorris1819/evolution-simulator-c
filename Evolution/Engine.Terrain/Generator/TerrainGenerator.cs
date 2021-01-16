@@ -1,12 +1,9 @@
 ﻿using Engine.Grid;
-using Engine.Render.Data;
+using Engine.Render.Core.Data;
 using Engine.Terrain.Data;
-using Engine.Terrain.Events;
 using Engine.Terrain.Noise;
 using Redbus.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Engine.Terrain.Generator
 {

@@ -1,15 +1,12 @@
 ﻿using DotnetNoise;
 using Engine.Grid;
-using Engine.Render.VAO;
-using Engine.Render.VAO.Primitives;
+using Engine.Render.Core.Data.Primitives;
 using Engine.Terrain.Biomes;
-using Engine.Terrain.Noise;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Engine.Terrain.Generator
 {

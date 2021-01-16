@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine.Render.Shaders.Enums
+namespace Engine.Render.Core.Shaders.Enums
 {
     public enum ShaderUniforms
     {

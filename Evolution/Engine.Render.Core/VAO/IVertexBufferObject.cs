@@ -1,7 +1,7 @@
-﻿using Engine.Render.Shaders;
+﻿using Engine.Render.Core.Shaders;
 using System.Collections.Generic;
 
-namespace Engine.Render.VAO
+namespace Engine.Render.Core.VAO
 {
     public interface IVertexBufferObject
     {

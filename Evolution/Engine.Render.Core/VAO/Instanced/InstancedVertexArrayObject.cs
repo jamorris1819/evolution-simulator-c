@@ -1,13 +1,11 @@
-﻿using Engine.Render.Data;
-using Engine.Render.VAO;
-using Engine.Render.VAO.Instanced;
+﻿using Engine.Render.Core.Data;
 using OpenTK.Graphics.ES30;
 using System;
 using System.Linq;
 
-namespace Engine.Render.VAO.Instanced
+namespace Engine.Render.Core.VAO.Instanced
 {
-    internal class InstancedVertexArrayObject : VertexArrayObject
+    public class InstancedVertexArrayObject : VertexArrayObject
     {
 
         public Instance[] Instances { get; set; }

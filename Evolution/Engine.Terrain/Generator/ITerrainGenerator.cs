@@ -1,8 +1,6 @@
 ﻿using Engine.Grid;
-using Engine.Render.Data;
+using Engine.Render.Core.Data;
 using Engine.Terrain.Data;
-using Engine.Terrain.Noise;
-using System;
 using System.Collections.Generic;
 
 namespace Engine.Terrain.Generator

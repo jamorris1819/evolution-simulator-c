@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Engine.Render.VAO
+namespace Engine.Render.Core.VAO
 {
     /// <summary>
     /// Describes some data that we want to send to the graphics card.

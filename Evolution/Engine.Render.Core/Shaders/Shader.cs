@@ -1,11 +1,9 @@
-﻿using Engine.Render.Shaders.Enums;
+﻿using Engine.Render.Core.Shaders.Enums;
 using OpenTK.Graphics.ES30;
 using OpenTK.Mathematics;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Engine.Render.Shaders
+namespace Engine.Render.Core.Shaders
 {
     public class Shader
     {

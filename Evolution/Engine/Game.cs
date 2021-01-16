@@ -1,5 +1,5 @@
 ﻿using Engine.Render;
-using Engine.Render.Shaders;
+using Engine.Render.Core.Shaders;
 using Engine.UI;
 using OpenTK.Windowing.Desktop;
 using Redbus;

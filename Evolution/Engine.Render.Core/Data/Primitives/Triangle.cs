@@ -1,11 +1,7 @@
-﻿using Engine.Render.Data;
-using OpenTK.Mathematics;
-using System;
-using System.Collections.Generic;
+﻿using OpenTK.Mathematics;
 using System.Linq;
-using System.Text;
 
-namespace Engine.Render.Data.Primitives
+namespace Engine.Render.Core.Data.Primitives
 {
     public class Triangle
     {
