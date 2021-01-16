@@ -58,10 +58,11 @@ namespace Engine.Render
                 comp.VertexArrayObject.Initialise(_shaderManager.All);
                 comp.VertexArrayObject.Load();
             }
-            /*if(comp.VertexArrayObject.Reload)
+
+            if (comp.VertexArrayObject.NeedsUpdate)
             {
-                _vaoLoader.Reload(comp.VertexArrayObject);
-            }*/
+                comp.VertexArrayObject.Reload();
+            }
         }
 
         private bool InView(Vector2 pos)

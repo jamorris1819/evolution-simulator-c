@@ -61,12 +61,25 @@ namespace Engine.Render.Core.VAO
             }
         }
 
+        public void Reload()
+        {
+            Bind();
+
+            var needsReload = VBO.Where(x => x.NeedsUpdate).ToArray();
+            for(int i = 0; i < needsReload.Length; i++)
+            {
+                needsReload[i].Reload();
+            }
+        }
+
         public void Unload()
         {
             for (int i = 0; i < VBO.Length; i++)
             {
                 VBO[i].Unload();
             }
+
+            throw new NotImplementedException();
         }
 
         public void Bind()

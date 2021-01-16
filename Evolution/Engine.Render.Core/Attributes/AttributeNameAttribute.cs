@@ -14,12 +14,24 @@ namespace Engine.Render.Core.Attributes
 
         public VertexAttribPointerType Type { get; private set; }
 
-        public AttributeNameAttribute(string name, int size, VertexAttribPointerType type, bool instanced = false)
+        public BufferUsageHint BufferUsage { get; private set; } = BufferUsageHint.StaticDraw;
+
+        public AttributeNameAttribute(string name, int size, VertexAttribPointerType type)
+            : this(name, size, type, false, BufferUsageHint.StaticDraw) { }
+
+        public AttributeNameAttribute(string name, int size, VertexAttribPointerType type, bool instanced)
+            : this(name, size, type, instanced, BufferUsageHint.StaticDraw) { }
+
+        public AttributeNameAttribute(string name, int size, VertexAttribPointerType type, BufferUsageHint hint)
+            : this(name, size, type, false, hint) { }
+
+        public AttributeNameAttribute(string name, int size, VertexAttribPointerType type, bool instanced, BufferUsageHint hint)
         {
             Name = name;
             Size = size;
             Type = type;
             Instanced = instanced;
+            BufferUsage = hint;
         }
     }
 }

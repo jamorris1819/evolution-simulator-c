@@ -65,6 +65,7 @@ namespace Engine.Render.Core.VAO
         {
             Bind();
             LoadToMemory();
+            NeedsUpdate = false;
         }
 
         public void Unload()
