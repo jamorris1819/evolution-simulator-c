@@ -16,11 +16,11 @@ namespace Engine.UI.Core
         [Conditional("DEBUG")]
         public static void CheckGLError(string title)
         {
-            var error = GL.GetError();
+            /*var error = GL.GetError();
             if (error != ErrorCode.NoError)
             {
                 Debug.Print($"{title}: {error}");
-            }
+            }*/
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

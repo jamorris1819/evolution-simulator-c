@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Engine.Render.Data
+﻿namespace Engine.Render.VAO
 {
     interface IBufferAttribute
     {
+        public string Name { get; set; }
+
         IVertexBufferObject[] GenerateBufferObjects();
     }
 }

@@ -53,7 +53,7 @@ namespace Engine.Render.Data
 
         public void Translate(Vector2 pos)
         {
-            for(int i = 0; i< Vertices.Length;i++)
+            for (int i = 0; i < Vertices.Length; i++)
             {
                 Vertices[i].Position += pos;
             }

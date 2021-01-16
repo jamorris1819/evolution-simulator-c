@@ -1,19 +1,17 @@
-﻿using Engine.Render.Attributes;
+﻿using Engine.Render.Data;
 using Engine.Render.Shaders;
 using OpenTK.Graphics.ES30;
-using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Engine.Render.Data
+namespace Engine.Render.VAO
 {
     internal class VertexArrayObject
     {
         private int _handle;
         public bool Initialised { get; protected set; }
-        public bool Reload { get; set; }
+        public bool NeedsUpdate => VBO.Any(x => x.NeedsUpdate);
         public bool Enabled { get; set; }
         public VertexArray VertexArray { get; set; }
         public IVertexBufferObject[] VBO { get; set; }
@@ -28,7 +26,7 @@ namespace Engine.Render.Data
             VertexArray = va;
 
             Attributes = new List<IBufferAttribute>() { 
-                new BufferAttribute<Vertex>(VertexArray.Vertices)
+                new BufferAttribute<Vertex>("Vertex data", VertexArray.Vertices)
                 {
                     Indices = VertexArray.Indices
                 }

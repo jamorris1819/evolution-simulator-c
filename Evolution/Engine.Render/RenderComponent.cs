@@ -1,10 +1,12 @@
 ﻿using Engine.Core;
-using Engine.Render.Data;
+using Engine.Render.VAO;
 using Engine.Render.Shaders.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Engine.Render.Data;
+using Engine.Render.VAO.Instanced;
 
 namespace Engine.Render
 {
@@ -31,9 +33,6 @@ namespace Engine.Render
         {
             VertexArray = va;
 
-            
-            var Positions = settings.Instances.Select(x => x.Position).ToArray();
-            var Colours = settings.Instances.Select(x => x.Colour).ToArray();
             var iVAO = new InstancedVertexArrayObject(va, settings.Instances);
             VertexArrayObject = iVAO;
         }
@@ -42,8 +41,7 @@ namespace Engine.Render
         {
             if (VertexArrayObject is InstancedVertexArrayObject iVAO)
             {
-                iVAO.Instances = settings.Instances;
-                iVAO.Reload = true;
+                iVAO.Update(settings.Instances);
             }
         }
     }

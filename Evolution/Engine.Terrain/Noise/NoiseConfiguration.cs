@@ -33,7 +33,7 @@ namespace Engine.Terrain.Noise
 
         public override int GetHashCode()
         {
-            return this.GetHashCodeOnProperties(new[] { nameof(Name) });
+            return this.GetHashCodeOnFields(new[] { nameof(Name) });
         }
     }
 }

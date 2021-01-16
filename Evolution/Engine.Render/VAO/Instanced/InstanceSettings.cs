@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Engine.Render.VAO.Instanced;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine.Render.Data
+namespace Engine.Render.VAO.Instanced
 {
     public struct InstanceSettings
     {

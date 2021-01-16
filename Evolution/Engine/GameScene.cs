@@ -2,7 +2,7 @@
 using Engine.Core.Events;
 using Engine.Core.Managers;
 using Engine.Render;
-using Engine.Render.Data.Primitives;
+using Engine.Render.VAO.Primitives;
 using Engine.Render.Shaders;
 using OpenTK.Graphics.ES30;
 using OpenTK.Mathematics;

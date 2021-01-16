@@ -1,7 +1,7 @@
 ﻿using DotnetNoise;
 using Engine.Grid;
-using Engine.Render.Data;
-using Engine.Render.Data.Primitives;
+using Engine.Render.VAO;
+using Engine.Render.VAO.Primitives;
 using Engine.Terrain.Biomes;
 using Engine.Terrain.Noise;
 using OpenTK.Mathematics;
@@ -79,11 +79,6 @@ namespace Engine.Terrain.Generator
         private float CalculateDropOff(Hex hex, int size)
         {
             var len = hex.Length() + _noise.GetPerlin(hex.Q, hex.R, hex.S) * TerrainProfile.IslandEdgeDistortion;
-
-            if(len < 70)
-            {
-                string a = "";
-            }
 
             float dropDistance = TerrainProfile.DropOffPoint;
             if (len < size * dropDistance) return 0;

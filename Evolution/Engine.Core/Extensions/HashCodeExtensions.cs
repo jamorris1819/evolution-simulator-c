@@ -9,6 +9,13 @@ namespace Engine.Core.Extensions
 
         public static int GetHashCodeOnProperties<T>(this T inspect, IEnumerable<string> ignoreList)
         {
+            return inspect.GetType().GetProperties().Where(x => !ignoreList.Contains(x.Name)).Select(o => o.GetValue(inspect)).GetListHashCode();
+        }
+
+        public static int GetHashCodeOnFields<T>(this T inspect) => GetHashCodeOnFields(inspect, new string[0]);
+
+        public static int GetHashCodeOnFields<T>(this T inspect, IEnumerable<string> ignoreList)
+        {
             return inspect.GetType().GetFields().Where(x => !ignoreList.Contains(x.Name)).Select(o => o.GetValue(inspect)).GetListHashCode();
         }
 

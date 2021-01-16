@@ -8,15 +8,21 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Engine.Render.Data
+namespace Engine.Render.VAO
 {
-    internal class VertexBufferObject<T1> : IVertexBufferObject where T1: struct
+    /// <summary>
+    /// Handles the allocation and management of memory on the GPU
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    internal class VertexBufferObject<T> : IVertexBufferObject where T: struct
     {
         private int _handle = -1;
-        private T1[] _buffer;
+        private T[] _buffer;
         private IList<Shader> _shaders;
 
-        public T1[] Buffer => _buffer;
+        public T[] Buffer => _buffer;
+
+        public string Name { get; }
 
         public BufferUsageHint BufferHint { get; set; }
 
@@ -24,10 +30,11 @@ namespace Engine.Render.Data
 
         public bool Initialised => _handle != -1;
 
-        public bool NeedsUpdate { get; set; }
+        public bool NeedsUpdate { get; private set; }
 
-        public VertexBufferObject(T1[] items, BufferUsageHint hint, BufferTarget target)
+        public VertexBufferObject(string name, T[] items, BufferUsageHint hint, BufferTarget target)
         {
+            Name = name;
             _buffer = items;
             BufferHint = hint;
             BufferTarget = target;
@@ -35,7 +42,7 @@ namespace Engine.Render.Data
 
         public void Initialise(IList<Shader> shaders)
         {
-            if (Initialised) throw new Exception("VBO already initialised");
+            if (Initialised) throw new Exception($"The VBO ({Name}) already initialised");
             _shaders = shaders;
 
              _handle = GL.GenBuffer();
@@ -47,21 +54,18 @@ namespace Engine.Render.Data
         public void Load()
         {
             Bind();
-
-            var expectedSize = Buffer.Length * Marshal.SizeOf<T1>();
-
-            GL.BufferSubData(BufferTarget, IntPtr.Zero, expectedSize, _buffer);
-            GL.GetBufferParameter(BufferTarget, BufferParameterName.BufferSize, out int size);
-
-            if (expectedSize != size)
-            {
-                throw new Exception("Error occurred when loading to memory");
-            }
+            LoadToMemory();
 
             for (int i = 0; i < _shaders.Count; i++)
             {
                 AssignAttributes(_shaders[i]);
             }
+        }
+
+        public void Reload()
+        {
+            Bind();
+            LoadToMemory();
         }
 
         public void Unload()
@@ -73,7 +77,7 @@ namespace Engine.Render.Data
 
         private void AllocateMemory()
         {
-            var expectedSize = Buffer.Length * Marshal.SizeOf<T1>();
+            var expectedSize = Buffer.Length * Marshal.SizeOf<T>();
             GL.BufferData(BufferTarget, expectedSize, IntPtr.Zero, BufferHint);
 
             GL.GetBufferParameter(BufferTarget, BufferParameterName.BufferSize, out int size);
@@ -102,9 +106,21 @@ namespace Engine.Render.Data
             }
         }
 
+        private void LoadToMemory()
+        {
+            var expectedSize = Buffer.Length * Marshal.SizeOf<T>();
+            GL.BufferSubData(BufferTarget, IntPtr.Zero, expectedSize, _buffer);
+            GL.GetBufferParameter(BufferTarget, BufferParameterName.BufferSize, out int size);
+
+            if (expectedSize != size)
+            {
+                throw new Exception($"Error occurred when loading to memory ({Name})");
+            }
+        }
+
         private AttributeNameAttribute[] GetAttributes()
         {
-            var props = typeof(T1).GetProperties();
+            var props = typeof(T).GetProperties();
             var dict = new Dictionary<AttributeNameAttribute, PropertyInfo>();
 
             for(int i = 0; i < props.Length; i++)
@@ -117,6 +133,11 @@ namespace Engine.Render.Data
             }
 
             return dict.Keys.ToArray();
+        }
+
+        public void QueueReload()
+        {
+            NeedsUpdate = true;
         }
     }
 }

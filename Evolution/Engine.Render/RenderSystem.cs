@@ -1,6 +1,6 @@
 ﻿using Engine.Core;
 using Engine.Core.Components;
-using Engine.Render.Data;
+using Engine.Render.VAO;
 using Engine.Render.Events;
 using Engine.Render.Managers;
 using Engine.Render.Shaders;
@@ -51,19 +51,6 @@ namespace Engine.Render
             shader.SetUniformMat4(Shaders.Enums.ShaderUniforms.Model, def);
 
             comp.VertexArrayObject.Render();
-
-           /* GL.BindVertexArray(comp.VertexArrayObject.VAO[0]);
-
-            if (comp.VertexArrayObject is InstancedVertexArrayObject iVAO)
-            {
-                GL.DrawElementsInstanced(PrimitiveType.Triangles, iVAO.VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero, iVAO.Positions.Length);
-            }
-            else
-            {
-                GL.DrawElements(PrimitiveType.Triangles, comp.VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero);
-            }
-
-            GL.BindVertexArray(0);*/
         }
 
         public override void OnUpdate(Entity entity)

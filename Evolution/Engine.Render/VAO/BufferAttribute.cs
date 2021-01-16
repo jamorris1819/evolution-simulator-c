@@ -1,14 +1,16 @@
 ﻿using OpenTK.Graphics.ES30;
-using OpenTK.Mathematics;
-using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace Engine.Render.Data
+namespace Engine.Render.VAO
 {
+    /// <summary>
+    /// Describes some data that we want to send to the graphics card.
+    /// </summary>
     public class BufferAttribute<T> : IBufferAttribute where T: struct
     {
+        public string Name { get; set; }
+
         public T[] Data { get; set; }
 
         public ushort[] Indices { get; set; } = new ushort[0];
@@ -21,23 +23,28 @@ namespace Engine.Render.Data
 
         public BufferTarget BufferTarget { get; set; }
 
-        public BufferAttribute(T[] data) : this(data, BufferUsageHint.StaticDraw, BufferTarget.ArrayBuffer) { }
+        public BufferAttribute(string name, T[] data) : this(name, data, BufferUsageHint.StaticDraw, BufferTarget.ArrayBuffer) { }
 
-        public BufferAttribute(T[] data, BufferUsageHint hint, BufferTarget target)
+        public BufferAttribute(string name, T[] data, BufferUsageHint hint, BufferTarget target)
         {
+            Name = name;
             Data = data;
             BufferHint = hint;
             BufferTarget = target;
         }
 
+        /// <summary>
+        /// Create VertexBufferObjects configured for this data
+        /// </summary>
+        /// <returns></returns>
         public IVertexBufferObject[] GenerateBufferObjects()
         {
             List<IVertexBufferObject> vbos = new List<IVertexBufferObject>
             {
-                new VertexBufferObject<T>(Data, BufferHint, BufferTarget)
+                new VertexBufferObject<T>(Name, Data, BufferHint, BufferTarget)
             };
 
-            if (HasIndices) vbos.Add(new VertexBufferObject<ushort>(Indices, BufferUsageHint.StaticDraw, BufferTarget.ElementArrayBuffer));
+            if (HasIndices) vbos.Add(new VertexBufferObject<ushort>($"{Name} (index)", Indices, BufferUsageHint.StaticDraw, BufferTarget.ElementArrayBuffer));
 
             return vbos.ToArray();
         }

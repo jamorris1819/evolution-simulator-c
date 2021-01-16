@@ -1,7 +1,8 @@
-﻿using Engine.Render.Attributes;
+﻿using Engine.Core.Extensions;
+using Engine.Render.Attributes;
 using OpenTK.Mathematics;
 
-namespace Engine.Render.Data
+namespace Engine.Render.VAO.Instanced
 {
     public struct Instance
     {
@@ -10,5 +11,10 @@ namespace Engine.Render.Data
 
         [AttributeName("vIColour", 3, OpenTK.Graphics.ES30.VertexAttribPointerType.Float, true)]
         public Vector3 Colour { get; set; }
+
+        public override int GetHashCode()
+        {
+            return this.GetHashCodeOnProperties();
+        }
     }
 }

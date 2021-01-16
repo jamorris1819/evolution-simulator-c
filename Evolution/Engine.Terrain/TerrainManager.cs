@@ -3,8 +3,7 @@ using Engine.Core.Components;
 using Engine.Core.Managers;
 using Engine.Grid;
 using Engine.Render;
-using Engine.Render.Data;
-using Engine.Terrain.Biomes;
+using Engine.Render.VAO.Instanced;
 using Engine.Terrain.Data;
 using Engine.Terrain.Events;
 using Engine.Terrain.Generator;
@@ -12,10 +11,8 @@ using Engine.Terrain.Painters;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Engine.Terrain
 {

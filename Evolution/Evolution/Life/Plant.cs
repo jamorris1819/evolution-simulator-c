@@ -1,7 +1,7 @@
 ﻿using Engine.Core;
 using Engine.Render;
-using Engine.Render.Data;
 using Engine.Render.Data.Primitives;
+using Engine.Render.VAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
