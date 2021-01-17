@@ -5,9 +5,12 @@ using Engine.Core.Components;
 using Engine.Core.Events.Input.Mouse;
 using Engine.Grid;
 using Engine.Render;
+using Engine.Render.Core.Data.Primitives;
+using Engine.Render.Core.VAO.Instanced;
 using Engine.Render.Events;
 using Engine.Terrain;
 using Engine.Terrain.Biomes;
+using Engine.Terrain.Data;
 using Engine.Terrain.Generator;
 using Evolution.Life;
 using Evolution.UI;
@@ -26,6 +29,9 @@ namespace Evolution
         Camera cam;
         double counter = 0;
 
+        PooledInstanceVAO a;
+        PooledInstance last;
+
         public WorldScene(Game game) : base(game)
         {
             _terrainManager = new TerrainManager(EntityManager, new HexTerrainGenerator(Game.EventBus), Game.EventBus);
@@ -36,15 +42,20 @@ namespace Evolution
             cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 
             EventBus.Publish(new CameraChangeEvent() { Camera = cam });
-/*
+
+            /*a = new PooledInstanceVAO(Triangle.Generate(2, 1), 100);
+            a.Initialise(Game.ShaderManager.All);
+            a.Load();*/
+
+
             var points = _terrainManager.Units.Values.Where(x => x.Biome == Biome.TemperateGrassland)
                                            .Select(x => x.Position).ToArray();
 
            
 
-            var items = UniformPoissonDiskSampler.SampleRectangle(new Vector2(-200, -200), new Vector2(200, 200), 1.0f);
+            /*var items = UniformPoissonDiskSampler.SampleRectangle(new Vector2(-10, -10), new Vector2(10, 10), 1f);
 
-            Dictionary<Hex, List<Vector2>> growingPoints = new Dictionary<Hex, List<Vector2>>();
+            List<Vector2> growingPoints = new List<Vector2>();
 
             for(int i = 0; i < items.Count; i++)
             {
@@ -55,12 +66,15 @@ namespace Evolution
                         Console.WriteLine(hex.Length());
                     continue;
                 }
-                unit.GrowingPoints.Add(items[i]);
-            }
 
-            var aridUnits = _terrainManager.Units.Values.Where(x => x.Biome == Biome.TemperateGrassland).SelectMany(x => x.GrowingPoints).ToList();
+                growingPoints.Add(items[i]);
+            }*/
 
-            *
+
+
+            var fertilePoints = _terrainManager.Units.Values.Where(x => x.Biome == Biome.RainForest).SelectMany(x => x.GrowingPoints).ToList();
+
+            //Console.WriteLine(_terrainManager.Units.Values.Count(x => x.Biome == Biome.TemperateGrassland));
 
             /*var keep = items.Where(x =>
             {
@@ -68,15 +82,12 @@ namespace Evolution
                 var hash = hex.GetHashCode();
                 if (!_terrainManager.Units.ContainsKey(hash)) return false;
                 return _terrainManager.Units[hash].Biome == Biome.TemperateGrassland;
-            }).ToList();
+            }).ToList();*/
+            
+            var plant = Plant.Generate(fertilePoints);
 
-            for (int i = 0; i < aridUnits.Count; i++)
-            {
-                var plant = Plant.Generate();
-
-                plant.AddComponent(new PositionComponent(aridUnits[i] * 2));
+                //plant.AddComponent(new PositionComponent(aridUnits[i] * 2));
                 EntityManager.AddEntity(plant);
-            }*/
 
              EventBus.Subscribe<MouseDownEvent>((e) =>
              {
@@ -84,6 +95,21 @@ namespace Evolution
                  var hex = _terrainManager.Layout.PixelToHex(pos).Round();
                  Console.WriteLine($"{pos} -> {hex}");
                  Console.WriteLine(e.Location);
+
+                /* if (e.Button == OpenTK.Windowing.GraphicsLibraryFramework.MouseButton.Left)
+                 {
+                     last = a.CreateInstance(new Instance()
+                     {
+                         Colour = new Vector3(1, 0, 1),
+                         Position = pos * 2
+                     });
+                     a.Reload();
+                 }
+                 else
+                 {
+                     last.Release();
+                     a.Reload();
+                 }*/
              });
 
             /* EventBus.Subscribe<TerrainUpdateEvent>(x =>

@@ -23,6 +23,8 @@ namespace Engine.Render.Core.VAO
 
         public BufferTarget BufferTarget { get; set; }
 
+        public BufferAttribute(string name, T[] data, BufferUsageHint hint) : this(name, data, hint, BufferTarget.ArrayBuffer) { }
+
         public BufferAttribute(string name, T[] data) : this(name, data, BufferUsageHint.StaticDraw, BufferTarget.ArrayBuffer) { }
 
         public BufferAttribute(string name, T[] data, BufferUsageHint hint, BufferTarget target)

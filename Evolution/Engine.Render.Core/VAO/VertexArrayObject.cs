@@ -33,10 +33,10 @@ namespace Engine.Render.Core.VAO
             };
         }
 
-        public void Initialise(IList<Shader> shaders)
+        public virtual void Initialise(IList<Shader> shaders)
         {
             if (Initialised) throw new Exception("The VAO is already initialised");
-
+            AddAttributes();
             VBO = Attributes.SelectMany(x => x.GenerateBufferObjects()).ToArray();
 
             // Generate VAO buffer
@@ -94,5 +94,7 @@ namespace Engine.Render.Core.VAO
             Bind();
             GL.DrawElements(PrimitiveType.Triangles, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero);
         }
+
+        protected virtual void AddAttributes() { }
     }
 }

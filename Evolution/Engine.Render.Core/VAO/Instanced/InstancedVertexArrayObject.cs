@@ -1,6 +1,8 @@
 ﻿using Engine.Render.Core.Data;
+using Engine.Render.Core.Shaders;
 using OpenTK.Graphics.ES30;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Engine.Render.Core.VAO.Instanced
@@ -13,7 +15,11 @@ namespace Engine.Render.Core.VAO.Instanced
         public InstancedVertexArrayObject(VertexArray va, Instance[] instances) : base(va)
         {
             Instances = instances;
-            Attributes.Add(new BufferAttribute<Instance>("Instances", Instances));
+        }
+
+        public override void Initialise(IList<Shader> shaders)
+        {
+            base.Initialise(shaders);
         }
 
         public override void Render()
@@ -36,6 +42,11 @@ namespace Engine.Render.Core.VAO.Instanced
             }
 
             VBO.First(x => x.Name == "Instances").QueueReload();
+        }
+
+        protected override void AddAttributes()
+        {
+            Attributes.Add(new BufferAttribute<Instance>("Instances", Instances, BufferUsageHint.DynamicDraw));
         }
     }
 }

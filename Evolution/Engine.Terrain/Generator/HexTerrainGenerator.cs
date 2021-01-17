@@ -2,6 +2,7 @@
 using Engine.Grid;
 using Engine.Render.Core.Data.Primitives;
 using Engine.Terrain.Biomes;
+using Engine.Terrain.Data;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System;
@@ -23,14 +24,16 @@ namespace Engine.Terrain.Generator
             _noise = new FastNoise();
 
             TerrainShape = Polygon.Generate(Layout.GetHexPoints());
+            PointPicker.Initialise();
         }
 
         public override void Generate()
         {
 
-            _terrain = new List<TerrainUnit>();
             var units = Map.GenerateHexagon((int)TerrainProfile.Size.X);
             var positions = units.Select(x => Layout.HexToPixel(x)).ToArray();
+
+            _terrain = new TerrainUnit[positions.Length];
 
             var map = Combinator.Generate(TerrainProfile, positions);
 
@@ -47,18 +50,18 @@ namespace Engine.Terrain.Generator
                 }
             }
 
-            for (int i = 0; i < positions.Count(); i++)
+            for (int i = 0; i < positions.Length; i++)
             {
-                _terrain.Add(new TerrainUnit()
+                _terrain[i] = new TerrainUnit()
                 {
                     Hex = units.ElementAt(i),
                     Position = positions[i],
                     Height = map.Heights[i],
                     Rainfall = map.Rainfall[i],
-                    Temperature = map.Temperature[i],
-                    GrowingPoints = new List<Vector2>(),
+                    Temperature = 1f,
+                    GrowingPoints = PointPicker.GetPoints(6).Select(x => x + positions[i]).ToArray(),
                     Biome = BiomePainter.Determine(map.Heights[i], TerrainProfile.SeaLevel, TerrainProfile.TideLevel, map.Rainfall[i], map.Temperature[i])
-                });
+                };
             }
         }
 
