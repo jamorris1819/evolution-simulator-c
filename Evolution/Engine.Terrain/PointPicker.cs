@@ -33,6 +33,7 @@ namespace Engine.Terrain
 
         public static Vector2[] GetPoints(int div)
         {
+            if (div == 0) return new Vector2[0];
             var list = _points[div];
             var count = list.Count;
 

@@ -99,7 +99,7 @@ namespace Engine.Render.Core.VAO
 
                 if(attrib.Instanced)
                 {
-                    GL.VertexAttribDivisor(attrib.Size, 1);
+                    GL.VertexAttribDivisor(attrib.Size, attrib.Divisor);
                 }
 
                 cumulative += attrib.Size;

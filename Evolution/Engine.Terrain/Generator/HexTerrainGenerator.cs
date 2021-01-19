@@ -52,6 +52,20 @@ namespace Engine.Terrain.Generator
 
             for (int i = 0; i < positions.Length; i++)
             {
+                var biome = BiomePainter.Determine(map.Heights[i], TerrainProfile.SeaLevel, TerrainProfile.TideLevel, map.Rainfall[i], map.Temperature[i]);
+
+                int density(Biome biome)
+                {
+                    switch (biome)
+                    {
+                        case Biome.RainForest: return 6;
+                        case Biome.TemperateGrassland: return 4;
+                        case Biome.Savanna: return 3;
+                        case Biome.HotDesert: return 1;
+                        default: return 0;
+                    }
+                }
+
                 _terrain[i] = new TerrainUnit()
                 {
                     Hex = units.ElementAt(i),
@@ -59,8 +73,8 @@ namespace Engine.Terrain.Generator
                     Height = map.Heights[i],
                     Rainfall = map.Rainfall[i],
                     Temperature = 1f,
-                    GrowingPoints = PointPicker.GetPoints(6).Select(x => x + positions[i]).ToArray(),
-                    Biome = BiomePainter.Determine(map.Heights[i], TerrainProfile.SeaLevel, TerrainProfile.TideLevel, map.Rainfall[i], map.Temperature[i])
+                    GrowingPoints = PointPicker.GetPoints(density(biome)).Select(x => x + positions[i]).ToArray(),
+                    Biome = biome
                 };
             }
         }

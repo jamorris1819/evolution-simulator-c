@@ -7,6 +7,7 @@ using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Evolution.Life
 {
@@ -33,16 +34,23 @@ namespace Evolution.Life
 
             tri.Scale(0.1f);
 
-            tri.SetColour(new OpenTK.Mathematics.Vector3(0, 0.6f, 0));            
+            tri.SetColour(new OpenTK.Mathematics.Vector3(0, 0.6f, 0));
+
+            Random random = new Random();
+
+            int ee = 0;
+
+            var instances = points.Select(x => new Instance()
+            {
+                Position = x,
+                Colour = new Vector3(0, 0.5f, 0) + new Vector3((float)(random.NextDouble() * 0.1f))
+            }).ToArray();
 
             entity.AddComponent(new RenderComponent(tri, new Engine.Render.Core.VAO.Instanced.InstanceSettings()
             {
-                Instances = points.Select(x => new Instance()
-                {
-                    Position = x,
-                    Colour = new Vector3(0, 0.6f, 0)
-                }).ToArray()
-            }) { MinZoom = 0.1f, Shader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardInstanced });
+                Instances = instances
+            })
+            { MinZoom = 0.1f, Shader = Engine.Render.Core.Shaders.Enums.ShaderType.InstancedRotated });
             entity.AddComponent(new PositionComponent());
 
             return entity;

@@ -25,8 +25,9 @@ namespace Engine
             EntityManager = new EntityManager(EventBus);
             SystemManager = new SystemManager(EntityManager, EventBus);
 
-            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.Standard, "vshader.glsl", "fshader.glsl");
-            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.StandardInstanced, "vshaderinstanced.glsl", "fshader.glsl");
+            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.Standard, "Shaders/vshader.glsl", "Shaders/fshader.glsl");
+            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.StandardInstanced, "Shaders/vshaderinstanced.glsl", "Shaders/fshader.glsl");
+            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.InstancedRotated, "Shaders/vshaderinstancedrotated.glsl", "Shaders/fshader.glsl");
 
             var renderSystem = new RenderSystem(EventBus, Game.ShaderManager);
             SystemManager.AddSystem(renderSystem);

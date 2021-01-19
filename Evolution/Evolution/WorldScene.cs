@@ -72,7 +72,7 @@ namespace Evolution
 
 
 
-            var fertilePoints = _terrainManager.Units.Values.Where(x => x.Biome == Biome.RainForest).SelectMany(x => x.GrowingPoints).ToList();
+            var fertilePoints = _terrainManager.Units.Values.SelectMany(x => x.GrowingPoints).ToList();
 
             //Console.WriteLine(_terrainManager.Units.Values.Count(x => x.Biome == Biome.TemperateGrassland));
 

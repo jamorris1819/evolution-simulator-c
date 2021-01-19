@@ -60,7 +60,7 @@ namespace Engine.Render.Core.Shaders
             GL.ShaderSource(shader, data);
             GL.CompileShader(shader);
             GL.GetShader(shader, ShaderParameter.CompileStatus, out int state);
-
+            var a = GL.GetShaderInfoLog(shader);
             if(state == 0)
             {
                 throw new Exception("Error compiling shader");
