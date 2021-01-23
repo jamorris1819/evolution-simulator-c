@@ -74,5 +74,9 @@ namespace Engine.Render.Core.Data
 
         public void GenerateIndices()
             => Indices = Enumerable.Range(0, Vertices.Length).Select(x => (ushort)x).ToArray();
+
+        public VertexArray Copy() => Copy(this);
+
+        private VertexArray Copy(VertexArray va) => va; // copy struct... maybe find a better way
     }
 }

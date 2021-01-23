@@ -70,8 +70,6 @@ namespace Evolution
                 growingPoints.Add(items[i]);
             }*/
 
-
-
             var fertilePoints = _terrainManager.Units.Values.SelectMany(x => x.GrowingPoints).ToList();
 
             //Console.WriteLine(_terrainManager.Units.Values.Count(x => x.Biome == Biome.TemperateGrassland));
