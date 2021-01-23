@@ -21,11 +21,10 @@ namespace Engine.Render.Core.Data.Primitives
                 indices.Add(i == vertices.Count - 1 ? (ushort)1 : (ushort)(i + 1));
             }
 
-            return new VertexArray()
-            {
-                Vertices = vertices.Select(x => new Vertex(x)).ToArray(),
-                Indices = indices.ToArray()
-            };
+            return new VertexArray(
+                vertices.Select(x => new Vertex(x)).ToArray(),
+                indices.ToArray()
+            );
         }
     }
 }

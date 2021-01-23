@@ -7,19 +7,18 @@ namespace Engine.Render.Core.Data.Primitives
     {
         public static VertexArray Generate(int h, int w)
         {
-            return new VertexArray()
+            var vertices = new[]
             {
-                Vertices = new[]
-                {
                     new Vertex(new Vector2(-w * 0.5f, 0)),
                     new Vertex(new Vector2(w * 0.5f, 0)),
                     new Vertex(new Vector2(0, h))
-                },
-                Indices = new[]
-                {
-                    0, 1, 2
-                }.Select(x => (ushort)x).ToArray()
             };
+            var indices = new[]
+            {
+                    0, 1, 2
+            }.Select(x => (ushort)x).ToArray();
+
+            return new VertexArray(vertices, indices);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Engine.Core;
 using Engine.Core.Components;
 using Engine.Render;
+using Engine.Render.Core;
 using Engine.Render.Core.Data;
 using Engine.Render.Core.Data.Primitives;
 using Engine.Render.Core.VAO.Instanced;
@@ -19,7 +20,7 @@ namespace Evolution.Life
             Entity entity = new Entity("plant");
 
             var tri = layer(0);
-            tri.Add(layer(1));
+            tri = VertexHelper.Combine(tri, layer(1));
 
 
 
@@ -75,7 +76,7 @@ namespace Evolution.Life
 
         private static VertexArray layer(float angle)
         {
-            var tri = new VertexArray() { Vertices = new Vertex[0], Indices = new ushort[0] };
+            var tri = new VertexArray(new Vertex[0], new ushort[0]);
 
             int count = 6;
             float step = (float)(Math.PI * 2) / count;
@@ -83,18 +84,18 @@ namespace Evolution.Life
             for (int i = 0; i < count; i++)
             {
                 var tri2 = leaf();
-                tri2.Rotate(i * step);
-                tri.Add(tri2);
+                tri2 = VertexHelper.Rotate(tri2, i * step);
+                tri = VertexHelper.Combine(tri, tri2);
             }
 
-            tri.Scale(0.1f);
-            var dup = tri.Copy();
+            tri = VertexHelper.Scale(tri, 0.1f);
+            /*var dup = tri.Copy();
             dup.Rotate(1);
 
             tri.Add(dup);
 
             tri.SetColour(new OpenTK.Mathematics.Vector3(0, 0.6f, 0));
-            tri.Rotate(angle);
+            tri.Rotate(angle);*/
             return tri;
         }
     }

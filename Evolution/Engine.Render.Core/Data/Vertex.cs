@@ -6,15 +6,15 @@ using System.Text;
 
 namespace Engine.Render.Core.Data
 {
-    public struct Vertex
+    public readonly struct Vertex
     {
         public static int BytesPerVertex = 5;
 
         [AttributeName("vPosition", 2, OpenTK.Graphics.ES30.VertexAttribPointerType.Float)]
-        public Vector2 Position { get; set; }
+        public Vector2 Position { get; }
 
         [AttributeName("vColour", 3, OpenTK.Graphics.ES30.VertexAttribPointerType.Float)]
-        public Vector3 Colour { get; set; }
+        public Vector3 Colour { get; }
 
         public Vertex(Vector2 pos) : this(pos, new Vector3(1, 1, 1)) { }
 
