@@ -13,6 +13,7 @@ using Engine.Terrain.Biomes;
 using Engine.Terrain.Data;
 using Engine.Terrain.Generator;
 using Evolution.Life;
+using Evolution.Life.DNA;
 using Evolution.UI;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
@@ -81,11 +82,21 @@ namespace Evolution
                 if (!_terrainManager.Units.ContainsKey(hash)) return false;
                 return _terrainManager.Units[hash].Biome == Biome.TemperateGrassland;
             }).ToList();*/
-            
-            var plant = Plant.Generate(fertilePoints);
+
+            var leafData = new LeafData(new Vector2(0), new Vector2(0.5f));
+            var dna = new PlantDNA(4, leafData);
+            var plant = new Plant(dna);
+
+            var plantShape = plant.GenerateShape();
+
+            var ent = new Entity("plant");
+            ent.AddComponent(new RenderComponent(plantShape));
+            ent.AddComponent(new PositionComponent());
+            EntityManager.AddEntity(ent);
+            //var plant = Plant.Generate(fertilePoints);
 
                 //plant.AddComponent(new PositionComponent(aridUnits[i] * 2));
-                EntityManager.AddEntity(plant);
+                //EntityManager.AddEntity(plant);
 
              EventBus.Subscribe<MouseDownEvent>((e) =>
              {
