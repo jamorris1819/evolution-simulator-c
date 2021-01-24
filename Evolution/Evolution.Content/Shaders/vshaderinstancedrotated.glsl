@@ -23,6 +23,6 @@ void main(void)
 	vec2 newPos = vPosition * rotationZ((vIPosition.x + vIPosition.y) * 10);
 	gl_Position = uProjection * uView * uModel * vec4(newPos + vIPosition, 0, 1);
 
-	oColour = vIColour;
+	oColour = vColour + vIColour;
 }
 

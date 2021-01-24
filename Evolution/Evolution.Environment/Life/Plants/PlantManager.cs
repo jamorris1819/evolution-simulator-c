@@ -35,7 +35,7 @@ namespace Evolution.Environment.Life.Plants
         /// <summary>
         /// Creates an instance of the given plant at the specified location.
         /// </summary>
-        public void AddPlant(PlantDNA dna, Vector2 pos)
+        public PlantInstance AddPlant(PlantDNA dna, Vector2 pos)
         {
             if (!_entities.ContainsKey(dna))
             {
@@ -44,6 +44,8 @@ namespace Evolution.Environment.Life.Plants
 
             var newInstance = new PlantInstance(Guid.NewGuid(), pos, dna.Colour);
             _instances[dna].Add(newInstance);
+
+            return newInstance;
         }
 
         /// <summary>
@@ -62,6 +64,14 @@ namespace Evolution.Environment.Life.Plants
             };
 
             _entities[dna].GetComponent<RenderComponent>().UpdateInstanceSettings(newInstanceSettings, true);
+        }
+
+        public void Clear()
+        {
+            _entities = new Dictionary<PlantDNA, Entity>();
+            _instances = new Dictionary<PlantDNA, List<PlantInstance>>();
+            _plants = new Dictionary<PlantDNA, Plant>();
+            Refresh();
         }
 
         public void Refresh()

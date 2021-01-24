@@ -27,12 +27,22 @@ namespace Engine.Render
             VertexArrayObject = new VertexArrayObject(va);
         }
 
-        public RenderComponent(VertexArray va, InstanceSettings settings)
+        public RenderComponent(VertexArray va, InstanceSettings settings) : this(va, settings, false) { }
+
+        public RenderComponent(VertexArray va, InstanceSettings settings, bool variableCount)
         {
             VertexArray = va;
 
-            var iVAO = new InstancedVertexArrayObject(va, settings.Instances);
-            VertexArrayObject = iVAO;
+            if (variableCount)
+            {
+                var iVAO = new VariableInstancedVAO(va, settings.Instances);
+                VertexArrayObject = iVAO;
+            }
+            else
+            {
+                var iVAO = new InstancedVertexArrayObject(va, settings.Instances);
+                VertexArrayObject = iVAO;
+            }
         }
 
         public void UpdateInstanceSettings(InstanceSettings settings, bool reload)

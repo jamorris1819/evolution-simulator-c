@@ -58,9 +58,9 @@ namespace Engine.Terrain.Generator
                 {
                     switch (biome)
                     {
-                        case Biome.RainForest: return 6;
-                        case Biome.TemperateGrassland: return 3;
-                        case Biome.Savanna: return 3;
+                        case Biome.RainForest: return 8;
+                        case Biome.TemperateGrassland: return 4;
+                        case Biome.Savanna: return 14;
                         case Biome.HotDesert: return 1;
                         default: return 0;
                     }

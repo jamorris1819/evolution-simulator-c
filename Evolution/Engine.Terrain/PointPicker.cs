@@ -23,7 +23,7 @@ namespace Engine.Terrain
             _layout = new Layout(Orientation.Layout_Pointy, new Vector2(4, 4));
             _hex = new Hex();
 
-            for(int i = 0; i < 10; i++)
+            for(int i = 0; i < 20; i++)
             {
                 _points.Add(i + 1, GenerateMulti(5, i + 1));
             }

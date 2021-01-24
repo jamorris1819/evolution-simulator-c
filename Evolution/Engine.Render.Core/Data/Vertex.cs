@@ -16,7 +16,7 @@ namespace Engine.Render.Core.Data
         [AttributeName("vColour", 3, OpenTK.Graphics.ES30.VertexAttribPointerType.Float)]
         public Vector3 Colour { get; }
 
-        public Vertex(Vector2 pos) : this(pos, new Vector3(1, 1, 1)) { }
+        public Vertex(Vector2 pos) : this(pos, new Vector3(0, 0, 0)) { }
 
         public Vertex(Vector2 pos, Vector3 colour)
         {

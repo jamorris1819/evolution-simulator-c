@@ -4,6 +4,7 @@ using Evolution.Environment.Life.Plants.Data;
 using Evolution.Genetics;
 using OpenTK.Mathematics;
 using System;
+using System.Collections.Generic;
 
 namespace Evolution.Life
 {
@@ -35,7 +36,24 @@ namespace Evolution.Life
             }
 
             body = VertexHelper.Scale(body, (float)(_dna.Size) / 100.0f);
-            body = VertexHelper.SetColour(body, new Vector3(0, 0.6f, 0));
+            body = VertexHelper.SetColour(body, new Vector3(0, 0, 0));
+
+            List<VertexArray> layers = new List<VertexArray>();
+            step = (float)(Math.PI * 2) / _dna.Layers;
+
+            for(int i = 0; i < _dna.Layers; i++)
+            {
+                var newLayer = VertexHelper.Rotate(body, step * (float)(i + 1));
+                newLayer = VertexHelper.Scale(newLayer, (float)Math.Pow(0.9, i + 1));
+                newLayer = VertexHelper.SetColour(newLayer, new Vector3(i * 0.03f));
+                layers.Add(newLayer);
+            }
+
+            for(int i = 0; i <layers.Count; i++)
+            {
+                body = VertexHelper.Combine(body, layers[i]);
+            }
+
             return body;
         }
 
