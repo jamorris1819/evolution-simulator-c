@@ -54,12 +54,12 @@ namespace Engine.Terrain.Generator
             {
                 var biome = BiomePainter.Determine(map.Heights[i], TerrainProfile.SeaLevel, TerrainProfile.TideLevel, map.Rainfall[i], map.Temperature[i]);
 
-                int density(Biome biome)
+                static int density(Biome biome)
                 {
                     switch (biome)
                     {
                         case Biome.RainForest: return 6;
-                        case Biome.TemperateGrassland: return 4;
+                        case Biome.TemperateGrassland: return 3;
                         case Biome.Savanna: return 3;
                         case Biome.HotDesert: return 1;
                         default: return 0;

@@ -59,7 +59,8 @@ namespace Engine.Terrain
 
             for(int i = 0; i < items.Count; i++)
             {
-                var hex = _layout.PixelToHex(items[i] * 0.5f).Round();
+                var offset = (items[i] * 0.5f) + (items[i].Normalized() * 0.1f);
+                var hex = _layout.PixelToHex(offset).Round();
                 if (hex.Length() > 0) continue;
                 points.Add(items[i]);
             }

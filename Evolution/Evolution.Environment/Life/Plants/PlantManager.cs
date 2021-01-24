@@ -51,11 +51,12 @@ namespace Evolution.Environment.Life.Plants
         /// </summary>
         public void Refresh(PlantDNA dna)
         {
+            Random random = new Random();
             var newInstanceSettings = new InstanceSettings()
             {
                 Instances = _instances[dna].Select(x => new Instance()
                 {
-                    Colour = x.Colour,
+                    Colour = x.Colour + new Vector3((float)random.NextDouble() * 0.05f),
                     Position = x.Position
                 }).ToArray()
             };
