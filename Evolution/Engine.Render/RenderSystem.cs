@@ -6,6 +6,7 @@ using Engine.Render.Core.VAO;
 using Engine.Render.Events;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
+using System;
 
 namespace Engine.Render
 {
@@ -23,7 +24,7 @@ namespace Engine.Render
             _shaderManager = shaderManager;
             _scale = 1;
 
-            eventBus.Subscribe<CameraZoomEvent>(x => _scale = x.Scale);
+            eventBus.Subscribe<CameraZoomEvent>(x => { _scale = x.Scale; Console.WriteLine(x.Scale); });
             eventBus.Subscribe<CameraChangeEvent>(x => _camera = x.Camera);
         }
 
@@ -36,7 +37,8 @@ namespace Engine.Render
 
             //if (!InView(posComp.Position)) return;
 
-            //if (comp.MinZoom > _scale) return;
+            if (comp.MinZoom > _scale) return;
+            if (comp.MaxZoom < _scale) return;
 
             var def = Matrix4.CreateTranslation(new Vector3(posComp.Position.X, posComp.Position.Y, 0));
 

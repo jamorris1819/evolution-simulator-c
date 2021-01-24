@@ -16,7 +16,11 @@ namespace Evolution.Genetics
 
         public int Layers { get; }
 
-        public PlantDNA(int size, int layers, int leaves, LeafData leafShape, Vector3 colour)
+        public float? MinHeight { get; }
+
+        public float? MaxHeight { get; }
+
+        public PlantDNA(int size, int layers, int leaves, LeafData leafShape, Vector3 colour, float? minHeight, float? maxHeight)
         {
             Size = size;
             Layers = layers;
@@ -24,9 +28,11 @@ namespace Evolution.Genetics
             LeafShape = leafShape;
             Colour = colour;
             Berries = null;
+            MinHeight = minHeight;
+            MaxHeight = maxHeight;
         }
 
-        public PlantDNA(int size, int layers, int leaves, LeafData leafShape, Vector3 colour, Vector3 berries)
+        public PlantDNA(int size, int layers, int leaves, LeafData leafShape, Vector3 colour, float? minHeight, float? maxHeight, Vector3 berries)
         {
             Size = size;
             Layers = layers;
@@ -34,6 +40,8 @@ namespace Evolution.Genetics
             LeafShape = leafShape;
             Colour = colour;
             Berries = berries;
+            MinHeight = minHeight;
+            MaxHeight = maxHeight;
         }
     }
 }

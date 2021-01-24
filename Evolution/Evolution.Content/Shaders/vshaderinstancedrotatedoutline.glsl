@@ -30,7 +30,9 @@ void main(void)
 	if(newPos.y < 0) newPos.y -= sizeChange;
 	if(newPos.y > 0) newPos.y += sizeChange;*/
 
-	gl_Position = uProjection * uView * uModel * vec4((newPos * 1.1) + vIPosition, 0, 1);
+	vec2 dir = normalize(newPos);
+
+	gl_Position = uProjection * uView * uModel * vec4((newPos + dir * 1) + vIPosition, 0, 1);
 
 	oColour = vIColour;
 }

@@ -20,6 +20,8 @@ namespace Engine.Render
 
         public float MinZoom { get; set; } = 0.0f;
 
+        public float? MaxZoom { get; set; }
+
 
         public RenderComponent(VertexArray va)
         {

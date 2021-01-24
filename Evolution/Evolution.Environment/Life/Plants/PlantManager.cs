@@ -118,6 +118,10 @@ namespace Evolution.Environment.Life.Plants
             var renderComponent = new RenderComponent(shape, instanceSettings);
             renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Outline);
             renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.InstancedRotated);
+
+            if (dna.MinHeight.HasValue) renderComponent.MinZoom = dna.MinHeight.Value;
+            if (dna.MaxHeight.HasValue) renderComponent.MaxZoom = dna.MaxHeight.Value;
+
             entity.AddComponent(renderComponent);
 
             _entities[dna] = entity;
