@@ -3,6 +3,7 @@ using Engine.Render.Core.Data;
 using Engine.Render.Core.Shaders.Enums;
 using Engine.Render.Core.VAO;
 using Engine.Render.Core.VAO.Instanced;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Engine.Render
@@ -13,7 +14,7 @@ namespace Engine.Render
 
         public VertexArrayObject VertexArrayObject { get; set; }
 
-        public ShaderType Shader { get; set; } = ShaderType.Standard;
+        public List<ShaderType> Shaders { get; set; } = new List<ShaderType>();
 
         public ComponentType Type => ComponentType.COMPONENT_RENDER;
 

@@ -105,7 +105,8 @@ namespace Evolution.Environment.Life.Plants
             entity.AddComponent(new PositionComponent());
             var shape = plant.GenerateShape();
             var renderComponent = new RenderComponent(shape, instanceSettings);
-            renderComponent.Shader = Engine.Render.Core.Shaders.Enums.ShaderType.InstancedRotated;
+            renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Outline);
+            renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.InstancedRotated);
             entity.AddComponent(renderComponent);
 
             _entities[dna] = entity;

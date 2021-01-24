@@ -10,6 +10,8 @@ namespace Engine.Render.Core.VAO
     public class VertexArrayObject
     {
         private int _handle;
+        protected Shader _outline;
+
         public bool Initialised { get; protected set; }
         public bool NeedsUpdate => VBO.Any(x => x.NeedsUpdate);
         public bool Enabled { get; set; }
@@ -33,7 +35,7 @@ namespace Engine.Render.Core.VAO
             };
         }
 
-        public virtual void Initialise(IList<Shader> shaders)
+        public virtual void Initialise(ShaderManager shaderManager)
         {
             if (Initialised) throw new Exception("The VAO is already initialised");
             AddAttributes();
@@ -47,8 +49,10 @@ namespace Engine.Render.Core.VAO
 
             for (int i = 0; i < VBO.Length; i++)
             {
-                VBO[i].Initialise(shaders);
+                VBO[i].Initialise(shaderManager.All);
             }
+
+            _outline = shaderManager.GetShader(Shaders.Enums.ShaderType.Outline);
         }
 
         public void Load()

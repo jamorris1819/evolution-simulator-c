@@ -40,11 +40,14 @@ namespace Engine.Render
 
             var def = Matrix4.CreateTranslation(new Vector3(posComp.Position.X, posComp.Position.Y, 0));
 
-            var shader = _shaderManager.GetShader(comp.Shader);
-            shader.Bind();
-            shader.SetUniformMat4(ShaderUniforms.Model, def);
+            for (int i = 0; i < comp.Shaders.Count; i++)
+            {
+                var shader = _shaderManager.GetShader(comp.Shaders[i]);
+                shader.Bind();
+                shader.SetUniformMat4(ShaderUniforms.Model, def);
 
-            comp.VertexArrayObject.Render();
+                comp.VertexArrayObject.Render();
+            }
         }
 
         public override void OnUpdate(Entity entity)
@@ -55,7 +58,7 @@ namespace Engine.Render
             
             if(!comp.VertexArrayObject.Initialised)
             {
-                comp.VertexArrayObject.Initialise(_shaderManager.All);
+                comp.VertexArrayObject.Initialise(_shaderManager);
                 comp.VertexArrayObject.Load();
             }
 

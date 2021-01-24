@@ -17,11 +17,6 @@ namespace Engine.Render.Core.VAO.Instanced
             Instances = instances;
         }
 
-        public override void Initialise(IList<Shader> shaders)
-        {
-            base.Initialise(shaders);
-        }
-
         public override void Render()
         {
             Bind();

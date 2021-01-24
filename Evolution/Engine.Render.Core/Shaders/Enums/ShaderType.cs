@@ -8,6 +8,7 @@ namespace Engine.Render.Core.Shaders.Enums
     {
         Standard,
         StandardInstanced,
-        InstancedRotated
+        InstancedRotated,
+        Outline
     }
 }
