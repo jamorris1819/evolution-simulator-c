@@ -44,6 +44,16 @@ namespace Engine.Render.Core.VAO.Instanced
             VBO.First(x => x.Name == "Instances").QueueReload();
         }
 
+        public void Update(List<Instance> instances)
+        {
+            Instances = instances.ToArray();
+
+            if (VBO == null) return;
+
+            (VBO.First(x => x.Name == "Instances") as VertexBufferObject<Instance>).UpdateData(Instances);
+            VBO.First(x => x.Name == "Instances").QueueReload();
+        }
+
         protected override void AddAttributes()
         {
             Attributes.Add(new BufferAttribute<Instance>("Instances", Instances, BufferUsageHint.DynamicDraw));

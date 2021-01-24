@@ -96,7 +96,7 @@ namespace Engine.Terrain
         private void OnTerrainUpdate(TerrainUpdateEvent e)
         {
             var settings = GenerateTerrain(e.Profile);
-            _renderComponent.UpdateInstanceSettings(settings);
+            _renderComponent.UpdateInstanceSettings(settings, false);
         }
     }
 }

@@ -3,6 +3,7 @@ using Engine.Render.Core.Data;
 using Engine.Render.Core.Shaders.Enums;
 using Engine.Render.Core.VAO;
 using Engine.Render.Core.VAO.Instanced;
+using System.Linq;
 
 namespace Engine.Render
 {
@@ -10,7 +11,7 @@ namespace Engine.Render
     {
         public VertexArray VertexArray { get; set; }
 
-        internal VertexArrayObject VertexArrayObject { get; set; }
+        public VertexArrayObject VertexArrayObject { get; set; }
 
         public ShaderType Shader { get; set; } = ShaderType.Standard;
 
@@ -33,11 +34,12 @@ namespace Engine.Render
             VertexArrayObject = iVAO;
         }
 
-        public void UpdateInstanceSettings(InstanceSettings settings)
+        public void UpdateInstanceSettings(InstanceSettings settings, bool reload)
         {
             if (VertexArrayObject is InstancedVertexArrayObject iVAO)
             {
-                iVAO.Update(settings.Instances);
+                if(reload) iVAO.Update(settings.Instances.ToList());
+                else iVAO.Update(settings.Instances);
             }
         }
     }

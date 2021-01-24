@@ -1,16 +1,9 @@
-﻿using Engine.Core;
-using Engine.Core.Components;
-using Engine.Render;
-using Engine.Render.Core;
+﻿using Engine.Render.Core;
 using Engine.Render.Core.Data;
-using Engine.Render.Core.Data.Primitives;
-using Engine.Render.Core.VAO.Instanced;
-using Evolution.Life.DNA;
+using Evolution.Environment.Life.Plants.Data;
+using Evolution.Genetics;
 using OpenTK.Mathematics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Evolution.Life
 {
@@ -41,7 +34,7 @@ namespace Evolution.Life
                 body = VertexHelper.Combine(body, newLeaf);
             }
 
-            body = VertexHelper.Scale(body, 0.1f);
+            body = VertexHelper.Scale(body, (float)(_dna.Size) / 100.0f);
             body = VertexHelper.SetColour(body, new Vector3(0, 0.6f, 0));
             return body;
         }

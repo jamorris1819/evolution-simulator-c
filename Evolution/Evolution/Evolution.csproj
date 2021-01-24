@@ -17,6 +17,11 @@
     <ProjectReference Include="..\Engine.UI\Engine.UI.csproj" />
     <ProjectReference Include="..\Engine\Engine.csproj" />
     <ProjectReference Include="..\Evolution.Content\Evolution.Content.csproj" />
+    <ProjectReference Include="..\Evolution.Environment\Evolution.Environment.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Life\DNA\" />
   </ItemGroup>
 
 </Project>

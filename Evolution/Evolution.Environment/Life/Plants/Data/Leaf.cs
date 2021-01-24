@@ -1,12 +1,12 @@
 ﻿using Engine.Render.Core.Data;
 using Engine.Render.Core.Data.Primitives;
+using Evolution.Genetics;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Evolution.Life
+namespace Evolution.Environment.Life.Plants.Data
 {
     public class Leaf
     {

@@ -52,7 +52,7 @@ namespace Engine.Render.Core.VAO.Instanced
 
         protected override void AddAttributes()
         {
-            Attributes.Add(new BufferAttribute<Instance>("Instances", Instances, BufferUsageHint.DynamicDraw));
+            Attributes.Add(new BufferAttribute<Instance>("Instances", Instances.ToArray(), BufferUsageHint.DynamicDraw));
         }
 
         public override void Render()

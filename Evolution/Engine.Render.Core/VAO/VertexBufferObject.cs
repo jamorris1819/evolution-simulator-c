@@ -75,6 +75,13 @@ namespace Engine.Render.Core.VAO
 
         public void Bind() => GL.BindBuffer(BufferTarget, _handle);
 
+        public void UpdateData(T[] data)
+        {
+            _buffer = data;
+            Bind();
+            AllocateMemory();
+        }
+
         private void AllocateMemory()
         {
             var expectedSize = Buffer.Length * Marshal.SizeOf<T>();
