@@ -13,6 +13,7 @@ namespace Engine.Render.Core.VAO
         protected Shader _outline;
 
         public bool Initialised { get; protected set; }
+        public float Visibility { get; set; } = 1.0f;
         public bool NeedsUpdate => VBO.Any(x => x.NeedsUpdate);
         public bool Enabled { get; set; }
         public VertexArray VertexArray { get; set; }
@@ -93,10 +94,9 @@ namespace Engine.Render.Core.VAO
             GL.BindVertexArray(_handle);
         }
 
-        public virtual void Render()
+        public virtual void Render(Shader shader)
         {
-            Bind();
-            GL.DrawElements(PrimitiveType.Triangles, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero);
+            GL.DrawElements(shader.PrimitiveType, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero);
         }
 
         protected virtual void AddAttributes() { }

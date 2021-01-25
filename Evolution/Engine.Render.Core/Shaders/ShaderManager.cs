@@ -18,7 +18,7 @@ namespace Engine.Render.Core.Shaders
             _shaders = new Dictionary<Enums.ShaderType, Shader>();
         }
 
-        public void CreateShader(Enums.ShaderType type, string vLocation, string fLocation)
+        public void CreateShader(Enums.ShaderType type, string vLocation, string fLocation, PrimitiveType primitiveType = PrimitiveType.Triangles)
         {
             if (_shaders.ContainsKey(type)) throw new Exception("Duplicate shader");
 
@@ -41,10 +41,12 @@ namespace Engine.Render.Core.Shaders
             }
 
             var shader = new Shader(program);
+            shader.PrimitiveType = primitiveType;
 
             shader.AddUniform(ShaderUniforms.View, GL.GetUniformLocation(program, "uView"));
             shader.AddUniform(ShaderUniforms.Projection, GL.GetUniformLocation(program, "uProjection"));
             shader.AddUniform(ShaderUniforms.Model, GL.GetUniformLocation(program, "uModel"));
+            shader.AddUniform(ShaderUniforms.Alpha, GL.GetUniformLocation(program, "alpha"));
 
             _shaders.Add(type, shader);
         }

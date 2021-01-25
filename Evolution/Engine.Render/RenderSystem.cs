@@ -4,6 +4,7 @@ using Engine.Render.Core.Shaders;
 using Engine.Render.Core.Shaders.Enums;
 using Engine.Render.Core.VAO;
 using Engine.Render.Events;
+using OpenTK.Graphics.ES30;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System;
@@ -37,18 +38,20 @@ namespace Engine.Render
 
             //if (!InView(posComp.Position)) return;
 
-            if (comp.MinZoom > _scale) return;
-            if (comp.MaxZoom < _scale) return;
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             var def = Matrix4.CreateTranslation(new Vector3(posComp.Position.X, posComp.Position.Y, 0));
-
+            if (comp.VertexArrayObject.Visibility == 0) return;
+            comp.VertexArrayObject.Bind();
             for (int i = 0; i < comp.Shaders.Count; i++)
             {
                 var shader = _shaderManager.GetShader(comp.Shaders[i]);
                 shader.Bind();
                 shader.SetUniformMat4(ShaderUniforms.Model, def);
+                shader.SetUniform(ShaderUniforms.Alpha, comp.VertexArrayObject.Visibility);
 
-                comp.VertexArrayObject.Render();
+                comp.VertexArrayObject.Render(shader);
             }
         }
 
@@ -57,8 +60,44 @@ namespace Engine.Render
             if (!MaskMatch(entity)) return;
 
             RenderComponent comp = entity.GetComponent<RenderComponent>();
-            
-            if(!comp.VertexArrayObject.Initialised)
+
+            // maybe make this a lil less hacky
+            if (comp.MinZoom < _scale)
+            {
+                if (comp.VertexArrayObject.Visibility < 1)
+                {
+                    comp.VertexArrayObject.Visibility += 0.16f;
+                }
+                else comp.VertexArrayObject.Visibility = 1;
+            }
+            else if (comp.MinZoom > _scale)
+            {
+                if (comp.VertexArrayObject.Visibility > 0)
+                {
+                    comp.VertexArrayObject.Visibility -= 0.16f;
+                }
+                else comp.VertexArrayObject.Visibility = 0;
+            }
+
+            if (comp.MaxZoom > _scale)
+            {
+                if(comp.VertexArrayObject.Visibility < 1)
+                {
+                    comp.VertexArrayObject.Visibility += 0.16f;
+                }
+                else comp.VertexArrayObject.Visibility = 1;
+                
+            }
+            else if (comp.MaxZoom < _scale)
+            {
+                if (comp.VertexArrayObject.Visibility > 0)
+                {
+                    comp.VertexArrayObject.Visibility -= 0.16f;
+                }
+                else comp.VertexArrayObject.Visibility = 0;
+            }
+
+            if (!comp.VertexArrayObject.Initialised)
             {
                 comp.VertexArrayObject.Initialise(_shaderManager);
                 comp.VertexArrayObject.Load();

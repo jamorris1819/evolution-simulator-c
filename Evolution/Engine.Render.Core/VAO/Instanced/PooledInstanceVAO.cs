@@ -1,4 +1,5 @@
 ﻿using Engine.Render.Core.Data;
+using Engine.Render.Core.Shaders;
 using OpenTK.Graphics.ES30;
 using System;
 using System.Collections.Generic;
@@ -55,10 +56,10 @@ namespace Engine.Render.Core.VAO.Instanced
             Attributes.Add(new BufferAttribute<Instance>("Instances", Instances.ToArray(), BufferUsageHint.DynamicDraw));
         }
 
-        public override void Render()
+        public override void Render(Shader shader)
         {
             Bind();
-            GL.DrawElementsInstanced(PrimitiveType.Triangles, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero, _tracker);
+            GL.DrawElementsInstanced(shader.PrimitiveType, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero, _tracker);
         }
     }
 }

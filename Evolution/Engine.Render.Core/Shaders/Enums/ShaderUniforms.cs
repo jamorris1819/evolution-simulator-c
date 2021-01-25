@@ -8,6 +8,7 @@ namespace Engine.Render.Core.Shaders.Enums
     {
         View,
         Projection,
-        Model
+        Model,
+        Alpha
     }
 }

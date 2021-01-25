@@ -17,10 +17,9 @@ namespace Engine.Render.Core.VAO.Instanced
             Instances = instances;
         }
 
-        public override void Render()
+        public override void Render(Shader shader)
         {
-            Bind();
-            GL.DrawElementsInstanced(PrimitiveType.Triangles, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero, Instances.Length);
+            GL.DrawElementsInstanced(shader.PrimitiveType, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero, Instances.Length);
         }
 
         public void Update(Instance[] instances)

@@ -1,4 +1,5 @@
 ﻿using Engine.Render.Core.Data;
+using Engine.Render.Core.Shaders;
 using OpenTK.Graphics.ES30;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,9 @@ namespace Engine.Render.Core.VAO.Instanced
             Visible = (int)(Total * random.NextDouble());
         }
 
-        public override void Render()
+        public override void Render(Shader shader)
         {
-            Bind();
-            GL.DrawElementsInstanced(PrimitiveType.Triangles, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero, Visible);
+            GL.DrawElementsInstanced(shader.PrimitiveType, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero, Visible);
         }
 
         public void Add(int count = 1)

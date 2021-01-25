@@ -6,8 +6,9 @@ out vec4 color;
 
 uniform bool uOverrideEnabled;
 uniform vec4 uOverrideColour;
+uniform float alpha;
  
 void main(void)
 {
-	color = vec4(0, 0, 0, 1);
+	color = vec4(0, 0, 0, alpha);
 }

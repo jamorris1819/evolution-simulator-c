@@ -11,11 +11,12 @@ namespace Engine.Render.Core.Shaders
 
         public int ProgramId { get; private set; }
 
+        public PrimitiveType PrimitiveType { get; set; } = PrimitiveType.Triangles;
+
         public Shader(int programId)
         {
             ProgramId = programId;
             _uniforms = new Dictionary<ShaderUniforms, int>();
-
         }
 
         public void Bind()
@@ -33,6 +34,14 @@ namespace Engine.Render.Core.Shaders
             if (id == -1) return;
 
             GL.UniformMatrix4(id, false, ref mat);
+        }
+
+        public void SetUniform(ShaderUniforms name, float value)
+        {
+            int id = GetUniform(name);
+            if (id == -1) return;
+
+            GL.Uniform1(id, value);
         }
     }
 }

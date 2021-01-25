@@ -19,11 +19,11 @@ namespace Evolution.Environment.Life.Plants
             var grasslandPlants = new BiomeFlora();
             grasslandPlants.AddPlant(Plants.Tree1, 1);
             grasslandPlants.AddPlant(Plants.Tree3, 1);
-            grasslandPlants.AddPlant(Plants.Spikey, 20);
-            grasslandPlants.AddPlant(Plants.Clover, 20);
+            grasslandPlants.AddPlant(Plants.Spikey, 100);
+            grasslandPlants.AddPlant(Plants.Clover, 200);
             grasslandPlants.AddPlant(Plants.Flat, 10);
-            grasslandPlants.AddPlant(Plants.Bush, 2);
-            grasslandPlants.AddPlant(Plants.Bush2, 2);
+            grasslandPlants.AddPlant(Plants.Bush, 6);
+            grasslandPlants.AddPlant(Plants.Bush2, 6);
             _flora.Add(Biome.TemperateGrassland, grasslandPlants);
 
             var rainforestPlants = new BiomeFlora();

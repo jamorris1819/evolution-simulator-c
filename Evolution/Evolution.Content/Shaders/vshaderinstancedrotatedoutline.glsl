@@ -32,7 +32,7 @@ void main(void)
 
 	vec2 dir = normalize(newPos);
 
-	gl_Position = uProjection * uView * uModel * vec4((newPos + dir * 1) + vIPosition, 0, 1);
+	gl_Position = uProjection * uView * uModel * vec4(newPos * 1.2 + vIPosition, 0, 1);
 
 	oColour = vIColour;
 }

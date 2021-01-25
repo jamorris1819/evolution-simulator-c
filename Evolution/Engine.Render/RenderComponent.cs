@@ -18,7 +18,7 @@ namespace Engine.Render
 
         public ComponentType Type => ComponentType.COMPONENT_RENDER;
 
-        public float MinZoom { get; set; } = 0.0f;
+        public float? MinZoom { get; set; }
 
         public float? MaxZoom { get; set; }
 

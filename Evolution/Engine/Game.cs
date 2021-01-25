@@ -1,6 +1,7 @@
 ﻿using Engine.Render;
 using Engine.Render.Core.Shaders;
 using Engine.UI;
+using OpenTK.Graphics.ES30;
 using OpenTK.Windowing.Desktop;
 using Redbus;
 using Redbus.Interfaces;
@@ -31,6 +32,9 @@ namespace Engine
             _sceneManager = new SceneManager(gameWindowSettings, nativeWindowSettings, EventBus);
             UIManager = new UIManager(_sceneManager, EventBus);
             _sceneManager.SetUIManager(UIManager);
+
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
         }
 
         public void Run()

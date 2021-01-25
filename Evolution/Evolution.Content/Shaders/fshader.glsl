@@ -6,6 +6,7 @@ out vec4 color;
 
 uniform bool uOverrideEnabled;
 uniform vec4 uOverrideColour;
+uniform float alpha;
  
 void main(void)
 {
@@ -13,6 +14,6 @@ void main(void)
 		color = uOverrideColour;
 	}
 	else {
-		color = vec4(oColour, 1);
+		color = vec4(oColour, alpha);
 	}
 }

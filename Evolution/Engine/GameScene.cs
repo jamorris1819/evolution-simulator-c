@@ -27,6 +27,7 @@ namespace Engine
 
             Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.Standard, "Shaders/vshader.glsl", "Shaders/fshader.glsl");
             Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.StandardInstanced, "Shaders/vshaderinstanced.glsl", "Shaders/fshader.glsl");
+            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.StandardInstancedLoop, "Shaders/vshaderinstancedloop.glsl", "Shaders/fshader.glsl", PrimitiveType.LinesAdjacency);
             Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.InstancedRotated, "Shaders/vshaderinstancedrotated.glsl", "Shaders/fshader.glsl");
             Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.Outline, "Shaders/vshaderinstancedrotatedoutline.glsl", "Shaders/fshaderinstancedrotatedoutline.glsl");
 
