@@ -44,13 +44,13 @@ namespace Evolution
 
             EventBus.Publish(new CameraChangeEvent() { Camera = cam });
 
-            /*for(int x = 0; x < 100; x++)
+            for(int x = 0; x < 10; x++)
             {
-                for(int y= 0; y < 100; y ++)
+                for(int y= 0; y < 10; y ++)
                 {
                     createCreature(x, y);
                 }
-            }*/
+            }
             
 
             EventBus.Subscribe<MouseDownEvent>((e) =>
@@ -68,8 +68,10 @@ namespace Evolution
 
             Random random = new Random();
             FastNoise noise = new FastNoise(random.Next());
+            noise.Octaves = 5;
+            noise.UsedNoiseType = FastNoise.NoiseType.PerlinFractal;
 
-            int steps = 16;
+            int steps = 64;
             float stepSize = (float)Math.PI / steps;
 
             List<Vector2> points = new List<Vector2>();
@@ -77,12 +79,12 @@ namespace Evolution
             {
                 var point = new Vector2((float)Math.Sin(stepSize * i), (float)Math.Cos(stepSize * i));
                 point.Normalize();
-                var dist = Math.Abs(noise.GetSimplexFractal(i * 4, 0));
+                var dist = Math.Abs(noise.GetNoise(i, 0));
                 point *= Math.Max(dist, 0.1f);
                 points.Add(point);
             }
 
-            var highResPoints = Enumerable.Range(0, 64).Select(x => BezierCurve.CalculatePoint(points, x / 63f)).ToArray();
+            //var highResPoints = Enumerable.Range(0, 64).Select(x => BezierCurve.CalculatePoint(points, x / 63f)).ToArray();
             
            
 
