@@ -44,7 +44,7 @@ namespace Evolution.Environment.Food
             var renderComponent = new RenderComponent(_shape, instanceSettings, true);
             renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Outline);
             renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.InstancedRotated);
-            renderComponent.MinZoom = 0.15f;
+            //renderComponent.MinZoom = 0.15f;
             Entity.AddComponent(renderComponent);
             Entity.AddComponent(new PositionComponent(Position));
         }

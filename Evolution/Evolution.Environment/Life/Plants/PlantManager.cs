@@ -2,6 +2,7 @@
 using Engine.Core.Components;
 using Engine.Core.Managers;
 using Engine.Render;
+using Engine.Render.Core.Data.Zoom;
 using Engine.Render.Core.VAO.Instanced;
 using Evolution.Environment.Life.Plants.Data;
 using Evolution.Genetics;
@@ -119,8 +120,12 @@ namespace Evolution.Environment.Life.Plants
             renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Outline);
             renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.InstancedRotated);
 
-            if (dna.MinHeight.HasValue) renderComponent.MinZoom = dna.MinHeight.Value;
-            if (dna.MaxHeight.HasValue) renderComponent.MaxZoom = dna.MaxHeight.Value;
+            if (dna.MinHeight.HasValue && dna.MaxHeight.HasValue)
+            {
+                var profile = new ZoomProfile(dna.MinHeight.Value, dna.MaxHeight.Value, true,
+                    new BezierZoomCurve(new Vector2(1, 0), new Vector2(0, 1)));
+                renderComponent.ZoomProfile = profile;
+            }
 
             entity.AddComponent(renderComponent);
 

@@ -10,10 +10,18 @@ namespace Engine.Render.Core.VAO
     public class VertexArrayObject
     {
         private int _handle;
+        private float _alpha;
         protected Shader _outline;
 
         public bool Initialised { get; protected set; }
-        public float Visibility { get; set; } = 1.0f;
+        public float Alpha
+        {
+            get => _alpha;
+            set
+            {
+                _alpha = Math.Max(0, Math.Min(1, value));
+            }
+        }
         public bool NeedsUpdate => VBO.Any(x => x.NeedsUpdate);
         public bool Enabled { get; set; }
         public VertexArray VertexArray { get; set; }
@@ -23,6 +31,7 @@ namespace Engine.Render.Core.VAO
 
         public VertexArrayObject(VertexArray va)
         {
+            _alpha = 1;
             Enabled = true;
             Initialised = false;
 

@@ -7,7 +7,7 @@ namespace Engine.Core
     public interface ISystem
     {
         ComponentType Mask { get; }
-        void OnUpdate(Entity entity);
+        void OnUpdate(Entity entity, float deltaTime);
         void OnRender(Entity entity);
     }
 }

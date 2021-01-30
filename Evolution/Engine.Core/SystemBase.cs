@@ -12,7 +12,7 @@ namespace Engine.Core
         {
         }
 
-        public virtual void OnUpdate(Entity entity)
+        public virtual void OnUpdate(Entity entity, float deltaTime)
         {
         }
 

@@ -21,7 +21,7 @@ namespace Engine.Core.Managers
             foreach (ISystem system in _systems) {
                 foreach (Entity entity in _entityManager.Entities)
                 {
-                    system.OnUpdate(entity);
+                    system.OnUpdate(entity, 0.0166f);
                 }
             }
         }

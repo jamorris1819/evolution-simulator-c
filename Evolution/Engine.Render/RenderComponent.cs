@@ -1,5 +1,6 @@
 ﻿using Engine.Core;
 using Engine.Render.Core.Data;
+using Engine.Render.Core.Data.Zoom;
 using Engine.Render.Core.Shaders.Enums;
 using Engine.Render.Core.VAO;
 using Engine.Render.Core.VAO.Instanced;
@@ -18,10 +19,7 @@ namespace Engine.Render
 
         public ComponentType Type => ComponentType.COMPONENT_RENDER;
 
-        public float? MinZoom { get; set; }
-
-        public float? MaxZoom { get; set; }
-
+        public ZoomProfile? ZoomProfile { get; set; }
 
         public RenderComponent(VertexArray va)
         {

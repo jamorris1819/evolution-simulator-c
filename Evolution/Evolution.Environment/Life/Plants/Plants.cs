@@ -86,7 +86,7 @@ namespace Evolution.Environment.Life.Plants
                       7,
                       new LeafData(new Vector2(0.5f, 0.0f), new Vector2(0.35f, 1f)),
                 new Vector3(60 / 255.0f, 108 / 255.0f, 34 / 255.0f),
-               null, 0.15f
+               0.1f, .5f
                       );
 
         public readonly static PlantDNA Tree2 = new PlantDNA(
@@ -95,7 +95,7 @@ namespace Evolution.Environment.Life.Plants
                       3,
                       new LeafData(new Vector2(0.5f), new Vector2(0.35f, 0.65f)),
                 new Vector3(119 / 255.0f, 192 / 255.0f, 99 / 255.0f),
-               null, 0.15f
+               0.1f, .5f
                       );
 
         public readonly static PlantDNA Tree3 = new PlantDNA(
@@ -104,7 +104,7 @@ namespace Evolution.Environment.Life.Plants
                       7,
                       new LeafData(new Vector2(1f, 1f), new Vector2(0.5f, 1.25f)),
                 new Vector3(57 / 255.0f, 122 / 255.0f, 76 / 255.0f),
-               null, 0.15f
+               0.1f, .5f
                       );
 
 
