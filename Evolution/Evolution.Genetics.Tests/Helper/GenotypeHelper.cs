@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Evolution.Genetics.Tests.Helper
 {
-    internal class GenotypeHelper<T> where T: IEquatable<T>
+    internal class GenotypeHelper<T> where T: struct, IEquatable<T>
     {
         public static Gene<T> CreateGene(T data, bool dominant) => new Gene<T>(data, dominant);
 

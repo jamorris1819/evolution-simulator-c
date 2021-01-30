@@ -1,5 +1,6 @@
 ﻿
 using Evolution.Genetics.Creature;
+using Evolution.Genetics.Creature.Helper;
 using Evolution.Genetics.Tests.Helper;
 using OpenTK.Mathematics;
 using Xunit;
@@ -22,7 +23,7 @@ namespace Evolution.Genetics.Tests
                 var expectedValue = 10;
 
                 // Act
-                var phenotype = new Phenotype<int>(genotype);
+                var phenotype = Phenotype<int>.GetFromGenotype(genotype);
 
                 // Assert
                 Assert.Equal(expectedValue, phenotype.Data);
@@ -39,7 +40,7 @@ namespace Evolution.Genetics.Tests
                 var expectedValue = 10;
 
                 // Act
-                var phenotype = new Phenotype<int>(genotype);
+                var phenotype = Phenotype<int>.GetFromGenotype(genotype);
 
                 // Assert
                 Assert.Equal(expectedValue, phenotype.Data);
@@ -56,7 +57,7 @@ namespace Evolution.Genetics.Tests
                 var expectedValue = 8;
 
                 // Act
-                var phenotype = new Phenotype<int>(genotype);
+                var phenotype = Phenotype<int>.GetFromGenotype(genotype);
 
                 // Assert
                 Assert.Equal(expectedValue, phenotype.Data);
@@ -73,12 +74,13 @@ namespace Evolution.Genetics.Tests
                 var expectedValue = 12;
 
                 // Act
-                var phenotype = new Phenotype<int>(genotype);
+                var phenotype = Phenotype<int>.GetFromGenotype(genotype);
 
                 // Assert
                 Assert.Equal(expectedValue, phenotype.Data);
             }
         }
+
         public class WhenGenotypeIsFloat
         {
             [Fact]
@@ -92,7 +94,7 @@ namespace Evolution.Genetics.Tests
                 var expectedValue = 10;
 
                 // Act
-                var phenotype = new Phenotype<float>(genotype);
+                var phenotype = Phenotype<float>.GetFromGenotype(genotype);
 
                 // Assert
                 Assert.Equal(expectedValue, phenotype.Data);
@@ -109,7 +111,7 @@ namespace Evolution.Genetics.Tests
                 var expectedValue = 10;
 
                 // Act
-                var phenotype = new Phenotype<float>(genotype);
+                var phenotype = Phenotype<float>.GetFromGenotype(genotype);
 
                 // Assert
                 Assert.Equal(expectedValue, phenotype.Data);
@@ -126,7 +128,7 @@ namespace Evolution.Genetics.Tests
                 var expectedValue = 8;
 
                 // Act
-                var phenotype = new Phenotype<float>(genotype);
+                var phenotype = Phenotype<float>.GetFromGenotype(genotype);
 
                 // Assert
                 Assert.Equal(expectedValue, phenotype.Data);
@@ -143,150 +145,45 @@ namespace Evolution.Genetics.Tests
                 var expectedValue = 12;
 
                 // Act
-                var phenotype = new Phenotype<float>(genotype);
+                var phenotype = Phenotype<float>.GetFromGenotype(genotype);
 
                 // Assert
                 Assert.Equal(expectedValue, phenotype.Data);
             }
         }
-        public class WhenGenotypeIsVector2
+
+        public class WhenMultipleGenotypes
         {
             [Fact]
-            public void AndBothGenesDominant_AverageIsReturned()
+            public void TwoGenomes_IntoVector2()
             {
                 // Arrange
-                var geneA = GenotypeHelper<Vector2>.CreateGene(new Vector2(0, 0), true);
-                var geneB = GenotypeHelper<Vector2>.CreateGene(new Vector2(10, 10), true);
-                var genotype = GenotypeHelper<Vector2>.CreateGenotype(geneA, geneB);
-
-                var expectedValue = new Vector2(5, 5);
+                var r = DNAHelper.CreateGenotypeBalanced(0.5f, 0.1f, true);
+                var g = DNAHelper.CreateGenotypeBalanced(0.5f, 0.1f, true);
 
                 // Act
-                var phenotype = new Phenotype<Vector2>(genotype);
+                var vec = Phenotype<float>.GetFromGenotypes(r, g);
 
                 // Assert
-                Assert.Equal(expectedValue, phenotype.Data);
+                Assert.Equal(0.5f, vec.Data.X);
+                Assert.Equal(0.5f, vec.Data.Y);
             }
 
             [Fact]
-            public void AndBothGenesRecessive_AverageIsReturned()
+            public void TwoGenomes_IntoVector3()
             {
                 // Arrange
-                var geneA = GenotypeHelper<Vector2>.CreateGene(new Vector2(0, 0), false);
-                var geneB = GenotypeHelper<Vector2>.CreateGene(new Vector2(10, 10), false);
-                var genotype = GenotypeHelper<Vector2>.CreateGenotype(geneA, geneB);
-
-                var expectedValue = new Vector2(5, 5);
+                var r = DNAHelper.CreateGenotypeBalanced(0.5f, 0.1f, true);
+                var g = DNAHelper.CreateGenotypeBalanced(0.5f, 0.1f, true);
+                var b = DNAHelper.CreateGenotypeBalanced(0.5f, 0.1f, true);
 
                 // Act
-                var phenotype = new Phenotype<Vector2>(genotype);
+                var vec = Phenotype<float>.GetFromGenotypes(r, g, b);
 
                 // Assert
-                Assert.Equal(expectedValue, phenotype.Data);
-            }
-
-            [Fact]
-            public void AndOnlyGeneADominant_GeneAValueIsReturned()
-            {
-                // Arrange
-                var geneA = GenotypeHelper<Vector2>.CreateGene(new Vector2(0, 0), true);
-                var geneB = GenotypeHelper<Vector2>.CreateGene(new Vector2(10, 10), false);
-                var genotype = GenotypeHelper<Vector2>.CreateGenotype(geneA, geneB);
-
-                var expectedValue = new Vector2(0, 0);
-
-                // Act
-                var phenotype = new Phenotype<Vector2>(genotype);
-
-                // Assert
-                Assert.Equal(expectedValue, phenotype.Data);
-            }
-
-            [Fact]
-            public void AndOnlyGeneBDominant_GeneBValueIsReturned()
-            {
-                // Arrange
-                var geneA = GenotypeHelper<Vector2>.CreateGene(new Vector2(0, 0), false);
-                var geneB = GenotypeHelper<Vector2>.CreateGene(new Vector2(10, 10), true);
-                var genotype = GenotypeHelper<Vector2>.CreateGenotype(geneA, geneB);
-
-                var expectedValue = new Vector2(10, 10);
-
-                // Act
-                var phenotype = new Phenotype<Vector2>(genotype);
-
-                // Assert
-                Assert.Equal(expectedValue, phenotype.Data);
-            }
-        }
-        public class WhenGenotypeIsVector3
-        {
-            [Fact]
-            public void AndBothGenesDominant_AverageIsReturned()
-            {
-                // Arrange
-                var geneA = GenotypeHelper<Vector3>.CreateGene(new Vector3(0, 0, 0), true);
-                var geneB = GenotypeHelper<Vector3>.CreateGene(new Vector3(10, 10, 10), true);
-                var genotype = GenotypeHelper<Vector3>.CreateGenotype(geneA, geneB);
-
-                var expectedValue = new Vector3(5, 5, 5);
-
-                // Act
-                var phenotype = new Phenotype<Vector3>(genotype);
-
-                // Assert
-                Assert.Equal(expectedValue, phenotype.Data);
-            }
-
-            [Fact]
-            public void AndBothGenesRecessive_AverageIsReturned()
-            {
-                // Arrange
-                var geneA = GenotypeHelper<Vector3>.CreateGene(new Vector3(0, 0, 0), false);
-                var geneB = GenotypeHelper<Vector3>.CreateGene(new Vector3(10, 10, 10), false);
-                var genotype = GenotypeHelper<Vector3>.CreateGenotype(geneA, geneB);
-
-                var expectedValue = new Vector3(5, 5, 5);
-
-                // Act
-                var phenotype = new Phenotype<Vector3>(genotype);
-
-                // Assert
-                Assert.Equal(expectedValue, phenotype.Data);
-            }
-
-            [Fact]
-            public void AndOnlyGeneADominant_GeneAValueIsReturned()
-            {
-                // Arrange
-                var geneA = GenotypeHelper<Vector3>.CreateGene(new Vector3(0, 0, 0), true);
-                var geneB = GenotypeHelper<Vector3>.CreateGene(new Vector3(10, 10, 10), false);
-                var genotype = GenotypeHelper<Vector3>.CreateGenotype(geneA, geneB);
-
-                var expectedValue = new Vector3(0, 0, 0);
-
-                // Act
-                var phenotype = new Phenotype<Vector3>(genotype);
-
-                // Assert
-                Assert.Equal(expectedValue, phenotype.Data);
-            }
-
-            [Fact]
-            public void AndOnlyGeneBDominant_GeneBValueIsReturned()
-            {
-                // Arrange
-                var geneA = GenotypeHelper<Vector3>.CreateGene(new Vector3(0, 0, 0), false);
-                var geneB = GenotypeHelper<Vector3>.CreateGene(new Vector3(10, 10, 10), true);
-                var genotype = GenotypeHelper<Vector3>.CreateGenotype(geneA, geneB);
-
-                var expectedValue = new Vector3(10, 10, 10);
-
-                // Act
-                var phenotype = new Phenotype<Vector3>(genotype);
-
-                // Assert
-                Assert.Equal(expectedValue, phenotype.Data);
+                Assert.Equal(0.5f, vec.Data.X);
+                Assert.Equal(0.5f, vec.Data.Y);
+                Assert.Equal(0.5f, vec.Data.Z);
             }
         }
     }

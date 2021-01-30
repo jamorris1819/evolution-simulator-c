@@ -7,11 +7,15 @@ namespace Evolution.Genetics.Creature
 {
     public readonly struct DNA
     {
-        public Genotype<Vector3> Colour { get; }
+        public Genotype<float> ColourR { get; }
+        public Genotype<float> ColourG { get; }
+        public Genotype<float> ColourB { get; }
 
-        public DNA(Genotype<Vector3> colour)
+        public DNA(Genotype<float> colourR, Genotype<float> colourG, Genotype<float> colourB)
         {
-            Colour = colour;
+            ColourR = colourR;
+            ColourG = colourG;
+            ColourB = colourB;
         }
     }
 }
