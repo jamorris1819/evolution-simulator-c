@@ -30,7 +30,7 @@ namespace Evolution.Genetics.Creature
                     GetValue(z)
                 ));
 
-        private static T GetValue<T>(in Genotype<T> genotype) where T: struct, IEquatable<T>
+        private static T2 GetValue<T2>(in Genotype<T2> genotype) where T2: struct, IEquatable<T2>
         {
             var strandA = genotype.GeneA;
             var strandB = genotype.GeneB;

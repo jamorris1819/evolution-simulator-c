@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Evolution.Genetics.Creature
 {
-    public enum MutationAmount
+    public enum MutationSeverity
     {
-        None = 0,
         Minor = 1,
-        Normal = 2,
-        Major = 3
+        Medium = 2,
+        Major = 3,
+        Extreme = 4
     }
 }

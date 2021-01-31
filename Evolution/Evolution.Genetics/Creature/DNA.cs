@@ -11,11 +11,17 @@ namespace Evolution.Genetics.Creature
         public Genotype<float> ColourG { get; }
         public Genotype<float> ColourB { get; }
 
-        public DNA(Genotype<float> colourR, Genotype<float> colourG, Genotype<float> colourB)
+        public Genotype<int> BodySteps { get; }
+        public Genotype<float> BodyOffset { get; }
+
+        public DNA(Genotype<float> colourR, Genotype<float> colourG, Genotype<float> colourB, Genotype<int> bodySteps, Genotype<float> bodyOffset)
         {
             ColourR = colourR;
             ColourG = colourG;
             ColourB = colourB;
+
+            BodySteps = bodySteps;
+            BodyOffset = bodyOffset;
         }
     }
 }

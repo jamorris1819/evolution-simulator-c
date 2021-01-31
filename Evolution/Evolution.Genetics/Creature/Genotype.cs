@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Evolution.Genetics.Creature.Helper;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -21,5 +22,7 @@ namespace Evolution.Genetics.Creature
             GeneB = b;
             Metadata = metadata;
         }
+
+        public Genotype<T> Mutate(MutationSeverity severity) => DNAHelper.MutateGenotype(this, severity);
     }
 }

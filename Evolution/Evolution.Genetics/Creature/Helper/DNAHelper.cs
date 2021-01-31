@@ -16,7 +16,10 @@ namespace Evolution.Genetics.Creature.Helper
             var colourG = Cross(a.ColourG, b.ColourG);
             var colourB = Cross(a.ColourB, b.ColourB);
 
-            return new DNA(colourR, colourG, colourB);
+            var bodySteps = Cross(a.BodySteps, b.BodySteps);
+            var bodyOffset = Cross(a.BodyOffset, b.BodyOffset);
+
+            return new DNA(colourR, colourG, colourB, bodySteps, bodyOffset);
         }
 
         public static Genotype<T> Cross<T>(in Genotype<T> a, in Genotype<T> b) where T : struct, IEquatable<T>
@@ -46,12 +49,15 @@ namespace Evolution.Genetics.Creature.Helper
         public static DNA CreateDNA(DNATemplate template)
         {
             var colourMetadata = new GenotypeMetadata<float>(MutationChance.Normal, 0.05f, 0, 1);
+            var bodySizeMetadata = new GenotypeMetadata<int>(MutationChance.Low, 1, 6, 128);
+            var bodyOffsetMetadata = new GenotypeMetadata<float>(MutationChance.High, 0.1f);
 
-            
             return new DNA(
                 CreateGenotypeBalanced(template.Colour.X, 0.1f, true, colourMetadata),
                 CreateGenotypeBalanced(template.Colour.Y, 0.1f, true, colourMetadata),
-                CreateGenotypeBalanced(template.Colour.Z, 0.1f, true, colourMetadata)
+                CreateGenotypeBalanced(template.Colour.Z, 0.1f, true, colourMetadata),
+                CreateGenotypeBalanced(template.BodySteps, 2, true, bodySizeMetadata),
+                CreateGenotypeBalanced(template.BodyOffset, 1f, true, bodyOffsetMetadata)
                 );
         }
 
