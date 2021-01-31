@@ -1,14 +1,60 @@
-﻿using MiscUtil;
+﻿using Evolution.Genetics.Creature.Enums;
+using MiscUtil;
 using System;
 
 namespace Evolution.Genetics.Creature.Helper
 {
     public partial class DNAHelper
     {
-        public static Genotype<T> MutateGenotype<T>(in Genotype<T> genotype, MutationSeverity severity = MutationSeverity.Minor) where T : struct, IEquatable<T>
+        /// <summary>
+        /// Copies DNA with the possiblity of mutation according to genotype metadata
+        /// </summary>
+        public static DNA CopyDNA(in DNA dna)
+            => new DNA(dna.ColourR.Copy(), dna.ColourG.Copy(), dna.ColourB.Copy(), dna.BodySteps.Copy(), dna.BodyOffset.Copy());
+
+        /// <summary>
+        /// Copies a genotype with the possibility of mutation according to genotype metadata
+        /// </summary>
+        public static Genotype<T> CopyGenotype<T>(in Genotype<T> genotype) where T: struct, IEquatable<T>
+        {
+            if (genotype.Metadata.MutationChance == MutationChance.None) return genotype;
+
+            int index = _random.Next((int)MutationChance.Maximum);
+
+            if (index < (int)genotype.Metadata.MutationChance) return MutateGenotype(genotype, GetRandomSeverity());
+
+            return genotype;
+        }
+
+        /// <summary>
+        /// Randomly chooses a severity (it is more likely to get a lesser severity)
+        /// </summary>
+        private static MutationSeverity GetRandomSeverity()
+        {
+            int index = _random.Next(16);
+
+            if (index < 8) return MutationSeverity.Minor;
+            if (index < 12) return MutationSeverity.Medium;
+            if (index < 14) return MutationSeverity.Major;
+
+            return MutationSeverity.Extreme;
+        }
+
+        /// <summary>
+        /// Mutates the genotype according to it's mutation rules
+        /// </summary>
+        /// <param name="genotype">The genotype  to mutate</param>
+        /// <param name="severity">Severity of the mutation</param>
+        public static Genotype<T> MutateGenotype<T>(in Genotype<T> genotype, MutationSeverity severity) where T : struct, IEquatable<T>
             => MutateGenotype(genotype, (int)Math.Round(_random.NextDouble()), severity);
 
-        public static Genotype<T> MutateGenotype<T>(in Genotype<T> genotype, int geneIndex, MutationSeverity severity = MutationSeverity.Minor) where T : struct, IEquatable<T>
+        /// <summary>
+        /// Mutates the genotype according to it's mutation rules
+        /// </summary>
+        /// <param name="genotype">The genotype  to mutate</param>
+        /// <param name="geneIndex">Which gene to mutate (0 or 1)</param>
+        /// <param name="severity">Severity of the mutation</param>
+        public static Genotype<T> MutateGenotype<T>(in Genotype<T> genotype, int geneIndex, MutationSeverity severity) where T : struct, IEquatable<T>
         {
             Gene<T> a = genotype.GeneA;
             Gene<T> b = genotype.GeneB;

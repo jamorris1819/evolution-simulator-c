@@ -1,4 +1,5 @@
-﻿using MiscUtil;
+﻿using Evolution.Genetics.Creature.Enums;
+using MiscUtil;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,6 @@ namespace Evolution.Genetics.Creature.Helper
     public partial class DNAHelper
     {
         private static Random _random = new Random();
-
-        public static DNA MutateDNA(DNA dna)
-            => new DNA(dna.ColourR.Mutate(), dna.ColourG.Mutate(), dna.ColourB.Mutate(), dna.BodySteps.Mutate(), dna.BodyOffset.Mutate());
 
         public static DNA Cross(DNA a, DNA b)
         {
@@ -53,7 +51,7 @@ namespace Evolution.Genetics.Creature.Helper
         {
             var colourMetadata = new GenotypeMetadata<float>(MutationChance.Normal, 0.05f, 0, 1);
             var bodySizeMetadata = new GenotypeMetadata<int>(MutationChance.Low, 1, 6, 128);
-            var bodyOffsetMetadata = new GenotypeMetadata<float>(MutationChance.High, 0.1f);
+            var bodyOffsetMetadata = new GenotypeMetadata<float>(MutationChance.Irradiate, 1f);
 
             return new DNA(
                 CreateGenotypeBalanced(template.Colour.X, 0.1f, true, colourMetadata),

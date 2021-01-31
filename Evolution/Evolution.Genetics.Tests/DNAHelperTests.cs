@@ -1,4 +1,5 @@
 ﻿using Evolution.Genetics.Creature;
+using Evolution.Genetics.Creature.Enums;
 using Evolution.Genetics.Creature.Helper;
 using OpenTK.Mathematics;
 using System;

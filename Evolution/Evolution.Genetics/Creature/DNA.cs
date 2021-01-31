@@ -25,6 +25,9 @@ namespace Evolution.Genetics.Creature
             BodyOffset = bodyOffset;
         }
 
-        public DNA Mutate() => DNAHelper.MutateDNA(this);
+        /// <summary>
+        /// Produces a copy of the DNA with possiblity of mutation according to the genotype metadata
+        /// </summary>
+        public DNA Copy() => DNAHelper.CopyDNA(this);
     }
 }

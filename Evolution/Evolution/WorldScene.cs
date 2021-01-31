@@ -38,6 +38,8 @@ namespace Evolution
         DNA[] bottomRow;
         DNA[] leftRow;
 
+        DNA dna;
+
         public WorldScene(Game game) : base(game)
         {
             _environment = new Environment.Environment(EntityManager, EventBus);
@@ -51,26 +53,30 @@ namespace Evolution
             Random random = new Random();
 
 
-            var dnaA = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), random.Next(200)));
-            var dnaB = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), random.Next(200)));
+            var dnaA = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 0));
+            var dnaB = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 50));
 
+            dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 50));
 
-            bottomRow = new DNA[9];
+            /*bottomRow = new DNA[9];
             leftRow = new DNA[9];
             for (int i =0; i < 9; i++)
             {
-                bottomRow[i] = dnaA.Mutate();
-                leftRow[i] = dnaB.Mutate();
+                dnaA = dnaA.Copy();
+                dnaB = dnaB.Copy();
+                bottomRow[i] = dnaA;
+                leftRow[i] = dnaB;
 
                 createCreature(i, -1, bottomRow[i]);
                 createCreature(-1, i, leftRow[i]);
-            }
+            }*/
 
-            for(int x = 0; x < 9; x++)
+            for (int x = 0; x < 9; x++)
             {
                 for(int y= 0; y < 9; y ++)
                 {
-                    createCreature(x, y, DNAHelper.Cross(bottomRow[x], leftRow[y]));
+                    createCreature(x, y, dna);
+                    dna = dna.Copy();
                 }
             }
 
@@ -106,11 +112,11 @@ namespace Evolution
                 points.Add(point);
             }
 
-            //var highResPoints = Enumerable.Range(0, 64).Select(x => BezierCurve.CalculatePoint(points, x / 63f)).ToArray();
+            /*var highResPoints = Enumerable.Range(0, 64).Select(x => BezierCurve.CalculatePoint(points, x / (steps - 1))).ToArray();
             
            
 
-            //points = highResPoints.ToList();
+            points = highResPoints.ToList();*/
 
 
             Vector2[] flippedPoints = new Vector2[points.Count];

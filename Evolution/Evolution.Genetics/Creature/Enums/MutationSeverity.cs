@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Evolution.Genetics.Creature
+﻿namespace Evolution.Genetics.Creature.Enums
 {
     public enum MutationSeverity
     {
