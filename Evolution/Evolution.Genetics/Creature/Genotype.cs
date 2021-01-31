@@ -23,6 +23,8 @@ namespace Evolution.Genetics.Creature
             Metadata = metadata;
         }
 
-        public Genotype<T> Mutate(MutationSeverity severity) => DNAHelper.MutateGenotype(this, severity);
+        public Genotype<T> Mutate(MutationSeverity severity = MutationSeverity.Medium) => DNAHelper.MutateGenotype(this, severity);
+
+        public Phenotype<T> GetPhenotype() => Phenotype<T>.GetFromGenotype(this);
     }
 }

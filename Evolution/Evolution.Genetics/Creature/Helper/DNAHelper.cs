@@ -10,6 +10,9 @@ namespace Evolution.Genetics.Creature.Helper
     {
         private static Random _random = new Random();
 
+        public static DNA MutateDNA(DNA dna)
+            => new DNA(dna.ColourR.Mutate(), dna.ColourG.Mutate(), dna.ColourB.Mutate(), dna.BodySteps.Mutate(), dna.BodyOffset.Mutate());
+
         public static DNA Cross(DNA a, DNA b)
         {
             var colourR = Cross(a.ColourR, b.ColourR);

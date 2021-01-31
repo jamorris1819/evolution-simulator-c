@@ -1,4 +1,5 @@
-﻿using OpenTK.Mathematics;
+﻿using Evolution.Genetics.Creature.Helper;
+using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,5 +24,7 @@ namespace Evolution.Genetics.Creature
             BodySteps = bodySteps;
             BodyOffset = bodyOffset;
         }
+
+        public DNA Mutate() => DNAHelper.MutateDNA(this);
     }
 }

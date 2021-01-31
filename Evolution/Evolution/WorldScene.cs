@@ -14,6 +14,8 @@ using Engine.Terrain.Generator;
 using Evolution.Environment;
 using Evolution.Environment.Life.Plants;
 using Evolution.Genetics;
+using Evolution.Genetics.Creature;
+using Evolution.Genetics.Creature.Helper;
 using Evolution.UI;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
@@ -33,6 +35,9 @@ namespace Evolution
         PooledInstanceVAO a;
         PooledInstance last;
 
+        DNA[] bottomRow;
+        DNA[] leftRow;
+
         public WorldScene(Game game) : base(game)
         {
             _environment = new Environment.Environment(EntityManager, EventBus);
@@ -43,15 +48,32 @@ namespace Evolution
             cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 
             EventBus.Publish(new CameraChangeEvent() { Camera = cam });
+            Random random = new Random();
 
-            for(int x = 0; x < 10; x++)
+
+            var dnaA = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), random.Next(200)));
+            var dnaB = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), random.Next(200)));
+
+
+            bottomRow = new DNA[9];
+            leftRow = new DNA[9];
+            for (int i =0; i < 9; i++)
             {
-                for(int y= 0; y < 10; y ++)
+                bottomRow[i] = dnaA.Mutate();
+                leftRow[i] = dnaB.Mutate();
+
+                createCreature(i, -1, bottomRow[i]);
+                createCreature(-1, i, leftRow[i]);
+            }
+
+            for(int x = 0; x < 9; x++)
+            {
+                for(int y= 0; y < 9; y ++)
                 {
-                    createCreature(x, y);
+                    createCreature(x, y, DNAHelper.Cross(bottomRow[x], leftRow[y]));
                 }
             }
-            
+
 
             EventBus.Subscribe<MouseDownEvent>((e) =>
              {
@@ -62,16 +84,16 @@ namespace Evolution
              });
         }
 
-        private void createCreature(int x, int y)
+        private void createCreature(int x, int y, DNA dna)
         {
             var entity = new Entity("creature");
 
             Random random = new Random();
-            FastNoise noise = new FastNoise(random.Next());
+            FastNoise noise = new FastNoise();
             noise.Octaves = 5;
             noise.UsedNoiseType = FastNoise.NoiseType.PerlinFractal;
 
-            int steps = 64;
+            int steps = dna.BodySteps.GetPhenotype().Data;
             float stepSize = (float)Math.PI / steps;
 
             List<Vector2> points = new List<Vector2>();
@@ -79,7 +101,7 @@ namespace Evolution
             {
                 var point = new Vector2((float)Math.Sin(stepSize * i), (float)Math.Cos(stepSize * i));
                 point.Normalize();
-                var dist = Math.Abs(noise.GetNoise(i, 0));
+                var dist = Math.Abs(noise.GetNoise(i + dna.BodyOffset.GetPhenotype().Data, 0));
                 point *= Math.Max(dist, 0.1f);
                 points.Add(point);
             }
@@ -100,7 +122,7 @@ namespace Evolution
             //BezierCurve.
 
             var shape = Polygon.Generate(points);
-            shape = VertexHelper.SetColour(shape, new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()));
+            shape = VertexHelper.SetColour(shape, Phenotype<Vector3>.GetFromGenotypes(dna.ColourR, dna.ColourG, dna.ColourB).Data);
             var rc = new RenderComponent(shape);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
