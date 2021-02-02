@@ -104,7 +104,7 @@ namespace Evolution.Genetics.Creature.Helper
             if (_random.NextDouble() < 0.5) newData = Operator.Add(current, metadata.MutationAmount);
             else newData = Operator.Subtract(current, metadata.MutationAmount);
 
-            newData = Operator.MultiplyAlternative(newData, multiplier);
+            newData = Operator.MultiplyAlternative(newData, 1);
 
             if (metadata.MinValue.HasValue && Operator.LessThan(newData, metadata.MinValue.Value)) newData = metadata.MinValue.Value;
             if (metadata.MaxValue.HasValue && Operator.GreaterThan(newData, metadata.MaxValue.Value)) newData = metadata.MaxValue.Value;

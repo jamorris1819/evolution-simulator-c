@@ -12,6 +12,7 @@ using Engine.Terrain;
 using Engine.Terrain.Biomes;
 using Engine.Terrain.Generator;
 using Evolution.Environment;
+using Evolution.Environment.Life.Creatures;
 using Evolution.Environment.Life.Plants;
 using Evolution.Genetics;
 using Evolution.Genetics.Creature;
@@ -40,12 +41,16 @@ namespace Evolution
 
         DNA dna;
 
+        CreatureBuilder creatureBuilder;
+
         public WorldScene(Game game) : base(game)
         {
             _environment = new Environment.Environment(EntityManager, EventBus);
             _environment.Initialise();
 
             game.UIManager.Windows.Add(new TerrainWindow(_environment.TerrainManager, Game.EventBus));
+
+            creatureBuilder = new CreatureBuilder();
 
             cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 
@@ -56,7 +61,7 @@ namespace Evolution
             var dnaA = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 0));
             var dnaB = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 50));
 
-            dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 50));
+            dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 500));
 
             /*bottomRow = new DNA[9];
             leftRow = new DNA[9];
@@ -71,12 +76,12 @@ namespace Evolution
                 createCreature(-1, i, leftRow[i]);
             }*/
 
-            for (int x = 0; x < 9; x++)
+            for (int x = 0; x < 5; x++)
             {
-                for(int y= 0; y < 9; y ++)
+                for(int y= 0; y < 5; y ++)
                 {
                     createCreature(x, y, dna);
-                    dna = dna.Copy();
+                    dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), random.Next(1000)));
                 }
             }
 
@@ -94,43 +99,9 @@ namespace Evolution
         {
             var entity = new Entity("creature");
 
-            Random random = new Random();
-            FastNoise noise = new FastNoise();
-            noise.Octaves = 5;
-            noise.UsedNoiseType = FastNoise.NoiseType.PerlinFractal;
-
-            int steps = dna.BodySteps.GetPhenotype().Data;
-            float stepSize = (float)Math.PI / steps;
-
-            List<Vector2> points = new List<Vector2>();
-            for (int i = 0; i < steps; i++)
-            {
-                var point = new Vector2((float)Math.Sin(stepSize * i), (float)Math.Cos(stepSize * i));
-                point.Normalize();
-                var dist = Math.Abs(noise.GetNoise(i + dna.BodyOffset.GetPhenotype().Data, 0));
-                point *= Math.Max(dist, 0.1f);
-                points.Add(point);
-            }
-
-            /*var highResPoints = Enumerable.Range(0, 64).Select(x => BezierCurve.CalculatePoint(points, x / (steps - 1))).ToArray();
-            
-           
-
-            points = highResPoints.ToList();*/
-
-
-            Vector2[] flippedPoints = new Vector2[points.Count];
-            points.CopyTo(flippedPoints, 0);
-            flippedPoints = flippedPoints.Reverse().Select(x => x * new Vector2(-1, 1)).ToArray();
-            points.AddRange(flippedPoints);
-            points = points.Select(x => x * new Vector2(1, 1.7f)).ToList();
-
-            //BezierCurve.
-
-            var shape = Polygon.Generate(points);
-            shape = VertexHelper.SetColour(shape, Phenotype<Vector3>.GetFromGenotypes(dna.ColourR, dna.ColourG, dna.ColourB).Data);
+            var shape = creatureBuilder.CreateBody(dna);
             var rc = new RenderComponent(shape);
-            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline);
+            //rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             entity.AddComponent(rc);
             entity.AddComponent(new PositionComponent(x, y));

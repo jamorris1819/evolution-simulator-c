@@ -9,8 +9,4 @@
     <ProjectReference Include="..\Evolution.Genetics\Evolution.Genetics.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Life\Creatures\" />
-  </ItemGroup>
-
 </Project>

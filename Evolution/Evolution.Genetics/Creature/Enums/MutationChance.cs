@@ -11,6 +11,6 @@
         High = 2,
         Irradiate = 1,
 
-        Maximum = 30 // used to calculate percentage (ie, low is 1 out of 40)
+        Maximum = 50 // used to calculate percentage (ie, low is 1 out of 40)
     }
 }
