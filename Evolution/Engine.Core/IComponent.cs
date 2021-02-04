@@ -9,7 +9,8 @@ namespace Engine.Core
     {
         COMPONENT_NONE = 0,
         COMPONENT_RENDER = 1 << 0,
-        COMPONENT_POSITION = 1 << 1
+        COMPONENT_POSITION = 1 << 1,
+        COMPONENT_PHYSICS = 1 << 2
     }
 
     public interface IComponent

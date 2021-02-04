@@ -1,8 +1,11 @@
-﻿using DotnetNoise;
+﻿using Box2DX.Dynamics;
+using DotnetNoise;
 using Engine;
 using Engine.Core;
 using Engine.Core.Components;
 using Engine.Core.Events.Input.Mouse;
+using Engine.Physics;
+using Engine.Physics.Core;
 using Engine.Render;
 using Engine.Render.Core;
 using Engine.Render.Core.Data.Primitives;
@@ -76,9 +79,9 @@ namespace Evolution
                 createCreature(-1, i, leftRow[i]);
             }*/
 
-            for (int x = 0; x < 5; x++)
+            for (int x = 0; x < 1; x++)
             {
-                for(int y= 0; y < 5; y ++)
+                for(int y= 0; y < 1; y ++)
                 {
                     createCreature(x, y, dna);
                     dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), random.Next(1000)));
@@ -105,6 +108,19 @@ namespace Evolution
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             entity.AddComponent(rc);
             entity.AddComponent(new PositionComponent(x, y));
+
+            var bodyDef = new BodyDef()
+            {
+                Position = new Box2DX.Common.Vec2(x, y)
+            };
+
+            var fixtureDef = new PolygonDef();
+            fixtureDef.SetAsBox(1, 1);
+            fixtureDef.Density = 1;
+
+            var body = new PhysicsBody(bodyDef, fixtureDef);
+            entity.AddComponent(new PhysicsComponent(body));
+
             EntityManager.AddEntity(entity);
         }
 

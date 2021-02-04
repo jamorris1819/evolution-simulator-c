@@ -16,6 +16,8 @@ namespace Engine.Core
         {
         }
 
+        public virtual void OnUpdate(float deltaTime) { }
+
         protected bool MaskMatch(Entity entity)
         {
             return (Mask & entity.Mask) == Mask;

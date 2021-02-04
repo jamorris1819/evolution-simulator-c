@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Engine.Render.Core
 {
+    /// <summary>
+    /// Utility that offers methods for manipulating vertices and vertex arrays
+    /// </summary>
     public static class VertexHelper
     {
         public static VertexArray SetColour(in VertexArray va, Vector3 colour)

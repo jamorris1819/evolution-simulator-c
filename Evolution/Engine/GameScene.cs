@@ -1,4 +1,5 @@
 ﻿using Engine.Core.Managers;
+using Engine.Physics;
 using Engine.Render;
 using Engine.Render.Core.Shaders.Enums;
 using OpenTK.Graphics.ES30;
@@ -34,6 +35,9 @@ namespace Engine
 
             var renderSystem = new RenderSystem(EventBus, Game.ShaderManager);
             SystemManager.AddSystem(renderSystem);
+
+            var physicsSystem = new PhysicsSystem(new OpenTK.Mathematics.Vector2(0, -1));
+            SystemManager.AddSystem(physicsSystem);
         }
 
         public override void OnFocusChanged(EventArgs e)

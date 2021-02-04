@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Engine.Core\Engine.Core.csproj" />
+    <ProjectReference Include="..\Engine.Physics.Core\Engine.Physics.Core.csproj" />
+    <ProjectReference Include="..\Engine.Physics\Engine.Physics.csproj" />
     <ProjectReference Include="..\Engine.Render\Engine.Render.csproj" />
     <ProjectReference Include="..\Engine.Terrain\Engine.Terrain.csproj" />
     <ProjectReference Include="..\Engine.UI\Engine.UI.csproj" />
