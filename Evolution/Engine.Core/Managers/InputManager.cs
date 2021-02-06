@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Engine.Core.Events;
+using Engine.Core.Events.Input.Keyboard;
 using Engine.Core.Events.Input.Mouse;
 using OpenTK.Input;
 using OpenTK.Mathematics;
@@ -86,6 +87,14 @@ namespace Engine.Core.Managers
             {
                 _eventBus.Publish(dragEvents[i]);
             }
+        }
+
+        public void OnKeyboardDown(KeyboardKeyEventArgs e)
+        {
+            _eventBus.Publish(new KeyDownEvent()
+            {
+                Key = e.Key
+            });
         }
     }
 }

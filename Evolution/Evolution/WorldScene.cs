@@ -8,6 +8,7 @@ using Engine.Physics;
 using Engine.Physics.Core;
 using Engine.Render;
 using Engine.Render.Core;
+using Engine.Render.Core.Data;
 using Engine.Render.Core.Data.Primitives;
 using Engine.Render.Core.VAO.Instanced;
 using Engine.Render.Events;
@@ -102,6 +103,73 @@ namespace Evolution
             EntityManager.AddEntity(floor);
 
 
+            /*IEnumerable<Vector2> sinPoints(int count)
+            {
+                for(int i = 0; i < count + 1; i++)
+                {
+                    float delta = (i / (float)count) * (float)Math.PI;
+                    yield return new Vector2(i, (float)Math.Sin(delta));
+                }
+            }
+
+            IEnumerable<Vector2> bezierpoints(int count, Vector2 val)
+            {
+                BezierCurveQuadric a = new BezierCurveQuadric(new Vector2(0), new Vector2(1, 0), val);
+
+                for (int i = 0; i < count + 1; i++)
+                {
+                    yield return a.CalculatePoint(i / (float)count);
+                }
+            }
+
+
+            VertexArray createClaw()
+            {
+                float height = 0.4f;
+
+                var width = 10;
+
+                var topPoints = bezierpoints(width - 1, new Vector2(0.5f)).ToArray();
+                var bottomPoints = bezierpoints(width - 1, new Vector2(0.8f, 0.3f)).Select(x => x - (new Vector2(0, 0.1f) * ((width - x.X) / (float)width))).ToArray();
+
+                var vertices = new List<Vertex>();
+
+                for (int i = 0; i < width - 1; i++)
+                {
+                    var t1v1 = new Vertex(topPoints[i]);
+                    var t1v2 = new Vertex(bottomPoints[i]);
+                    var t1v3 = new Vertex(topPoints[i + 1]);
+
+                    vertices.Add(t1v1);
+                    vertices.Add(t1v2);
+                    vertices.Add(t1v3);
+
+
+                    var t2v1 = new Vertex(topPoints[i + 1]);
+                    var t2v2 = new Vertex(bottomPoints[i]);
+                    var t2v3 = new Vertex(bottomPoints[i + 1]);
+
+                    vertices.Add(t2v1);
+                    vertices.Add(t2v2);
+                    vertices.Add(t2v3);
+                }
+
+                var va = new VertexArray(vertices.ToArray(), Enumerable.Range(0, vertices.Count).Select(x => (ushort)x).ToArray());
+
+                return va;
+            }
+
+            var clawEntity = new Entity("claw");
+            clawEntity.AddComponent(new PositionComponent(-10, 0));
+            clawEntity.AddComponent(new RenderComponent(createClaw()));
+            clawEntity.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+
+            EntityManager.AddEntity(clawEntity);*/
+
+
+
+
+
             EventBus.Subscribe<MouseDownEvent>((e) =>
              {
                  var pos = cam.ScreenToWorld(e.Location);
@@ -124,9 +192,9 @@ namespace Evolution
 
             var bodyDef = new BodyDef()
             {
-                LinearDamping = 1f,
-                AngularDamping = 1f,
-                Position = new Box2DX.Common.Vec2(x * 10, y * 3 * 10),
+                LinearDamping = 3f,
+                AngularDamping = 3f,
+                Position = new Box2DX.Common.Vec2(x * 4, y * 3 * 4),
                 IsBullet = true
             };
 

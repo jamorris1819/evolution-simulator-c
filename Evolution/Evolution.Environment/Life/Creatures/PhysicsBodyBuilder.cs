@@ -27,7 +27,7 @@ namespace Evolution.Environment.Life.Creatures
 
         private PolygonDef CreateRect(in DNA dna)
         {
-            var curve = _bodyBuilder.CreateThoraxCurve(dna).Select(x => x * 25.0f);
+            var curve = _bodyBuilder.CreateThoraxCurve(dna).Select(x => x * 4f);
 
             float top = curve.First().Y;
             float right = curve.OrderByDescending(x => x.X).First().X;

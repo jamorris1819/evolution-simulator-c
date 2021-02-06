@@ -2,6 +2,7 @@
 using Box2DX.Dynamics;
 using Engine.Core;
 using Engine.Core.Components;
+using Engine.Core.Events.Input.Keyboard;
 using Engine.Core.Events.Input.Mouse;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
@@ -34,16 +35,35 @@ namespace Engine.Physics
 
             components = new List<PhysicsComponent>();
 
-            _eventBus.Subscribe<MouseDownEvent>(x =>
+            // Control debuggable creatures
+            _eventBus.Subscribe<KeyDownEvent>(x =>
             {
                 if (!GetDebuggable().Any()) return;
 
-                if (x.Button == OpenTK.Windowing.GraphicsLibraryFramework.MouseButton.Left)
+                if (x.Key == OpenTK.Windowing.GraphicsLibraryFramework.Keys.W)
                 {
                     var bodies = GetDebuggable().ToArray();
                     foreach (var body in bodies)
                     {
-                        body.PhysicsBody.ApplyForce(new Vector2(0, 100));
+                        body.PhysicsBody.MoveForward(10);
+                    }
+                }
+
+                if (x.Key == OpenTK.Windowing.GraphicsLibraryFramework.Keys.A)
+                {
+                    var bodies = GetDebuggable().ToArray();
+                    foreach (var body in bodies)
+                    {
+                        body.PhysicsBody.ApplyTorque(10);
+                    }
+                }
+
+                if (x.Key == OpenTK.Windowing.GraphicsLibraryFramework.Keys.D)
+                {
+                    var bodies = GetDebuggable().ToArray();
+                    foreach (var body in bodies)
+                    {
+                        body.PhysicsBody.ApplyTorque(-10);
                     }
                 }
             });

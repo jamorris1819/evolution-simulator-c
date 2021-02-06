@@ -12,7 +12,7 @@ namespace Engine.Physics.Core
         private BodyDef _bodyDef;
         private FixtureDef[] _fixtureDef;
         private Body _body;
-        private float _scale = 25f;
+        private float _scale = 4f;
 
         public bool Initialised { get; private set; }
 
@@ -68,6 +68,14 @@ namespace Engine.Physics.Core
         {
             force *= _body.GetMass();
             _body.ApplyForce(new Vec2(force.X * _scale, force.Y * _scale), _body.GetWorldCenter());
+        }
+
+        public void MoveForward(float force)
+            => ApplyForce(new Vector2(-(float)System.Math.Sin(Angle) * force, (float)System.Math.Cos(Angle) * force));
+
+        public void ApplyTorque(float torque)
+        {
+            _body.ApplyTorque(torque * _body.GetMass());
         }
     }
 }

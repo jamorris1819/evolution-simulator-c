@@ -51,5 +51,11 @@ namespace Engine.Render
             base.OnTextInput(e);
             _uiManager.PressChar((char)e.Unicode);
         }
+
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            _inputManager.OnKeyboardDown(e);
+        }
     }
 }
