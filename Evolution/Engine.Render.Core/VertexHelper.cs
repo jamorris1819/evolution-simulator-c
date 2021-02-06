@@ -39,6 +39,14 @@ namespace Engine.Render.Core
 
         public static Vertex Scale(in Vertex v, float scale) => new Vertex(v.Position * scale, v.Colour);
 
+        public static VertexArray Multiply(in VertexArray va, Vector2 m)
+        {
+            var vertices = va.Vertices.Select(x => Multiply(x, m)).ToArray();
+            return new VertexArray(vertices, va.Indices);
+        }
+
+        public static Vertex Multiply(in Vertex v, Vector2 m) => new Vertex(v.Position * m, v.Colour);
+
         public static VertexArray Combine(in VertexArray va1, in VertexArray va2)
         {
             Vertex[] vertices = new Vertex[va1.Vertices.Length + va2.Vertices.Length];

@@ -27,7 +27,7 @@ namespace Evolution.Environment.Life.Creatures
         /// <summary>
         /// Creates the Thorax curve (half of the shape)
         /// </summary>
-        public IEnumerable<Vector2> CreateThoraxCurve(in DNA dna)
+        public IEnumerable<Vector2> CreateThoraxCurve(DNA dna)
         {
             FastNoise noise = new FastNoise();
             noise.Octaves = 5;
@@ -36,17 +36,15 @@ namespace Evolution.Environment.Life.Creatures
             int steps = dna.BodySteps.GetPhenotype().Data;
             float stepSize = (float)Math.PI / steps;
 
-            List<Vector2> points = new List<Vector2>();
             for (int i = 0; i < steps; i++)
             {
                 var point = new Vector2((float)Math.Sin(stepSize * i), (float)Math.Cos(stepSize * i));
                 point.Normalize();
                 var dist = Math.Abs(noise.GetNoise(i + dna.BodyOffset.GetPhenotype().Data, 0));
                 point *= Math.Max(dist, 0.1f);
-                points.Add(point);
-            }
 
-            return points;
+                yield return point;
+            }
         }
 
         private VertexArray CreateThorax(in DNA dna)

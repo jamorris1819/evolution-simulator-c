@@ -53,5 +53,12 @@ namespace Engine.Render
                 else iVAO.Update(settings.Instances);
             }
         }
+
+        public void Update(VertexArray va)
+        {
+            VertexArray = va;
+            VertexArrayObject.VBO.First(x => x.Name == "Vertex data").QueueReload();
+            VertexArrayObject.VBO.First(x => x.Name == "Vertex data (index)").QueueReload();
+        }
     }
 }

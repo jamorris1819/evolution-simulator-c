@@ -15,6 +15,8 @@ namespace Engine.Core
 
         public ComponentType Mask { get => _mask; }
 
+        public Entity Parent { get; set; }
+
         public Entity(string name)
         {
             _name = name;
@@ -31,6 +33,14 @@ namespace Engine.Core
             _mask |= component.Type;
         }
 
+        public void RemoveComponent<T>() where T: IComponent
+        {
+            if (!_components.Where(x => x is T).Any()) return;
+
+            var toRemove = _components.First(x => x is T);
+            _mask &= ~toRemove.Type;
+            _components.Remove(toRemove);
+        }
 
         public T GetComponent<T>() where T : IComponent
             => (T)_components.FirstOrDefault(x => x is T);

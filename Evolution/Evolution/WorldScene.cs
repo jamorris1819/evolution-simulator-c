@@ -17,6 +17,8 @@ using Engine.Terrain.Biomes;
 using Engine.Terrain.Generator;
 using Evolution.Environment;
 using Evolution.Environment.Life.Creatures;
+using Evolution.Environment.Life.Creatures.Mouth;
+using Evolution.Environment.Life.Creatures.Mouth.Models;
 using Evolution.Environment.Life.Plants;
 using Evolution.Genetics;
 using Evolution.Genetics.Creature;
@@ -47,12 +49,18 @@ namespace Evolution
 
         CreatureBodyBuilder creatureBuilder;
 
+        Entity clawEntity;
+        Entity clawEntity2;
+
+        List<IMouth> mouths = new List<IMouth>();
+
         public WorldScene(Game game) : base(game)
         {
             _environment = new Environment.Environment(EntityManager, EventBus);
             _environment.Initialise();
 
             game.UIManager.Windows.Add(new TerrainWindow(_environment.TerrainManager, Game.EventBus));
+            game.UIManager.Windows.Add(new TestWindow(Game.EventBus));
 
             creatureBuilder = new CreatureBodyBuilder();
 
@@ -157,16 +165,36 @@ namespace Evolution
                 var va = new VertexArray(vertices.ToArray(), Enumerable.Range(0, vertices.Count).Select(x => (ushort)x).ToArray());
 
                 return va;
-            }
+            }*/
 
-            var clawEntity = new Entity("claw");
+            /*var pm = new PincerModel(1, 0.5f, 0.15f, 0.2f);
+
+            clawEntity = new Entity("claw");
             clawEntity.AddComponent(new PositionComponent(-10, 0));
-            clawEntity.AddComponent(new RenderComponent(createClaw()));
+            clawEntity.AddComponent(new RenderComponent(pm.GenerateShape(16)));
             clawEntity.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
 
-            EntityManager.AddEntity(clawEntity);*/
+            EntityManager.AddEntity(clawEntity);
 
+            clawEntity2 = new Entity("claw2");
+            clawEntity2.AddComponent(new PositionComponent(-10, 0));
+            clawEntity2.AddComponent(new RenderComponent(pm.GenerateShape(16)));
+            clawEntity2.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
 
+            EntityManager.AddEntity(clawEntity2);
+
+            EventBus.Subscribe<TestEvent>(x =>
+            {
+                clawEntity.RemoveComponent<RenderComponent>();
+                clawEntity.AddComponent(new RenderComponent(x.Model.GenerateShape(16)));
+                clawEntity.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+
+                clawEntity2.RemoveComponent<RenderComponent>();
+                var shape = VertexHelper.Multiply(x.Model.GenerateShape(16), new Vector2(1, -1));
+                clawEntity2.AddComponent(new RenderComponent(shape));
+                clawEntity2.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            });
+            */
 
 
 
@@ -205,6 +233,12 @@ namespace Evolution
             body.Debug = debuggable;
             entity.AddComponent(new PhysicsComponent(body));
 
+            var mouth = new PincerMouth(EntityManager);
+            mouth.Build(dna);
+            mouth.SetParent(entity);
+
+            mouths.Add(mouth);
+
             EntityManager.AddEntity(entity);
         }
 
@@ -217,6 +251,22 @@ namespace Evolution
         {
             base.OnUpdateFrame(e);
             cam.Update(0.01666);
+            counter += 0.01666f;
+
+            float triangleWave(float x)
+            {
+                return (float)Math.Abs(Math.Asin(Math.Cos(x)) * 0.63661828367f);
+            }
+
+            float speed = 2.5f;
+
+            foreach (IMouth mouth in mouths)
+            {
+                mouth.Update((float)counter);
+            }
+
+            /*clawEntity.GetComponent<PositionComponent>().Angle = 
+            clawEntity2.GetComponent<PositionComponent>().Angle = -triangleWave((float)counter * speed) * (float)(Math.PI * 0.25);*/
         }
     }
 }

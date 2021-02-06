@@ -43,9 +43,13 @@ namespace Engine.Render
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-            var def = Matrix4.CreateRotationZ(posComp.Angle) * Matrix4.CreateTranslation(new Vector3(posComp.Position.X, posComp.Position.Y, 0));
+            var pos = GetWorldPosition(entity);
+            var def = Matrix4.CreateRotationZ(GetWorldAngle(entity)) * Matrix4.CreateTranslation(new Vector3(pos.X, pos.Y, 0));
+
             if (comp.VertexArrayObject.Alpha == 0) return;
+
             comp.VertexArrayObject.Bind();
+
             for (int i = 0; i < comp.Shaders.Count; i++)
             {
                 var shader = _shaderManager.GetShader(comp.Shaders[i]);
@@ -55,6 +59,41 @@ namespace Engine.Render
 
                 comp.VertexArrayObject.Render(shader);
             }
+        }
+
+        private Vector2 GetWorldPosition(Entity entity)
+        {
+            var position = entity.GetComponent<PositionComponent>().Position;
+
+            if (entity.Parent == null) return position;
+
+            var parentPosComp = entity.Parent.GetComponent<PositionComponent>();
+            var parentRotation = parentPosComp.Angle;
+
+            var rotPos = Rotate(position, parentRotation);
+
+            return rotPos + GetWorldPosition(entity.Parent);
+        }
+
+        private static Vector2 Rotate(Vector2 v, float rad)
+        {
+            float sin = (float)Math.Sin(rad);
+            float cos = (float)Math.Cos(rad);
+
+            float tx = v.X;
+            float ty = v.Y;
+            v.X = (cos * tx) - (sin * ty);
+            v.Y = (sin * tx) + (cos * ty);
+            return v;
+        }
+
+        private float GetWorldAngle(Entity entity)
+        {
+            var angle = entity.GetComponent<PositionComponent>().Angle;
+
+            if (entity.Parent == null) return angle;
+
+            return angle + GetWorldAngle(entity.Parent);
         }
 
         public override void OnUpdate(Entity entity, float deltaTime)
