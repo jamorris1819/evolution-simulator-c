@@ -11,6 +11,8 @@ namespace Engine.Core.Components
 
         public Vector2 Position { get; set; }
 
+        public float Angle { get; set; } // TODO: Create RotationComponent
+
         public PositionComponent() : this(Vector2.Zero) { }
 
         public PositionComponent(float x, float y) : this(new Vector2(x, y)) { }

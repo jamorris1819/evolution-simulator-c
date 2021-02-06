@@ -44,7 +44,7 @@ namespace Evolution
 
         DNA dna;
 
-        CreatureBuilder creatureBuilder;
+        CreatureBodyBuilder creatureBuilder;
 
         public WorldScene(Game game) : base(game)
         {
@@ -53,7 +53,7 @@ namespace Evolution
 
             game.UIManager.Windows.Add(new TerrainWindow(_environment.TerrainManager, Game.EventBus));
 
-            creatureBuilder = new CreatureBuilder();
+            creatureBuilder = new CreatureBodyBuilder();
 
             cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 
@@ -79,14 +79,27 @@ namespace Evolution
                 createCreature(-1, i, leftRow[i]);
             }*/
 
-            for (int x = 0; x < 1; x++)
+            for (int x = 0; x < 20; x++)
             {
-                for(int y= 0; y < 1; y ++)
+                for(int y= 0; y < 20; y ++)
                 {
                     createCreature(x, y, dna);
                     dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), random.Next(1000)));
                 }
             }
+
+            var bodyDef = new BodyDef();
+
+            var fixtureDef = new PolygonDef();
+            fixtureDef.SetAsBox(10, 1);
+
+
+            var body = new PhysicsBody(bodyDef, fixtureDef);
+            var floor = new Entity("floor");
+            floor.AddComponent(new PositionComponent(0, -10));
+            floor.AddComponent(new PhysicsComponent(body));
+
+            EntityManager.AddEntity(floor);
 
 
             EventBus.Subscribe<MouseDownEvent>((e) =>
@@ -107,18 +120,21 @@ namespace Evolution
             //rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             entity.AddComponent(rc);
-            entity.AddComponent(new PositionComponent(x, y));
+            entity.AddComponent(new PositionComponent(x, y * 3) {  });
 
             var bodyDef = new BodyDef()
             {
-                Position = new Box2DX.Common.Vec2(x, y)
+                LinearDamping = 1f,
+                AngularDamping = 1f,
+                Position = new Box2DX.Common.Vec2(x * 10, y * 3 * 10),
+                IsBullet = true
             };
 
-            var fixtureDef = new PolygonDef();
-            fixtureDef.SetAsBox(1, 1);
-            fixtureDef.Density = 1;
+            var fixtureDef = (new PhysicsBodyBuilder()).CreateBody(dna);
+            bool debuggable = y % 2 == 0;
 
             var body = new PhysicsBody(bodyDef, fixtureDef);
+            body.Debug = debuggable;
             entity.AddComponent(new PhysicsComponent(body));
 
             EntityManager.AddEntity(entity);

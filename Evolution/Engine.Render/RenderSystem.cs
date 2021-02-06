@@ -25,6 +25,8 @@ namespace Engine.Render
             _shaderManager = shaderManager;
             _scale = 1;
 
+            Mask = ComponentType.COMPONENT_RENDER | ComponentType.COMPONENT_POSITION;
+
             eventBus.Subscribe<CameraZoomEvent>(x => { _scale = x.Scale; Console.WriteLine(x.Scale); });
             eventBus.Subscribe<CameraChangeEvent>(x => _camera = x.Camera);
         }
@@ -41,7 +43,7 @@ namespace Engine.Render
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
-            var def = Matrix4.CreateTranslation(new Vector3(posComp.Position.X, posComp.Position.Y, 0));
+            var def = Matrix4.CreateRotationZ(posComp.Angle) * Matrix4.CreateTranslation(new Vector3(posComp.Position.X, posComp.Position.Y, 0));
             if (comp.VertexArrayObject.Alpha == 0) return;
             comp.VertexArrayObject.Bind();
             for (int i = 0; i < comp.Shaders.Count; i++)

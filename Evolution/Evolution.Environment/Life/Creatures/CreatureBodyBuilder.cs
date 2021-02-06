@@ -11,7 +11,10 @@ using System.Text;
 
 namespace Evolution.Environment.Life.Creatures
 {
-    public class CreatureBuilder
+    /// <summary>
+    /// Class responsible for constructing creatures' bodies from their DNA
+    /// </summary>
+    public class CreatureBodyBuilder
     {
         public VertexArray CreateBody(in DNA dna)
         {
@@ -21,7 +24,10 @@ namespace Evolution.Environment.Life.Creatures
             return VertexHelper.Combine(thorax, eyes);
         }
 
-        private IEnumerable<Vector2> CreateThoraxCurve(in DNA dna)
+        /// <summary>
+        /// Creates the Thorax curve (half of the shape)
+        /// </summary>
+        public IEnumerable<Vector2> CreateThoraxCurve(in DNA dna)
         {
             FastNoise noise = new FastNoise();
             noise.Octaves = 5;
