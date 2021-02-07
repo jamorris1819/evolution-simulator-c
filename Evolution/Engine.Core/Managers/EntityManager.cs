@@ -18,5 +18,13 @@ namespace Engine.Core.Managers
 
         public void AddEntity(Entity entity)
             => _entities.Add(entity);
+
+        public void AddEntities(IEnumerable<Entity> entities)
+        {
+            foreach(var entity in entities)
+            {
+                AddEntity(entity);
+            }
+        }
     }
 }

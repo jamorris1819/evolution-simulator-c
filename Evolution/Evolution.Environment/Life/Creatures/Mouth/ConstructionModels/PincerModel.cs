@@ -5,9 +5,8 @@ using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Evolution.Environment.Life.Creatures.Mouth.Models
+namespace Evolution.Environment.Life.Creatures.Mouth.ConstructionModels
 {
     public readonly struct PincerModel
     {

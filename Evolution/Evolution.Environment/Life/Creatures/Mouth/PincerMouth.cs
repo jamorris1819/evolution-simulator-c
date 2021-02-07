@@ -4,7 +4,7 @@ using Engine.Core.Managers;
 using Engine.Render;
 using Engine.Render.Core;
 using Engine.Render.Core.Data;
-using Evolution.Environment.Life.Creatures.Mouth.Models;
+using Evolution.Environment.Life.Creatures.Mouth.ConstructionModels;
 using Evolution.Genetics.Creature;
 using OpenTK.Mathematics;
 using System;
@@ -14,47 +14,31 @@ using System.Text;
 
 namespace Evolution.Environment.Life.Creatures.Mouth
 {
-    public class PincerMouth : IMouth
+    public class PincerMouth : Mouth
     {
         private List<PositionComponent> _positions;
-        private EntityManager _manager;
 
         private CreatureBodyBuilder _creatureBodyBuilder; // TODO: make abstract Mouth class
         // TODO: also find better way of doing this without creating so many creature body builders
 
-        public Entity MouthEntity { get; private set; }
-
-        public PincerMouth(EntityManager manager)
+        public PincerMouth()
         {
-            _manager = manager;
             _creatureBodyBuilder = new CreatureBodyBuilder();
             _positions = new List<PositionComponent>();
         }
 
-        public void Build(in DNA dna)
+        public override void Build(in DNA dna)
         {
-            CreateBaseEntity(dna);
+            CreateMouthEntity();
             CreatePincerEntities(dna);
         }
 
-        public void SetParent(Entity entity)
-        {
-            MouthEntity.Parent = entity;
-        }
-
-        public void Update(float counter)
+        public override void Update(float counter)
         {
             float speed = 5.5f;
 
             _positions[0].Angle = triangleWave((float)counter * speed) * (float)(Math.PI * 0.25);
             _positions[1].Angle = -triangleWave((float)counter * speed) * (float)(Math.PI * 0.25);
-        }
-
-        private void CreateBaseEntity(in DNA dna)
-        {
-            MouthEntity = new Entity("Pincer Mouth");
-            MouthEntity.AddComponent(new PositionComponent(GetMouthPosition(dna)));
-            _manager.AddEntity(MouthEntity);
         }
 
         private Vector2 GetMouthPosition(in DNA dna) => _creatureBodyBuilder.CreateThoraxCurve(dna).First();
@@ -98,8 +82,8 @@ namespace Evolution.Environment.Life.Creatures.Mouth
             entity.AddComponent(new RenderComponent(va));
             entity.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             entity.Parent = MouthEntity;
-            _manager.AddEntity(entity);
             _positions.Add(entity.GetComponent<PositionComponent>());
+            _entities.Add(entity);
         }
 
         private static float triangleWave(float x)

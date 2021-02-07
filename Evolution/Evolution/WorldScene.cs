@@ -1,5 +1,4 @@
 ﻿using Box2DX.Dynamics;
-using DotnetNoise;
 using Engine;
 using Engine.Core;
 using Engine.Core.Components;
@@ -7,20 +6,11 @@ using Engine.Core.Events.Input.Mouse;
 using Engine.Physics;
 using Engine.Physics.Core;
 using Engine.Render;
-using Engine.Render.Core;
-using Engine.Render.Core.Data;
-using Engine.Render.Core.Data.Primitives;
 using Engine.Render.Core.VAO.Instanced;
 using Engine.Render.Events;
-using Engine.Terrain;
-using Engine.Terrain.Biomes;
-using Engine.Terrain.Generator;
-using Evolution.Environment;
 using Evolution.Environment.Life.Creatures;
 using Evolution.Environment.Life.Creatures.Mouth;
-using Evolution.Environment.Life.Creatures.Mouth.Models;
-using Evolution.Environment.Life.Plants;
-using Evolution.Genetics;
+using Evolution.Environment.Life.Creatures.Mouth.Factory;
 using Evolution.Genetics.Creature;
 using Evolution.Genetics.Creature.Helper;
 using Evolution.UI;
@@ -28,7 +18,6 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Evolution
 {
@@ -52,7 +41,7 @@ namespace Evolution
         Entity clawEntity;
         Entity clawEntity2;
 
-        List<IMouth> mouths = new List<IMouth>();
+        List<Mouth> mouths = new List<Mouth>();
 
         public WorldScene(Game game) : base(game)
         {
@@ -233,9 +222,11 @@ namespace Evolution
             body.Debug = debuggable;
             entity.AddComponent(new PhysicsComponent(body));
 
-            var mouth = new PincerMouth(EntityManager);
-            mouth.Build(dna);
+            var factory = MouthFactoryBuilder.GetFactory(Environment.Life.Creatures.Mouth.Enums.MouthType.Pincer);
+            var mouth = factory.CreateMouth(dna);
+
             mouth.SetParent(entity);
+            EntityManager.AddEntities(mouth.GetEntities());
 
             mouths.Add(mouth);
 
@@ -260,7 +251,7 @@ namespace Evolution
 
             float speed = 2.5f;
 
-            foreach (IMouth mouth in mouths)
+            foreach (Mouth mouth in mouths)
             {
                 mouth.Update((float)counter);
             }

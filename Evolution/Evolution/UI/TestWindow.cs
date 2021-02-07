@@ -1,4 +1,5 @@
 ﻿using Engine.UI;
+using Evolution.Environment.Life.Creatures.Mouth.ConstructionModels;
 using ImGuiNET;
 using Redbus.Interfaces;
 using System;
@@ -32,7 +33,7 @@ namespace Evolution.UI
 
             if (changeMade)
             {
-                _eventBus.Publish(new TestEvent() { Model = new Environment.Life.Creatures.Mouth.Models.PincerModel(length, curveHeight, baseDiameter, thickness) });
+                _eventBus.Publish(new TestEvent() { Model = new PincerModel(length, curveHeight, baseDiameter, thickness) });
             }
         }
     }
