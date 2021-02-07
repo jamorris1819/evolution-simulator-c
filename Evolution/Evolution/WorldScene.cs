@@ -1,10 +1,10 @@
-﻿using Box2DX.Dynamics;
-using Engine;
+﻿using Engine;
 using Engine.Core;
 using Engine.Core.Components;
 using Engine.Core.Events.Input.Mouse;
 using Engine.Physics;
 using Engine.Physics.Core;
+using Engine.Physics.Core.Shapes;
 using Engine.Render;
 using Engine.Render.Core.VAO.Instanced;
 using Engine.Render.Events;
@@ -86,7 +86,7 @@ namespace Evolution
                 }
             }
 
-            var bodyDef = new BodyDef();
+            /*var bodyDef = new BodyDef();
 
             var fixtureDef = new PolygonDef();
             fixtureDef.SetAsBox(10, 1);
@@ -97,7 +97,7 @@ namespace Evolution
             floor.AddComponent(new PositionComponent(0, -10));
             floor.AddComponent(new PhysicsComponent(body));
 
-            EntityManager.AddEntity(floor);
+            EntityManager.AddEntity(floor);*/
 
 
             /*IEnumerable<Vector2> sinPoints(int count)
@@ -207,18 +207,16 @@ namespace Evolution
             entity.AddComponent(rc);
             entity.AddComponent(new PositionComponent(x, y * 3) {  });
 
-            var bodyDef = new BodyDef()
-            {
-                LinearDamping = 3f,
-                AngularDamping = 3f,
-                Position = new Box2DX.Common.Vec2(x * 4, y * 3 * 4),
-                IsBullet = true
-            };
 
-            var fixtureDef = (new PhysicsBodyBuilder()).CreateBody(dna);
             bool debuggable = y % 2 == 0;
 
-            var body = new PhysicsBody(bodyDef, fixtureDef);
+            var body = new CirclePhysicsBody(0.2f, 10)
+            {
+                BodyType = tainicom.Aether.Physics2D.Dynamics.BodyType.Dynamic,
+                LinearDrag = 1f,
+                AngularDrag = 2f
+            };
+
             body.Debug = debuggable;
             entity.AddComponent(new PhysicsComponent(body));
 

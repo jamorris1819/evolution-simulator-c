@@ -1,81 +1,74 @@
-﻿using Box2DX.Common;
-using Box2DX.Dynamics;
-using OpenTK.Mathematics;
+﻿using OpenTK.Mathematics;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Engine.Physics.Core
 {
-    public class PhysicsBody
+    public abstract class PhysicsBody
     {
-        private BodyDef _bodyDef;
-        private FixtureDef[] _fixtureDef;
-        private Body _body;
-        private float _scale = 4f;
-
+        protected Body _body;
+        
         public bool Initialised { get; private set; }
 
         public bool Debug { get; set; }
+
+        public float Density { get; protected set; }
+
+        public float LinearDrag { get; set; }
+
+        public float AngularDrag { get; set; }
 
         public Vector2 Position
         {
             get
             {
-                var pos = _body.GetPosition();
+                var pos = _body.Position;
 
-                return new Vector2(pos.X, pos.Y) / _scale;
+                return new Vector2(pos.X, pos.Y);
             }
             set
             {
-                _body.SetPosition(new Vec2(value.X * _scale, value.Y * _scale));
+                _body.Position = new tainicom.Aether.Physics2D.Common.Vector2(value.X, value.Y);
             }
         }
 
-        public float Angle
+        public float Rotation
         {
-            get => _body.GetAngle();
-            set => _body.SetAngle(value);
+            get => _body.Rotation;
+            set => _body.Rotation = value;
         }
 
-        public PhysicsBody(BodyDef bodyDef, FixtureDef fixtureDef)
+        public BodyType BodyType { get; set; }
+
+        public PhysicsBody(float density)
         {
-            _bodyDef = bodyDef;
-            _fixtureDef = new[] { fixtureDef };
+            Density = density;
         }
 
-        public PhysicsBody(BodyDef bodyDef, FixtureDef[] fixtureDef)
-        {
-            _bodyDef = bodyDef;
-            _fixtureDef = fixtureDef;
-        }
+        public abstract void CreateBody(World world, Vector2 position);
 
-        public void Initialise(Func<BodyDef, Body> createBody)
+        public void CreateBody(World world) => CreateBody(world, new Vector2());
+
+        public void Initialise(World world, Vector2 position = default)
         {
             if (Initialised) throw new Exception("Physics body is already initialised!");
-            _body = createBody(_bodyDef);
 
-            for (int i = 0; i < _fixtureDef.Length; i++)
-            {
-                _body.CreateFixture(_fixtureDef[i]);
-            }
+            CreateBody(world, position);
 
-            _body.SetMassFromShapes();
             Initialised = true;
         }
 
         public void ApplyForce(Vector2 force)
         {
-            force *= _body.GetMass();
-            _body.ApplyForce(new Vec2(force.X * _scale, force.Y * _scale), _body.GetWorldCenter());
+            _body.ApplyForce(new tainicom.Aether.Physics2D.Common.Vector2(force.X, force.Y));
         }
 
         public void MoveForward(float force)
-            => ApplyForce(new Vector2(-(float)System.Math.Sin(Angle) * force, (float)System.Math.Cos(Angle) * force));
+            => ApplyForce(new Vector2(-(float)System.Math.Sin(Rotation) * force, (float)System.Math.Cos(Rotation) * force));
 
         public void ApplyTorque(float torque)
         {
-            _body.ApplyTorque(torque * _body.GetMass());
+            _body.ApplyTorque(torque);
         }
     }
 }

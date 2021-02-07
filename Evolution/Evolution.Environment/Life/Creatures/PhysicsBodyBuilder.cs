@@ -1,12 +1,5 @@
-﻿using Box2DX.Collision;
-using Box2DX.Common;
-using Box2DX.Dynamics;
-using Evolution.Genetics.Creature;
-using OpenTK.Mathematics;
-using System;
-using System.Collections.Generic;
+﻿using Evolution.Genetics.Creature;
 using System.Linq;
-using System.Text;
 
 namespace Evolution.Environment.Life.Creatures
 {
@@ -14,7 +7,7 @@ namespace Evolution.Environment.Life.Creatures
     {
         private readonly CreatureBodyBuilder _bodyBuilder;
 
-        public PhysicsBodyBuilder()
+       /* public PhysicsBodyBuilder()
         {
             _bodyBuilder = new CreatureBodyBuilder();
         }
@@ -33,7 +26,8 @@ namespace Evolution.Environment.Life.Creatures
             float right = curve.OrderByDescending(x => x.X).First().X;
             float bottom = curve.Last().Y;
 
-            var shape = new PolygonShape();
+            var shape = new CircleShape();
+
             /*shape.Set(new[]
             {
                     new Vec2(-right, top),
@@ -41,11 +35,11 @@ namespace Evolution.Environment.Life.Creatures
                     new Vec2(right, bottom),
                     new Vec2(right, top)
             }, 3);*/
-            var height = top + System.Math.Abs(bottom);
+            /*var height = top + System.Math.Abs(bottom);
 
             var newTop = height / 2.0f;
 
-            shape.SetAsBox(right, newTop, new Vec2(0, -(newTop - top)), 0);
+            //shape.SetAsBox(right, newTop, new Vec2(0, -(newTop - top)), 0);
             //shape.SetAsBox(0.2f, 0.2f);
 
             return new PolygonDef()
@@ -56,6 +50,6 @@ namespace Evolution.Environment.Life.Creatures
                 Friction = 0.3f,
                 Restitution = 0.3f
             };
-        }
+        }*/
     }
 }

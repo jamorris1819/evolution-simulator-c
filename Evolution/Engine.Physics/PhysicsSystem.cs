@@ -1,15 +1,11 @@
-﻿using Box2DX.Collision;
-using Box2DX.Dynamics;
-using Engine.Core;
+﻿using Engine.Core;
 using Engine.Core.Components;
 using Engine.Core.Events.Input.Keyboard;
-using Engine.Core.Events.Input.Mouse;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Engine.Physics
 {
@@ -22,12 +18,7 @@ namespace Engine.Physics
 
         public PhysicsSystem(Vector2 gravity, IEventBus eventBus)
         {
-            var space = new AABB()
-            {
-                LowerBound = new Box2DX.Common.Vec2(-100000, -100000),
-                UpperBound = new Box2DX.Common.Vec2(100000, 100000)
-            };
-            _world = new World(space, new Box2DX.Common.Vec2(gravity.X, gravity.Y), true);
+            _world = new World(new tainicom.Aether.Physics2D.Common.Vector2(gravity.X, gravity.Y));
 
             Mask = ComponentType.COMPONENT_PHYSICS | ComponentType.COMPONENT_POSITION;
 
@@ -45,7 +36,7 @@ namespace Engine.Physics
                     var bodies = GetDebuggable().ToArray();
                     foreach (var body in bodies)
                     {
-                        body.PhysicsBody.MoveForward(10);
+                        body.PhysicsBody.MoveForward(3);
                     }
                 }
 
@@ -54,7 +45,7 @@ namespace Engine.Physics
                     var bodies = GetDebuggable().ToArray();
                     foreach (var body in bodies)
                     {
-                        body.PhysicsBody.ApplyTorque(10);
+                        body.PhysicsBody.ApplyTorque(1);
                     }
                 }
 
@@ -63,7 +54,7 @@ namespace Engine.Physics
                     var bodies = GetDebuggable().ToArray();
                     foreach (var body in bodies)
                     {
-                        body.PhysicsBody.ApplyTorque(-10);
+                        body.PhysicsBody.ApplyTorque(-1);
                     }
                 }
             });
@@ -71,7 +62,7 @@ namespace Engine.Physics
 
         public override void OnUpdate(float deltaTime)
         {
-            _world.Step(1.0f / 60.0f, 10, 3);
+            _world.Step(1.0f / 60.0f);
         }
 
         public override void OnUpdate(Entity entity, float deltaTime)
@@ -84,14 +75,14 @@ namespace Engine.Physics
             if (!physicsComponent.PhysicsBody.Initialised) InitialisePhysicsBody(physicsComponent, positionComponent.Position, positionComponent.Angle);
 
             positionComponent.Position = physicsComponent.PhysicsBody.Position;
-            positionComponent.Angle = physicsComponent.PhysicsBody.Angle;
+            positionComponent.Angle = physicsComponent.PhysicsBody.Rotation;
         }
 
         private void InitialisePhysicsBody(PhysicsComponent component, Vector2 pos, float angle)
         {
-            component.PhysicsBody.Initialise(_world.CreateBody);
+            component.PhysicsBody.Initialise(_world, pos);
             component.PhysicsBody.Position = pos;
-            component.PhysicsBody.Angle = angle;
+            component.PhysicsBody.Rotation = angle;
 
             components.Add(component);
         }
