@@ -7,6 +7,7 @@ using Engine.Render;
 using Engine.Render.Core.Data;
 using Evolution.Environment.Life.Creatures.Body.Physics;
 using Evolution.Environment.Life.Creatures.Body.Visual;
+using Evolution.Environment.Life.Creatures.Mouth.Factory;
 using Evolution.Genetics.Creature;
 using OpenTK.Mathematics;
 using System;
@@ -33,15 +34,25 @@ namespace Evolution.Environment.Life.Creatures
 
             var bodies = CreateBodyParts(dna).ToArray();
             var physicBodies = CreatePhysicsBodyParts(dna, position).ToArray();
+            
+            var length = GetSegmentLength(bodies[0]);
+
+            var mouth = CreateMouth(dna, length * 0.5f);
+            mouth.MouthEntity.GetComponent<PositionComponent>().Position = GetMouthPos(bodies[0]);
+            _entityManager.AddEntities(mouth.GetEntities());
 
             if (bodies.Length != physicBodies.Length) throw new Exception();
+
+            var entities = new List<Entity>();
 
             for(int i = 0; i < bodies.Length; i++)
             {
                 var body = bodies[i];
                 var physBody = physicBodies[i];
-                CreateBodyPart(baseEntity, body, physBody);
-            }
+                entities.Add(CreateBodyPart(baseEntity, body, physBody));
+            }            
+
+            mouth.SetParent(entities[0]);
         }
 
         private Entity BuildBaseEntity(Vector2 position)
@@ -63,6 +74,7 @@ namespace Evolution.Environment.Life.Creatures
             physBod.Debug = true;
             entity.AddComponent(new PhysicsComponent(physBod));
 
+            // TODO: decide if parent should be set
             //entity.Parent = parent;
             _entityManager.AddEntity(entity);
 
@@ -73,5 +85,21 @@ namespace Evolution.Environment.Life.Creatures
 
         private IEnumerable<PhysicsBody> CreatePhysicsBodyParts(in DNA dna, Vector2 pos)
             => CreaturePhysicsBodyFactoryBuilder.Get(Body.Enums.BodyType.SinglePart, _world).CreateBody(dna, pos);
+
+        private Mouth.Mouth CreateMouth(in DNA dna, float scale) => MouthFactoryBuilder.GetFactory(Mouth.Enums.MouthType.Pincer).CreateMouth(dna, scale);
+
+        private Vector2 GetMouthPos(in VertexArray va)
+        {
+            var points = va.Vertices.Where(x => x.Position.X == 0).OrderByDescending(x => x.Position.Y);
+
+            return points.First().Position;
+        }
+
+        private float GetSegmentLength(VertexArray va)
+        {
+            var points = va.Vertices.OrderByDescending(x => x.Position.Y);
+
+            return points.First().Position.Y + Math.Abs(points.Last().Position.Y);
+        }
     }
 }

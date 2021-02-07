@@ -6,10 +6,10 @@ namespace Evolution.Environment.Life.Creatures.Mouth.Factory
 {
     public class PincerMouthFactory : MouthFactory
     {
-        public override Mouth CreateMouth(in DNA dna)
+        public override Mouth CreateMouth(in DNA dna, float scale)
         {
             var mouth = new PincerMouth();
-            mouth.Build(dna);
+            mouth.Build(dna, scale);
             return mouth;
         }
     }

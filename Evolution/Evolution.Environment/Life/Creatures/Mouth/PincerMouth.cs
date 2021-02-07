@@ -23,10 +23,10 @@ namespace Evolution.Environment.Life.Creatures.Mouth
             _positions = new List<PositionComponent>();
         }
 
-        public override void Build(in DNA dna)
+        public override void Build(in DNA dna, float scale)
         {
             CreateMouthEntity();
-            CreatePincerEntities(dna);
+            CreatePincerEntities(dna, scale);
         }
 
         public override void Update(float counter)
@@ -37,7 +37,7 @@ namespace Evolution.Environment.Life.Creatures.Mouth
             _positions[1].Angle = -triangleWave((float)counter * speed) * (float)(Math.PI * 0.25);
         }
 
-        private void CreatePincerEntities(in DNA dna)
+        private void CreatePincerEntities(in DNA dna, float scale)
         {
             Random random = new Random();
             var pincer = new PincerModel(1, (float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
@@ -49,9 +49,9 @@ namespace Evolution.Environment.Life.Creatures.Mouth
 
             /*var curve = _creatureBodyBuilder.CreateThoraxCurve(dna);
             var creatureHeight = curve.First().Y + (float)Math.Abs(curve.Last().Y);
-            var mouthSize = creatureHeight / 2.0f;
+            var mouthSize = creatureHeight / 2.0f;*/
 
-            va1 = VertexHelper.Scale(va1, mouthSize);*/
+            va1 = VertexHelper.Scale(va1, scale);
 
             var border = VertexHelper.Scale(va1, 1.1f);
             border = VertexHelper.SetColour(border, new Vector3(0));
