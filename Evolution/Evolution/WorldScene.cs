@@ -9,6 +9,7 @@ using Engine.Render;
 using Engine.Render.Core.VAO.Instanced;
 using Engine.Render.Events;
 using Evolution.Environment.Life.Creatures;
+using Evolution.Environment.Life.Creatures.Body.Visual;
 using Evolution.Environment.Life.Creatures.Mouth;
 using Evolution.Environment.Life.Creatures.Mouth.Factory;
 using Evolution.Genetics.Creature;
@@ -18,6 +19,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Evolution
 {
@@ -36,10 +38,7 @@ namespace Evolution
 
         DNA dna;
 
-        CreatureBodyBuilder creatureBuilder;
-
-        Entity clawEntity;
-        Entity clawEntity2;
+        CreatureBuilder cb;
 
         List<Mouth> mouths = new List<Mouth>();
 
@@ -51,18 +50,19 @@ namespace Evolution
             game.UIManager.Windows.Add(new TerrainWindow(_environment.TerrainManager, Game.EventBus));
             game.UIManager.Windows.Add(new TestWindow(Game.EventBus));
 
-            creatureBuilder = new CreatureBodyBuilder();
-
             cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
 
             EventBus.Publish(new CameraChangeEvent() { Camera = cam });
             Random random = new Random();
 
 
+
             var dnaA = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 0));
             var dnaB = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 50));
 
             dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 500));
+
+            cb = new CreatureBuilder(EntityManager, SystemManager.GetSystem<PhysicsSystem>().World);
 
             /*bottomRow = new DNA[9];
             leftRow = new DNA[9];
@@ -198,9 +198,12 @@ namespace Evolution
 
         private void createCreature(int x, int y, DNA dna)
         {
-            var entity = new Entity("creature");
+            /*var entity = new Entity("creature");
 
-            var shape = creatureBuilder.CreateBody(dna);
+
+            var shape = CreatureBodyFactoryBuilder.Get(Environment.Life.Creatures.Body.Enums.BodyType.SinglePart).CreateBody(dna).First();
+
+
             var rc = new RenderComponent(shape);
             //rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
@@ -228,7 +231,8 @@ namespace Evolution
 
             mouths.Add(mouth);
 
-            EntityManager.AddEntity(entity);
+            EntityManager.AddEntity(entity);*/
+            cb.BuildCreature(dna, new Vector2(x, y));
         }
 
         public override void OnRenderFrame(FrameEventArgs e)

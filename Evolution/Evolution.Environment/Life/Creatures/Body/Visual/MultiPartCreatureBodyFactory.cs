@@ -9,19 +9,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Evolution.Environment.Life.Creatures
+namespace Evolution.Environment.Life.Creatures.Body.Visual
 {
-    /// <summary>
-    /// Class responsible for constructing creatures' bodies from their DNA
-    /// </summary>
-    public class CreatureBodyBuilder
+    public class MultiPartCreatureBodyFactory : CreatureBodyFactory
     {
-        public VertexArray CreateBody(in DNA dna)
+        public override IEnumerable<VertexArray> CreateBody(in DNA dna)
         {
             var thorax = CreateThorax(dna);
+
+            var p2 = VertexHelper.Translate(thorax, new Vector2(0, -.1f));
+
+            thorax = VertexHelper.Combine(thorax, p2);
+
             var eyes = CreateEyes(dna);
 
-            return VertexHelper.Combine(thorax, eyes);
+            return new[] { VertexHelper.Combine(thorax, eyes) };
         }
 
         /// <summary>

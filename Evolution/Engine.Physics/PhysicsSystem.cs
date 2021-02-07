@@ -16,6 +16,8 @@ namespace Engine.Physics
 
         private List<PhysicsComponent> components;
 
+        public World World => _world;
+
         public PhysicsSystem(Vector2 gravity, IEventBus eventBus)
         {
             _world = new World(new tainicom.Aether.Physics2D.Common.Vector2(gravity.X, gravity.Y));
@@ -25,6 +27,8 @@ namespace Engine.Physics
             _eventBus = eventBus;
 
             components = new List<PhysicsComponent>();
+
+            _world.CreateRectangle(50, 10, 0, new tainicom.Aether.Physics2D.Common.Vector2(0, -10));
 
             // Control debuggable creatures
             _eventBus.Subscribe<KeyDownEvent>(x =>
@@ -72,7 +76,10 @@ namespace Engine.Physics
             var physicsComponent = entity.GetComponent<PhysicsComponent>();
             var positionComponent = entity.GetComponent<PositionComponent>();
 
-            if (!physicsComponent.PhysicsBody.Initialised) InitialisePhysicsBody(physicsComponent, positionComponent.Position, positionComponent.Angle);
+            if (!physicsComponent.PhysicsBody.Initialised)
+            {
+                InitialisePhysicsBody(physicsComponent, positionComponent.Position, positionComponent.Angle);
+            }
 
             positionComponent.Position = physicsComponent.PhysicsBody.Position;
             positionComponent.Angle = physicsComponent.PhysicsBody.Rotation;

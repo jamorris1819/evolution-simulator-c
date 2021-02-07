@@ -40,6 +40,8 @@ namespace Engine.Render
 
             //if (!InView(posComp.Position)) return;
 
+            if (comp.Shaders.Count == 0) throw new Exception("Cannot render object without any shaders");
+
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 

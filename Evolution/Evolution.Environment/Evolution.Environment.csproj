@@ -9,6 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Engine.Physics.Core\Engine.Physics.Core.csproj" />
+    <ProjectReference Include="..\Engine.Physics\Engine.Physics.csproj" />
     <ProjectReference Include="..\Engine.Terrain\Engine.Terrain.csproj" />
     <ProjectReference Include="..\Evolution.Genetics\Evolution.Genetics.csproj" />
   </ItemGroup>

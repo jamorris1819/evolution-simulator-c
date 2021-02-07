@@ -18,12 +18,8 @@ namespace Evolution.Environment.Life.Creatures.Mouth
     {
         private List<PositionComponent> _positions;
 
-        private CreatureBodyBuilder _creatureBodyBuilder; // TODO: make abstract Mouth class
-        // TODO: also find better way of doing this without creating so many creature body builders
-
         public PincerMouth()
         {
-            _creatureBodyBuilder = new CreatureBodyBuilder();
             _positions = new List<PositionComponent>();
         }
 
@@ -41,8 +37,6 @@ namespace Evolution.Environment.Life.Creatures.Mouth
             _positions[1].Angle = -triangleWave((float)counter * speed) * (float)(Math.PI * 0.25);
         }
 
-        private Vector2 GetMouthPosition(in DNA dna) => _creatureBodyBuilder.CreateThoraxCurve(dna).First();
-
         private void CreatePincerEntities(in DNA dna)
         {
             Random random = new Random();
@@ -53,11 +47,11 @@ namespace Evolution.Environment.Life.Creatures.Mouth
 
             va1 = VertexHelper.SetColour(va1, colour.Data * 1.5f);
 
-            var curve = _creatureBodyBuilder.CreateThoraxCurve(dna);
+            /*var curve = _creatureBodyBuilder.CreateThoraxCurve(dna);
             var creatureHeight = curve.First().Y + (float)Math.Abs(curve.Last().Y);
             var mouthSize = creatureHeight / 2.0f;
 
-            va1 = VertexHelper.Scale(va1, mouthSize);
+            va1 = VertexHelper.Scale(va1, mouthSize);*/
 
             var border = VertexHelper.Scale(va1, 1.1f);
             border = VertexHelper.SetColour(border, new Vector3(0));
@@ -72,7 +66,6 @@ namespace Evolution.Environment.Life.Creatures.Mouth
 
             CreatePincerEntity(va1);
             CreatePincerEntity(va2);
-            //CreatePincerEntity(VertexHelper.Multiply(va, new Vector2(1, -1)));
         }
 
         private void CreatePincerEntity(VertexArray va)

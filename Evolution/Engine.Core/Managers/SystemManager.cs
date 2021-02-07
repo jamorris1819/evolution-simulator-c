@@ -1,5 +1,6 @@
 ﻿using Redbus.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine.Core.Managers
 {
@@ -42,5 +43,8 @@ namespace Engine.Core.Managers
         {
             _systems.Add(system);
         }
+
+        public T GetSystem<T>() where T : ISystem
+            => (T)_systems.FirstOrDefault(x => x is T);
     }
 }
