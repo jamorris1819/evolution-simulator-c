@@ -1,7 +1,4 @@
 ﻿using OpenTK.Mathematics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Engine.Physics.Core.Shapes
@@ -12,16 +9,14 @@ namespace Engine.Physics.Core.Shapes
 
         public CirclePhysicsBody(float radius, float density) : base(density)
         {
-            _radius = radius;
+            _radius = radius * Physics.Scale;
         }
 
-        public override void CreateBody(World world, Vector2 pos)
+        protected override void CreateBodyImpl(World world, Vector2 pos)
         {
-            _body = world.CreateCircle(_radius, Density, new tainicom.Aether.Physics2D.Common.Vector2(pos.X, pos.Y), BodyType);
-            _body.LinearDamping = LinearDrag;
-            _body.AngularDamping = AngularDrag;
-
-            Initialised = true;
+            Body = world.CreateCircle(_radius, Density, new tainicom.Aether.Physics2D.Common.Vector2(pos.X, pos.Y), BodyType);
+            Body.LinearDamping = LinearDrag;
+            Body.AngularDamping = AngularDrag;
         }
     }
 }

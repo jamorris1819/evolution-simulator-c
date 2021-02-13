@@ -1,79 +1,100 @@
 ﻿using OpenTK.Mathematics;
-using System;
 using tainicom.Aether.Physics2D.Dynamics;
 
 namespace Engine.Physics.Core
 {
     public abstract class PhysicsBody
     {
-        public Body _body; // TODO: change back to protected
-        
-        public bool Initialised { get; protected set; }
+        public bool Debug { get; set; } // TODO: phase this out
 
-        public bool Debug { get; set; }
-
+        /// <summary>
+        /// The density of the physics object
+        /// </summary>
         public float Density { get; protected set; }
 
+        /// <summary>
+        /// The linear drag of the physics object
+        /// </summary>
         public float LinearDrag { get; set; }
 
+        /// <summary>
+        /// The angular drag of the physics object
+        /// </summary>
         public float AngularDrag { get; set; }
 
-        public PhysicsBody Parent { get; private set; }
+        /// <summary>
+        /// The box2d body.
+        /// </summary>
+        public Body Body { get; protected set; }
 
+        /// <summary>
+        /// The position of the physics object
+        /// </summary>
         public Vector2 Position
         {
             get
             {
-                var pos = _body.Position;
+                var pos = Body.Position;
 
-                return new Vector2(pos.X, pos.Y);
+                return new Vector2(pos.X, pos.Y) * Physics.InvScale;
             }
             set
             {
-                _body.Position = new tainicom.Aether.Physics2D.Common.Vector2(value.X, value.Y);
+                var newPos = value * Physics.Scale;
+                Body.Position = new tainicom.Aether.Physics2D.Common.Vector2(newPos.X, newPos.Y);
             }
         }
 
+        /// <summary>
+        /// The rotation of the physics object
+        /// </summary>
         public float Rotation
         {
-            get => _body.Rotation;
-            set => _body.Rotation = value;
+            get => Body.Rotation;
+            set => Body.Rotation = value;
         }
 
-        public BodyType BodyType { get; set; }
+        /// <summary>
+        /// The body type of the physics object
+        /// </summary>
+        public BodyType BodyType { get; set; } = BodyType.Static;
 
         public PhysicsBody(float density)
         {
             Density = density;
         }
 
-        public abstract void CreateBody(World world, Vector2 pos);
+        /// <summary>
+        /// Abstract method for creating the physics body
+        /// </summary>
+        protected abstract void CreateBodyImpl(World world, Vector2 pos);
 
-        public void Initialise(World world, Vector2 pos)
-        {
-            if (Initialised) throw new Exception("Physics body is already initialised!");
+        /// <summary>
+        /// Creates the body at the specified location
+        /// </summary>
+        public void CreateBody(World world, Vector2 pos)
+            => CreateBodyImpl(world, pos * Physics.Scale);
 
-            CreateBody(world, pos);
-
-            Initialised = true;
-        }
-
+        /// <summary>
+        /// Applies a force to the physics body
+        /// </summary>
         public void ApplyForce(Vector2 force)
         {
-            _body.ApplyForce(new tainicom.Aether.Physics2D.Common.Vector2(force.X, force.Y));
+            Body.ApplyForce(new tainicom.Aether.Physics2D.Common.Vector2(force.X, force.Y));
         }
 
+        /// <summary>
+        /// Applies a force in the direction the physics body is facing
+        /// </summary>
         public void MoveForward(float force)
             => ApplyForce(new Vector2(-(float)System.Math.Sin(Rotation) * force, (float)System.Math.Cos(Rotation) * force));
 
+        /// <summary>
+        /// Apply torque to the physics body
+        /// </summary>
         public void ApplyTorque(float torque)
         {
-            _body.ApplyTorque(torque);
-        }
-
-        public void SetParent(PhysicsBody body)
-        {
-            Parent = body;
+            Body.ApplyTorque(torque);
         }
     }
 }

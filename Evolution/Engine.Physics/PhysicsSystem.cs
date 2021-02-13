@@ -29,7 +29,7 @@ namespace Engine.Physics
 
             components = new List<PhysicsComponent>();
 
-            _world.CreateRectangle(50, 10, 0, new tainicom.Aether.Physics2D.Common.Vector2(0, -10));
+            _world.CreateRectangle(50 * 4f, 10*4, 0, new tainicom.Aether.Physics2D.Common.Vector2(0, -10 * 4f));
 
             // Control debuggable creatures
             _eventBus.Subscribe<KeyDownEvent>(x =>
@@ -77,37 +77,8 @@ namespace Engine.Physics
             var physicsComponent = entity.GetComponent<PhysicsComponent>();
             var positionComponent = entity.GetComponent<PositionComponent>();
 
-            if (!physicsComponent.PhysicsBody.Initialised)
-            {
-                InitialisePhysicsBody(physicsComponent, positionComponent.Position, positionComponent.Angle);
-            }
-
             positionComponent.Position = physicsComponent.PhysicsBody.Position;
             positionComponent.Angle = physicsComponent.PhysicsBody.Rotation;
-        }
-
-        private void InitialisePhysicsBody(PhysicsComponent component, Vector2 pos, float angle)
-        {
-            component.PhysicsBody.Initialise(_world, pos);
-            component.PhysicsBody.Position = pos;
-            component.PhysicsBody.Rotation = angle;
-
-            components.Add(component);
-
-            if(component.PhysicsBody.Parent != null)
-            {
-                /*JointFactory.CreateRevoluteJoint(_world,
-                    component.PhysicsBody._body,
-                    component.PhysicsBody.Parent._body,
-                    component.PhysicsBody._body.Position);*/
-
-                var joint = JointFactory.CreateRopeJoint(_world,
-                    component.PhysicsBody._body,
-                    component.PhysicsBody.Parent._body,
-                    new tainicom.Aether.Physics2D.Common.Vector2(0, 0.05f),
-                    new tainicom.Aether.Physics2D.Common.Vector2(0, -0.05f));
-                joint.CollideConnected = true;
-            }
         }
 
         private IEnumerable<PhysicsComponent> GetDebuggable() => components.Where(x => x.PhysicsBody.Debug);
