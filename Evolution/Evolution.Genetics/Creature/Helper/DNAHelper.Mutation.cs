@@ -7,12 +7,6 @@ namespace Evolution.Genetics.Creature.Helper
     public partial class DNAHelper
     {
         /// <summary>
-        /// Copies DNA with the possiblity of mutation according to genotype metadata
-        /// </summary>
-        public static DNA CopyDNA(in DNA dna)
-            => new DNA(dna.ColourR.Copy(), dna.ColourG.Copy(), dna.ColourB.Copy(), dna.BodySteps.Copy(), dna.BodyOffset.Copy());
-
-        /// <summary>
         /// Copies a genotype with the possibility of mutation according to genotype metadata
         /// </summary>
         public static Genotype<T> CopyGenotype<T>(in Genotype<T> genotype) where T: struct, IEquatable<T>

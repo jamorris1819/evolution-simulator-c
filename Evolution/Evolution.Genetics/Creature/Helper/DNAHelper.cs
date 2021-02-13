@@ -11,18 +11,6 @@ namespace Evolution.Genetics.Creature.Helper
     {
         private static Random _random = new Random();
 
-        public static DNA Cross(DNA a, DNA b)
-        {
-            var colourR = Cross(a.ColourR, b.ColourR);
-            var colourG = Cross(a.ColourG, b.ColourG);
-            var colourB = Cross(a.ColourB, b.ColourB);
-
-            var bodySteps = Cross(a.BodySteps, b.BodySteps);
-            var bodyOffset = Cross(a.BodyOffset, b.BodyOffset);
-
-            return new DNA(colourR, colourG, colourB, bodySteps, bodyOffset);
-        }
-
         public static Genotype<T> Cross<T>(in Genotype<T> a, in Genotype<T> b) where T : struct, IEquatable<T>
         {
             var rand = Math.Round(_random.NextDouble());

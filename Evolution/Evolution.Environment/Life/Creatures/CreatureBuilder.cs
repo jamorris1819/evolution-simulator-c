@@ -80,10 +80,10 @@ namespace Evolution.Environment.Life.Creatures
             return entity;
         }
 
-        private IEnumerable<VertexArray> CreateBodyParts(in DNA dna) => CreatureBodyFactoryBuilder.Get(Body.Enums.BodyType.MultiPart).CreateBody(dna);
+        private IEnumerable<VertexArray> CreateBodyParts(in DNA dna) => CreatureBodyFactoryBuilder.Get(Genetics.Creature.Modules.Body.BodyType.MultiPart).CreateBody(dna);
 
         private IEnumerable<PhysicsBody> CreatePhysicsBodyParts(in DNA dna, Vector2 pos)
-            => CreaturePhysicsBodyFactoryBuilder.Get(Body.Enums.BodyType.MultiPart, _world).CreateBody(dna, pos);
+            => CreaturePhysicsBodyFactoryBuilder.Get(Genetics.Creature.Modules.Body.BodyType.MultiPart, _world).CreateBody(dna, pos);
 
         private Mouth.Mouth CreateMouth(in DNA dna, float scale) => MouthFactoryBuilder.GetFactory(Mouth.Enums.MouthType.Pincer).CreateMouth(dna, scale);
 
