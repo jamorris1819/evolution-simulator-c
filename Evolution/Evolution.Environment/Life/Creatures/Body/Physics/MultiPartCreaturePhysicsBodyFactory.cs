@@ -37,6 +37,9 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
                    bodies[i].Body,
                    new tainicom.Aether.Physics2D.Common.Vector2(0, -0.5f),
                    new tainicom.Aether.Physics2D.Common.Vector2(0, 0.5f));
+                joint.LimitEnabled = true;
+                joint.LowerLimit = -1;
+                joint.UpperLimit = 1;
             }
 
             //PathManager.AttachBodiesWithRevoluteJoint(_world, bodies.Select(x => x._body).ToList(), new tainicom.Aether.Physics2D.Common.Vector2(0, 0.01f), new tainicom.Aether.Physics2D.Common.Vector2(0, -0.01f), false, false);
