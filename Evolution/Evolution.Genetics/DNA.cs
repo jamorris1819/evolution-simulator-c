@@ -1,13 +1,7 @@
-﻿using Evolution.Genetics.Creature.Helper;
-using Evolution.Genetics.Creature.Modules;
-using Evolution.Genetics.Creature.Modules.Body;
-using OpenTK.Mathematics;
-using System;
-using System.Collections.Generic;
+﻿using Evolution.Genetics.Creature.Modules;
 using System.Linq;
-using System.Text;
 
-namespace Evolution.Genetics.Creature
+namespace Evolution.Genetics
 {
     public readonly struct DNA
     {

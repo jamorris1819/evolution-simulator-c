@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Evolution.Genetics.Creature
 {
-    public readonly struct Gene<T> where T: IEquatable<T>
+    public readonly struct Gene
     {
         /// <summary>
         /// The data held inside the gene
         /// </summary>
-        public T Data { get; }
+        public byte Data { get; }
 
         /// <summary>
         /// Whether the gene is a dominant gene
@@ -21,7 +21,7 @@ namespace Evolution.Genetics.Creature
         /// </summary>
         /// <param name="data">The data to hold</param>
         /// <param name="dominant">Whether this gene is dominant</param>
-        public Gene(T data, bool dominant)
+        public Gene(byte data, bool dominant)
         {
             Data = data;
             Dominant = dominant;

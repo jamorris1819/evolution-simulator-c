@@ -9,5 +9,7 @@ namespace Evolution.Genetics.Creature.Modules
         ModuleType ModuleType { get; }
 
         IModule Cross(IModule other);
+
+        IModule Mutate();
     }
 }

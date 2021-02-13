@@ -1,14 +1,11 @@
-﻿using Evolution.Genetics.Creature.Helper;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace Evolution.Genetics.Creature.Modules.Body
 {
     public class MultiPartBody : Body
     {
-        public Genotype<int> BodySteps { get; set; }
-        public Genotype<float> BodyOffset { get; set; }
+        public Genotype BodySteps { get; set; }
+        public Genotype BodyOffset { get; set; }
 
         public MultiPartBody()
         {
@@ -21,9 +18,9 @@ namespace Evolution.Genetics.Creature.Modules.Body
 
             return new MultiPartBody()
             {
-                BodySteps = DNAHelper.Cross(BodySteps, a.BodySteps),
-                BodyOffset = DNAHelper.Cross(BodyOffset, a.BodyOffset),
-                Size = DNAHelper.Cross(Size, a.Size)
+                BodySteps = BodySteps.Cross(a.BodySteps),
+                BodyOffset = BodyOffset.Cross(a.BodyOffset),
+                Size = Size.Cross(a.Size)
             };
         }
     }

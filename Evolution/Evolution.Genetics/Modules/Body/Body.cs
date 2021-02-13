@@ -4,13 +4,15 @@
     {
         public ModuleType ModuleType => ModuleType.Body;
 
-        public Genotype<float> Size { get; set; }
-        public Genotype<float> ColourR { get; }
-        public Genotype<float> ColourG { get; }
-        public Genotype<float> ColourB { get; }
+        public Genotype Size { get; set; }
+        public Genotype ColourR { get; }
+        public Genotype ColourG { get; }
+        public Genotype ColourB { get; }
 
         public BodyType Type { get; protected set; }
 
         public abstract IModule Cross(IModule other);
+
+        public abstract IModule Mutate();
     }
 }
