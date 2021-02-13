@@ -77,11 +77,11 @@ namespace Evolution
                 createCreature(-1, i, leftRow[i]);
             }*/
 
-            for (int x = 0; x < 20; x++)
+            for (int x = 0; x < 10; x++)
             {
-                for(int y= 0; y < 20; y ++)
+                for(int y= 0; y < 1; y ++)
                 {
-                    createCreature(x, y, dna);
+                    createCreature(x, y * 8, dna);
                     dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), random.Next(1000)));
                 }
             }

@@ -6,9 +6,9 @@ namespace Engine.Physics.Core
 {
     public abstract class PhysicsBody
     {
-        protected Body _body;
+        public Body _body; // TODO: change back to protected
         
-        public bool Initialised { get; private set; }
+        public bool Initialised { get; protected set; }
 
         public bool Debug { get; set; }
 
@@ -17,6 +17,8 @@ namespace Engine.Physics.Core
         public float LinearDrag { get; set; }
 
         public float AngularDrag { get; set; }
+
+        public PhysicsBody Parent { get; private set; }
 
         public Vector2 Position
         {
@@ -45,15 +47,13 @@ namespace Engine.Physics.Core
             Density = density;
         }
 
-        public abstract void CreateBody(World world, Vector2 position);
+        public abstract void CreateBody(World world, Vector2 pos);
 
-        public void CreateBody(World world) => CreateBody(world, new Vector2());
-
-        public void Initialise(World world, Vector2 position = default)
+        public void Initialise(World world, Vector2 pos)
         {
             if (Initialised) throw new Exception("Physics body is already initialised!");
 
-            CreateBody(world, position);
+            CreateBody(world, pos);
 
             Initialised = true;
         }
@@ -69,6 +69,11 @@ namespace Engine.Physics.Core
         public void ApplyTorque(float torque)
         {
             _body.ApplyTorque(torque);
+        }
+
+        public void SetParent(PhysicsBody body)
+        {
+            Parent = body;
         }
     }
 }

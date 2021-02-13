@@ -17,13 +17,21 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
         {
             var thorax = CreateThorax(dna);
 
-            var p2 = VertexHelper.Translate(thorax, new Vector2(0, -.1f));
+            var length = 20;
 
-            thorax = VertexHelper.Combine(thorax, p2);
+            var vertexArrays = new List<VertexArray>();
+
+            var bc = new BezierCurveCubic(new Vector2(0, 1f), new Vector2(1, 0.5f), new Vector2(0f, 5f), new Vector2(0.5f, 1f));
+
+            for (int i = 0; i < length; i++)
+            {
+                var piece = VertexHelper.Scale(thorax, bc.CalculatePoint((float)i / (float)(length - 1)).Y);
+                vertexArrays.Add(VertexHelper.Translate(piece, new Vector2(0, i * -.025f)));
+            }
 
             var eyes = CreateEyes(dna);
-
-            return new[] { VertexHelper.Combine(thorax, eyes) };
+            vertexArrays[0] = VertexHelper.Combine(vertexArrays[0], eyes);
+            return vertexArrays;// new[] { VertexHelper.Combine(thorax, eyes) };
         }
 
         /// <summary>
@@ -71,6 +79,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
 
             var shape = Polygon.Generate(thoraxPoints);
             shape = VertexHelper.SetColour(shape, Phenotype<Vector3>.GetFromGenotypes(dna.ColourR, dna.ColourG, dna.ColourB).Data);
+            
 
             var border = Polygon.Generate(borderPoints);
             border = VertexHelper.SetColour(border, new Vector3(0));

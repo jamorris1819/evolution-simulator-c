@@ -17,7 +17,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
 
         public override IEnumerable<PhysicsBody> CreateBody(in DNA dna, Vector2 position)
         {
-            var body = new CirclePhysicsBody(0.05f, 10)
+            var body = new CirclePhysicsBody(0.15f, 10)
             {
                 BodyType = BodyType.Dynamic,
                 LinearDrag = 1f,
@@ -25,7 +25,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
             };
 
             body.CreateBody(_world, position);
-
+            
             return new[]
             {
                 body

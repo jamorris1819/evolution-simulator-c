@@ -11,6 +11,8 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
             {
                 case Enums.BodyType.SinglePart:
                     return new SinglePartCreaturePhysicsBodyFactory(world);
+                case Enums.BodyType.MultiPart:
+                    return new MultiPartCreaturePhysicsBodyFactory(world);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type));
             }

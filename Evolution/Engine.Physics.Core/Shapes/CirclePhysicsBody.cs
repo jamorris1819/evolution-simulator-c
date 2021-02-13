@@ -15,11 +15,13 @@ namespace Engine.Physics.Core.Shapes
             _radius = radius;
         }
 
-        public override void CreateBody(World world, Vector2 position)
+        public override void CreateBody(World world, Vector2 pos)
         {
-            _body = world.CreateCircle(_radius, Density, new tainicom.Aether.Physics2D.Common.Vector2(position.X, position.Y), BodyType);
+            _body = world.CreateCircle(_radius, Density, new tainicom.Aether.Physics2D.Common.Vector2(pos.X, pos.Y), BodyType);
             _body.LinearDamping = LinearDrag;
             _body.AngularDamping = AngularDrag;
+
+            Initialised = true;
         }
     }
 }

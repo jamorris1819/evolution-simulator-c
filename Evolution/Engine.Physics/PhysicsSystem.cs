@@ -6,6 +6,7 @@ using Redbus.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using tainicom.Aether.Physics2D.Dynamics;
+using tainicom.Aether.Physics2D.Dynamics.Joints;
 
 namespace Engine.Physics
 {
@@ -49,7 +50,7 @@ namespace Engine.Physics
                     var bodies = GetDebuggable().ToArray();
                     foreach (var body in bodies)
                     {
-                        body.PhysicsBody.ApplyTorque(1);
+                        body.PhysicsBody.ApplyTorque(.4f);
                     }
                 }
 
@@ -58,7 +59,7 @@ namespace Engine.Physics
                     var bodies = GetDebuggable().ToArray();
                     foreach (var body in bodies)
                     {
-                        body.PhysicsBody.ApplyTorque(-1);
+                        body.PhysicsBody.ApplyTorque(-2f);
                     }
                 }
             });
@@ -92,6 +93,21 @@ namespace Engine.Physics
             component.PhysicsBody.Rotation = angle;
 
             components.Add(component);
+
+            if(component.PhysicsBody.Parent != null)
+            {
+                /*JointFactory.CreateRevoluteJoint(_world,
+                    component.PhysicsBody._body,
+                    component.PhysicsBody.Parent._body,
+                    component.PhysicsBody._body.Position);*/
+
+                var joint = JointFactory.CreateRopeJoint(_world,
+                    component.PhysicsBody._body,
+                    component.PhysicsBody.Parent._body,
+                    new tainicom.Aether.Physics2D.Common.Vector2(0, 0.05f),
+                    new tainicom.Aether.Physics2D.Common.Vector2(0, -0.05f));
+                joint.CollideConnected = true;
+            }
         }
 
         private IEnumerable<PhysicsComponent> GetDebuggable() => components.Where(x => x.PhysicsBody.Debug);

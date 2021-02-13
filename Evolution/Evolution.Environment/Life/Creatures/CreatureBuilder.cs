@@ -49,7 +49,7 @@ namespace Evolution.Environment.Life.Creatures
             {
                 var body = bodies[i];
                 var physBody = physicBodies[i];
-                entities.Add(CreateBodyPart(baseEntity, body, physBody));
+                entities.Add(CreateBodyPart(position + new Vector2(0, i * -0.05f), body, physBody));
             }            
 
             mouth.SetParent(entities[0]);
@@ -63,15 +63,14 @@ namespace Evolution.Environment.Life.Creatures
             return entity;
         }
 
-        private Entity CreateBodyPart(Entity parent, in VertexArray va, PhysicsBody physBod)
+        private Entity CreateBodyPart(Vector2 position, in VertexArray va, PhysicsBody physBod)
         {
             var entity = new Entity("body part");
 
-            entity.AddComponent(new PositionComponent(physBod.Position));
+            entity.AddComponent(new PositionComponent(position));
             var rc = new RenderComponent(va);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             entity.AddComponent(rc);
-            physBod.Debug = true;
             entity.AddComponent(new PhysicsComponent(physBod));
 
             // TODO: decide if parent should be set
@@ -81,10 +80,10 @@ namespace Evolution.Environment.Life.Creatures
             return entity;
         }
 
-        private IEnumerable<VertexArray> CreateBodyParts(in DNA dna) => CreatureBodyFactoryBuilder.Get(Body.Enums.BodyType.SinglePart).CreateBody(dna);
+        private IEnumerable<VertexArray> CreateBodyParts(in DNA dna) => CreatureBodyFactoryBuilder.Get(Body.Enums.BodyType.MultiPart).CreateBody(dna);
 
         private IEnumerable<PhysicsBody> CreatePhysicsBodyParts(in DNA dna, Vector2 pos)
-            => CreaturePhysicsBodyFactoryBuilder.Get(Body.Enums.BodyType.SinglePart, _world).CreateBody(dna, pos);
+            => CreaturePhysicsBodyFactoryBuilder.Get(Body.Enums.BodyType.MultiPart, _world).CreateBody(dna, pos);
 
         private Mouth.Mouth CreateMouth(in DNA dna, float scale) => MouthFactoryBuilder.GetFactory(Mouth.Enums.MouthType.Pincer).CreateMouth(dna, scale);
 
