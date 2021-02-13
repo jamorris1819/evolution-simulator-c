@@ -19,6 +19,7 @@ namespace Engine.Core.Managers
         private List<MouseButton> _mouseButtonsDown;
         private Vector2 _mousePosition;
         private Vector2 _mouseScroll;
+        private static Dictionary<Keys, bool> _keyMap = new Dictionary<Keys, bool>();
 
         public InputManager(IEventBus eventBus)
         {
@@ -95,6 +96,22 @@ namespace Engine.Core.Managers
             {
                 Key = e.Key
             });
+
+            if (!_keyMap.ContainsKey(e.Key)) _keyMap.Add(e.Key, true);
+            else _keyMap[e.Key] = true;
         }
+
+        public void OnKeyboardUp(KeyboardKeyEventArgs e)
+        {
+           /* _eventBus.Publish(new KeyUpEvent()
+            {
+                Key = e.Key
+            });*/
+
+            if (!_keyMap.ContainsKey(e.Key)) _keyMap.Add(e.Key, false);
+            else _keyMap[e.Key] = false;
+        }
+
+        public static bool IsKeyDown(Keys key) => _keyMap.ContainsKey(key) ? _keyMap[key] : false;
     }
 }

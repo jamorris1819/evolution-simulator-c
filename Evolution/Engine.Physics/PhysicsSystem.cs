@@ -1,6 +1,7 @@
 ﻿using Engine.Core;
 using Engine.Core.Components;
 using Engine.Core.Events.Input.Keyboard;
+using Engine.Core.Managers;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System.Collections.Generic;
@@ -30,39 +31,6 @@ namespace Engine.Physics
             components = new List<PhysicsComponent>();
 
             _world.CreateRectangle(50 * 4f, 10*4, 0, new tainicom.Aether.Physics2D.Common.Vector2(0, -10 * 4f));
-
-            // Control debuggable creatures
-            _eventBus.Subscribe<KeyDownEvent>(x =>
-            {
-                if (!GetDebuggable().Any()) return;
-
-                if (x.Key == OpenTK.Windowing.GraphicsLibraryFramework.Keys.W)
-                {
-                    var bodies = GetDebuggable().ToArray();
-                    foreach (var body in bodies)
-                    {
-                        body.PhysicsBody.MoveForward(3);
-                    }
-                }
-
-                if (x.Key == OpenTK.Windowing.GraphicsLibraryFramework.Keys.A)
-                {
-                    var bodies = GetDebuggable().ToArray();
-                    foreach (var body in bodies)
-                    {
-                        body.PhysicsBody.ApplyTorque(.4f);
-                    }
-                }
-
-                if (x.Key == OpenTK.Windowing.GraphicsLibraryFramework.Keys.D)
-                {
-                    var bodies = GetDebuggable().ToArray();
-                    foreach (var body in bodies)
-                    {
-                        body.PhysicsBody.ApplyTorque(-2f);
-                    }
-                }
-            });
         }
 
         public override void OnUpdate(float deltaTime)
@@ -77,10 +45,26 @@ namespace Engine.Physics
             var physicsComponent = entity.GetComponent<PhysicsComponent>();
             var positionComponent = entity.GetComponent<PositionComponent>();
 
+            if (physicsComponent.PhysicsBody.Debug)
+            {
+                var speed = 40f;
+                if (InputManager.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.LeftShift)) speed *= 2.75f;
+                if (InputManager.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.W))
+                {
+                    physicsComponent.PhysicsBody.MoveForward(speed);
+                }
+                if (InputManager.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.D))
+                {
+                    physicsComponent.PhysicsBody.ApplyTorque(-4);
+                }
+                if (InputManager.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.A))
+                {
+                    physicsComponent.PhysicsBody.ApplyTorque(4);
+                }
+            }
+
             positionComponent.Position = physicsComponent.PhysicsBody.Position;
             positionComponent.Angle = physicsComponent.PhysicsBody.Rotation;
         }
-
-        private IEnumerable<PhysicsComponent> GetDebuggable() => components.Where(x => x.PhysicsBody.Debug);
     }
 }

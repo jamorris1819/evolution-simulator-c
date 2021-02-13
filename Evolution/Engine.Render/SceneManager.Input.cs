@@ -57,5 +57,11 @@ namespace Engine.Render
             base.OnKeyDown(e);
             _inputManager.OnKeyboardDown(e);
         }
+
+        protected override void OnKeyUp(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+            _inputManager.OnKeyboardUp(e);
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace Engine
             var renderSystem = new RenderSystem(EventBus, Game.ShaderManager);
             SystemManager.AddSystem(renderSystem);
 
-            var physicsSystem = new PhysicsSystem(new OpenTK.Mathematics.Vector2(0, -9.01f), EventBus);
+            var physicsSystem = new PhysicsSystem(new OpenTK.Mathematics.Vector2(0, 0), EventBus);
             SystemManager.AddSystem(physicsSystem);
         }
 

@@ -17,7 +17,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
         {
             var thorax = CreateThorax(dna);
 
-            var length = 3;
+            var length = 6;
 
             var vertexArrays = new List<VertexArray>();
 

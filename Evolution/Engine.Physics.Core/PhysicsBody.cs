@@ -80,6 +80,7 @@ namespace Engine.Physics.Core
         /// </summary>
         public void ApplyForce(Vector2 force)
         {
+            force *= Physics.Scale;
             Body.ApplyForce(new tainicom.Aether.Physics2D.Common.Vector2(force.X, force.Y));
         }
 
@@ -94,6 +95,7 @@ namespace Engine.Physics.Core
         /// </summary>
         public void ApplyTorque(float torque)
         {
+            torque *= Physics.Scale;
             Body.ApplyTorque(torque);
         }
     }
