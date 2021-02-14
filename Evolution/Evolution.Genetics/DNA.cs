@@ -13,5 +13,15 @@ namespace Evolution.Genetics
         }
 
         public IModule GetModule(ModuleType type) => Modules.First(x => x.ModuleType == type);
+
+        public DNA Mutate() => new DNA(Modules.Select(x => x.Mutate()).ToArray());
+
+        public DNA Cross(DNA other)
+        {
+            return new DNA(new IModule[]
+            {
+                GetModule(ModuleType.Body).Cross(other.GetModule(ModuleType.Body))
+            });
+        }
     }
 }

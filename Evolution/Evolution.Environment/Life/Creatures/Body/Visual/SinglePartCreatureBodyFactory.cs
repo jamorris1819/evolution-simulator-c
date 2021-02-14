@@ -2,7 +2,11 @@
 using Engine.Render.Core;
 using Engine.Render.Core.Data;
 using Engine.Render.Core.Data.Primitives;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
+using Evolution.Genetics.Creature.Modules;
+using Evolution.Genetics.Creature.Modules.Body;
+using Evolution.Genetics.Creature.Readers;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -26,18 +30,22 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
         /// </summary>
         public IEnumerable<Vector2> CreateThoraxCurve(DNA dna)
         {
+            var bodyModule = (SinglePartBody)dna.GetModule(ModuleType.Body);
+
             FastNoise noise = new FastNoise();
             noise.Octaves = 5;
             noise.UsedNoiseType = FastNoise.NoiseType.PerlinFractal;
 
-            int steps = dna.BodySteps.GetPhenotype().Data;
+            var offset = DNAReader.ReadValueFloat(bodyModule.BodyOffset, DNAReader.BodyOffsetsReader);
+
+            int steps = DNAReader.ReadValueInt(bodyModule.BodySteps, DNAReader.BodyStepsReader);
             float stepSize = (float)Math.PI / steps;
 
             for (int i = 0; i < steps; i++)
             {
                 var point = new Vector2((float)Math.Sin(stepSize * i), (float)Math.Cos(stepSize * i));
                 point.Normalize();
-                var dist = Math.Abs(noise.GetNoise(i + dna.BodyOffset.GetPhenotype().Data, 0));
+                var dist = Math.Abs(noise.GetNoise(i + offset, 0));
                 point *= Math.Max(dist, 0.1f);
 
                 yield return point;
@@ -46,6 +54,8 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
 
         private VertexArray CreateThorax(in DNA dna)
         {
+            var bodyModule = (SinglePartBody)dna.GetModule(ModuleType.Body);
+
             float borderThickness = 0.01f;
             var thoraxPoints = CreateThoraxCurve(dna).ToList();
             var borderPoints = thoraxPoints.Select(x => x + x.Normalized() * borderThickness).ToList();
@@ -65,7 +75,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
             borderPoints.AddRange(flippedPoints);
 
             var shape = Polygon.Generate(thoraxPoints);
-            shape = VertexHelper.SetColour(shape, Phenotype<Vector3>.GetFromGenotypes(dna.ColourR, dna.ColourG, dna.ColourB).Data);
+            shape = VertexHelper.SetColour(shape, DNAReader.ReadValueColour(bodyModule.ColourR, bodyModule.ColourG, bodyModule.ColourB));
 
             var border = Polygon.Generate(borderPoints);
             border = VertexHelper.SetColour(border, new Vector3(0));

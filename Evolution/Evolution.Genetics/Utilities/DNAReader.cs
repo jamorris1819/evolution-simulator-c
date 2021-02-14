@@ -1,9 +1,14 @@
-﻿using OpenTK.Mathematics;
+﻿using Evolution.Genetics.Utilities;
+using OpenTK.Mathematics;
 
 namespace Evolution.Genetics.Creature.Readers
 {
     public static class DNAReader
     {
+        // Readers
+        public static readonly GenotypeReader<int> BodyStepsReader = new GenotypeReader<int>(32, 64);
+        public static readonly GenotypeReader<float> BodyOffsetsReader = new GenotypeReader<float>(0, 100);
+
         /// <summary>
         /// Converts the genotype into a boolean value
         /// </summary>
@@ -22,6 +27,8 @@ namespace Evolution.Genetics.Creature.Readers
             return (int)(min + diff * delta);
         }
 
+        public static int ReadValueInt(Genotype genotype, GenotypeReader<int> reader) => ReadValueInt(genotype, reader.Min, reader.Max);
+
         /// <summary>
         /// Converts the genotype into a float value
         /// </summary>
@@ -35,10 +42,12 @@ namespace Evolution.Genetics.Creature.Readers
             return min + diff * delta;
         }
 
+        public static float ReadValueFloat(Genotype genotype, GenotypeReader<float> reader) => ReadValueFloat(genotype, reader.Min, reader.Max);
+
         /// <summary>
         /// Converts the genotypes into a colour
         /// </summary>
         public static Vector3 ReadValueColour(Genotype r, Genotype g, Genotype b)
-            => new Vector3(ReadValueFloat(r, 0, 255), ReadValueFloat(g, 0, 255), ReadValueFloat(b, 0, 255));
+            => new Vector3(ReadValueFloat(r, 0, 1), ReadValueFloat(g, 0, 1), ReadValueFloat(b, 0, 1));
     }
 }

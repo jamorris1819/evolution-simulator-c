@@ -2,9 +2,11 @@
 using Engine.Render.Core;
 using Engine.Render.Core.Data;
 using Engine.Render.Core.Data.Primitives;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using Evolution.Genetics.Creature.Modules;
 using Evolution.Genetics.Creature.Modules.Body;
+using Evolution.Genetics.Creature.Readers;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -45,14 +47,16 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
             noise.Octaves = 5;
             noise.UsedNoiseType = FastNoise.NoiseType.PerlinFractal;
 
-            int steps = bodyModule.BodySteps.GetPhenotype().Data;
+            var offset = DNAReader.ReadValueFloat(bodyModule.BodyOffset, DNAReader.BodyOffsetsReader);
+
+            int steps = DNAReader.ReadValueInt(bodyModule.BodySteps, DNAReader.BodyStepsReader);
             float stepSize = (float)Math.PI / steps;
 
             for (int i = 0; i < steps; i++)
             {
                 var point = new Vector2((float)Math.Sin(stepSize * i), (float)Math.Cos(stepSize * i));
                 point.Normalize();
-                var dist = Math.Abs(noise.GetNoise(i + bodyModule.BodyOffset.GetPhenotype().Data, 0));
+                var dist = Math.Abs(noise.GetNoise(i + offset, 0));
                 point *= Math.Max(dist, 0.1f);
 
                 yield return point;
@@ -82,7 +86,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
             borderPoints.AddRange(flippedPoints);
 
             var shape = Polygon.Generate(thoraxPoints);
-            shape = VertexHelper.SetColour(shape, Phenotype<Vector3>.GetFromGenotypes(bodyModule.ColourR, bodyModule.ColourG, bodyModule.ColourB).Data);
+            shape = VertexHelper.SetColour(shape, DNAReader.ReadValueColour(bodyModule.ColourR, bodyModule.ColourG, bodyModule.ColourB));
             
 
             var border = Polygon.Generate(borderPoints);

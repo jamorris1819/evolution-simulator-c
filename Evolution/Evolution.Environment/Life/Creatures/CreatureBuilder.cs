@@ -8,6 +8,7 @@ using Engine.Render.Core.Data;
 using Evolution.Environment.Life.Creatures.Body.Physics;
 using Evolution.Environment.Life.Creatures.Body.Visual;
 using Evolution.Environment.Life.Creatures.Mouth.Factory;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using OpenTK.Mathematics;
 using System;

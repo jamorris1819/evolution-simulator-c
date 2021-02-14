@@ -58,5 +58,27 @@ namespace Evolution.Genetics.Creature
         {
             return DNAMutator.Mutate(this, severity);
         }
+
+        public static Genotype Create()
+        {
+            Random random = new Random();
+            bool dominant = random.NextDouble() > 0.5;
+
+            int val = (int)(255 * random.NextDouble());
+            var separation = 15;
+
+            return new Genotype(
+                new Gene((byte)(val - separation), dominant),
+                new Gene((byte)(val + separation), dominant));
+        }
+
+        public static Genotype CreateRandom()
+        {
+            Random random = new Random();
+
+            return new Genotype(
+                new Gene((byte)(random.NextDouble() * 255), random.NextDouble() > 0.5),
+                new Gene((byte)(random.NextDouble() * 255), random.NextDouble() > 0.5));
+        }
     }
 }

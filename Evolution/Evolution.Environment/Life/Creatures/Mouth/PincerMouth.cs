@@ -5,6 +5,7 @@ using Engine.Render;
 using Engine.Render.Core;
 using Engine.Render.Core.Data;
 using Evolution.Environment.Life.Creatures.Mouth.ConstructionModels;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using OpenTK.Mathematics;
 using System;
@@ -43,9 +44,9 @@ namespace Evolution.Environment.Life.Creatures.Mouth
             var pincer = new PincerModel(1, (float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
             var va1 = pincer.GenerateShape(16);
 
-            var colour = Phenotype<Vector3>.GetFromGenotypes(dna.ColourR, dna.ColourG, dna.ColourB);
+            var colour = new Vector3(0);//Phenotype<Vector3>.GetFromGenotypes(dna.ColourR, dna.ColourG, dna.ColourB);
 
-            va1 = VertexHelper.SetColour(va1, colour.Data * 1.5f);
+            va1 = VertexHelper.SetColour(va1, colour * 1.5f);
 
             /*var curve = _creatureBodyBuilder.CreateThoraxCurve(dna);
             var creatureHeight = curve.First().Y + (float)Math.Abs(curve.Last().Y);

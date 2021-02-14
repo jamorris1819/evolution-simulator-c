@@ -1,5 +1,6 @@
 ﻿using Engine.Physics.Core;
 using Engine.Physics.Core.Shapes;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using OpenTK.Mathematics;
 using System;

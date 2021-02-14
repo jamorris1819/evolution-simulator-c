@@ -25,7 +25,7 @@ namespace Evolution.Genetics.Utilities
                     currentData += (byte)(increase ? 2 : -2);
                     break;
                 case MutationSeverity.Major:
-                    currentData += (byte)(increase ? 1 : -1);
+                    currentData += (byte)(increase ? 5 : -5);
                     currentDominant = !currentDominant;
                     break;
                 case MutationSeverity.Extreme:
@@ -65,7 +65,5 @@ namespace Evolution.Genetics.Utilities
         }
 
         public static Genotype Mutate(Genotype gene, MutationSeverity severity) => Mutate(gene, severity, new Random());
-
-        public static DNA Mutate(DNA dna,)
     }
 }

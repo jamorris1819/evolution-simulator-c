@@ -5,9 +5,9 @@
         public ModuleType ModuleType => ModuleType.Body;
 
         public Genotype Size { get; set; }
-        public Genotype ColourR { get; }
-        public Genotype ColourG { get; }
-        public Genotype ColourB { get; }
+        public Genotype ColourR { get; set; }
+        public Genotype ColourG { get; set; }
+        public Genotype ColourB { get; set; }
 
         public BodyType Type { get; protected set; }
 

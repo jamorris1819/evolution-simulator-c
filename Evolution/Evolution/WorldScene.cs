@@ -1,19 +1,13 @@
 ﻿using Engine;
-using Engine.Core;
-using Engine.Core.Components;
 using Engine.Core.Events.Input.Mouse;
 using Engine.Physics;
-using Engine.Physics.Core;
-using Engine.Physics.Core.Shapes;
 using Engine.Render;
 using Engine.Render.Core.VAO.Instanced;
 using Engine.Render.Events;
 using Evolution.Environment.Life.Creatures;
-using Evolution.Environment.Life.Creatures.Body.Visual;
 using Evolution.Environment.Life.Creatures.Mouth;
-using Evolution.Environment.Life.Creatures.Mouth.Factory;
-using Evolution.Genetics.Creature;
-using Evolution.Genetics.Creature.Helper;
+using Evolution.Genetics;
+using Evolution.Genetics.Utilities;
 using Evolution.UI;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
@@ -37,6 +31,7 @@ namespace Evolution
         DNA[] leftRow;
 
         DNA dna;
+        DNA lastDNA;
 
         CreatureBuilder cb;
 
@@ -55,12 +50,7 @@ namespace Evolution
             EventBus.Publish(new CameraChangeEvent() { Camera = cam });
             Random random = new Random();
 
-
-
-            var dnaA = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 0));
-            var dnaB = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 50));
-
-            dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), 500));
+            dna = DNACreator.CreateDNA();
 
             cb = new CreatureBuilder(EntityManager, SystemManager.GetSystem<PhysicsSystem>().World);
 
@@ -77,13 +67,22 @@ namespace Evolution
                 createCreature(-1, i, leftRow[i]);
             }*/
 
-            for (int x = 0; x < 10; x++)
+            var aDNA = DNACreator.CreateDNA();
+            var bDNA = aDNA.Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate();
+
+            var topRow = new DNA[100];
+            var leftColumn = new DNA[100];
+
+            for (int x = 0; x < 100; x++)
             {
-                for(int y= 0; y < 1; y ++)
-                {
-                    createCreature(x, y * 8, dna);
-                    dna = DNAHelper.CreateDNA(new DNATemplate(new Vector3((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble()), random.Next(32, 64), random.Next(1000)));
-                }
+                topRow[x] = aDNA;
+                leftColumn[x] = bDNA;
+                aDNA = aDNA.Mutate();
+                bDNA = bDNA.Mutate();
+
+                createCreature(x, 0, topRow[x]);
+                createCreature(x, 3, topRow[x].Cross(leftColumn[x]));
+                createCreature(x, 6, leftColumn[x]);
             }
 
             /*var bodyDef = new BodyDef();
