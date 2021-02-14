@@ -32,47 +32,13 @@ namespace Evolution.Genetics.Creature.Modules.Body
 
         public override IModule Mutate()
         {
-            var severities = new[]
-            {
-                MutationSeverity.Minor,
-                MutationSeverity.Minor,
-                MutationSeverity.Minor,
-                MutationSeverity.Minor,
-                MutationSeverity.Minor,
-                MutationSeverity.Minor,
-                MutationSeverity.Minor,
-                MutationSeverity.Minor,
-                MutationSeverity.Medium,
-                MutationSeverity.Medium,
-                MutationSeverity.Medium,
-                MutationSeverity.Medium,
-                MutationSeverity.Medium,
-                MutationSeverity.Medium,
-                MutationSeverity.Major,
-                MutationSeverity.Extreme
-            };
-
-            var random = new Random();
-
-            for (int i = 0; i < 10; i++)
-            {
-                severities = severities.OrderBy(x => random.NextDouble()).ToArray();
-            }
-
-            var stack = new Stack<MutationSeverity>(severities.Length);
-
-            for(int i = 0; i < severities.Length; i++)
-            {
-                stack.Push(severities[i]);
-            }
-
             return new MultiPartBody()
             {
-                BodySteps = BodySteps.Mutate(stack.Pop()),
-                BodyOffset = BodyOffset.Mutate(stack.Pop()),
-                ColourR = ColourR.Mutate(stack.Pop()),
-                ColourG = ColourG.Mutate(stack.Pop()),
-                ColourB = ColourB.Mutate(stack.Pop())
+                BodySteps = BodySteps.Mutate(),
+                BodyOffset = BodyOffset.Mutate(),
+                ColourR = ColourR.Mutate(),
+                ColourG = ColourG.Mutate(),
+                ColourB = ColourB.Mutate()
             };
         }
     }

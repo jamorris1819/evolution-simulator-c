@@ -54,6 +54,8 @@ namespace Evolution.Genetics.Creature
             return new Genotype(other.GeneA, GeneB);
         }
 
+        public Genotype Mutate() => Mutate(DNAMutator.GetRandomMutationSeverity());
+
         public Genotype Mutate(MutationSeverity severity)
         {
             return DNAMutator.Mutate(this, severity);

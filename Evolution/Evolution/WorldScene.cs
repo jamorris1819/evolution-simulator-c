@@ -1,5 +1,6 @@
 ﻿using Engine;
 using Engine.Core.Events.Input.Mouse;
+using Engine.Core.Randomisers;
 using Engine.Physics;
 using Engine.Render;
 using Engine.Render.Core.VAO.Instanced;
@@ -67,21 +68,39 @@ namespace Evolution
                 createCreature(-1, i, leftRow[i]);
             }*/
 
+            var randomiser = new PlateauRandomiser(0, 0.11);
+            var list = new List<int>();
+            for(int i = 0; i <= 100; i++)
+            {
+                list.Add(randomiser.Roll(5));
+            }
+
+            list.Sort();
+
+            foreach (int i in list)
+            {
+                Console.WriteLine(i);
+            }
+
             var aDNA = DNACreator.CreateDNA();
-            var bDNA = aDNA.Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate().Mutate();
+            var bDNA = DNACreator.CreateDNA();
+            var cDNA = DNACreator.CreateDNA();
 
             var topRow = new DNA[100];
+            var middle = new DNA[100];
             var leftColumn = new DNA[100];
 
             for (int x = 0; x < 100; x++)
             {
                 topRow[x] = aDNA;
+                middle[x] = cDNA;
                 leftColumn[x] = bDNA;
                 aDNA = aDNA.Mutate();
+                cDNA = cDNA.Mutate();
                 bDNA = bDNA.Mutate();
 
                 createCreature(x, 0, topRow[x]);
-                createCreature(x, 3, topRow[x].Cross(leftColumn[x]));
+                createCreature(x, 3, middle[x]);
                 createCreature(x, 6, leftColumn[x]);
             }
 

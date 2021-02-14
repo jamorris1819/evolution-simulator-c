@@ -1,4 +1,5 @@
-﻿using Evolution.Genetics.Creature;
+﻿using Engine.Core.Randomisers;
+using Evolution.Genetics.Creature;
 using Evolution.Genetics.Creature.Enums;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,15 @@ namespace Evolution.Genetics.Utilities
 {
     public static class DNAMutator
     {
+        public static readonly Randomiser MutationRandomiser = new PlateauRandomiser(0, 0.2);
+
+        public static MutationSeverity GetRandomMutationSeverity()
+        {
+            var result = MutationRandomiser.Roll(5);
+
+            return (MutationSeverity)result;
+        }
+
         public static Gene Mutate(Gene gene, MutationSeverity severity, Random random)
         {
             var randomNumber = random.NextDouble();
@@ -18,6 +28,8 @@ namespace Evolution.Genetics.Utilities
 
             switch(severity)
             {
+                case MutationSeverity.None:
+                    return gene;
                 case MutationSeverity.Minor:
                     currentData += (byte)(increase ? 1 : -1);
                     break;
