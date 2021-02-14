@@ -26,6 +26,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
             };
 
             body.CreateBody(_world, position);
+            body.Debug = true;
             
             return new[]
             {

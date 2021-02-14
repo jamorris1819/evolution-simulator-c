@@ -2,7 +2,7 @@
 
 namespace Evolution.Genetics.Creature.Modules.Body
 {
-    public class SinglePartBody : Body
+    public class SinglePartBody : BodyModule
     {
         public Genotype BodySteps { get; set; }
         public Genotype BodyOffset { get; set; }
@@ -25,8 +25,13 @@ namespace Evolution.Genetics.Creature.Modules.Body
         }
 
         public override IModule Mutate()
-        {
-            throw new NotImplementedException();
-        }
+                => new SinglePartBody()
+                {
+                    BodySteps = BodySteps.Mutate(),
+                    BodyOffset = BodyOffset.Mutate(),
+                    ColourR = ColourR.Mutate(),
+                    ColourG = ColourG.Mutate(),
+                    ColourB = ColourB.Mutate()
+                };
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Evolution.Genetics.Creature.Modules.Body
 {
-    public abstract class Body : IModule
+    public abstract class BodyModule : IModule
     {
         public ModuleType ModuleType => ModuleType.Body;
 

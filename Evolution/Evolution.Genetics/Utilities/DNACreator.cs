@@ -11,7 +11,7 @@ namespace Evolution.Genetics.Utilities
     {
         public static DNA CreateDNA()
         {
-            var bodyModule = new MultiPartBody()
+            var bodyModule = new SinglePartBody()
             {
                 BodyOffset = Genotype.Create(),
                 BodySteps = Genotype.Create(),

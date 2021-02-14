@@ -21,11 +21,13 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
         {
             var thorax = CreateThorax(dna);
 
-            var length = 6;
 
             var vertexArrays = new List<VertexArray>();
 
-            
+            var bodyModule = (MultiPartBody)dna.GetModule(ModuleType.Body);
+
+            var length = bodyModule.Length.GetExpression();
+
             for (int i = 0; i < length; i++)
             {
                 vertexArrays.Add(thorax);

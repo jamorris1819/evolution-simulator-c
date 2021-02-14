@@ -5,14 +5,15 @@ using System.Linq;
 
 namespace Evolution.Genetics.Creature.Modules.Body
 {
-    public class MultiPartBody : Body
+    public class MultiPartBody : BodyModule
     {
         public Genotype BodySteps { get; set; }
         public Genotype BodyOffset { get; set; }
+        public Genotype Length { get; set; }
 
         public MultiPartBody()
         {
-            Type = BodyType.SinglePart;
+            Type = BodyType.MultiPart;
         }
 
         public override IModule Cross(IModule other)
@@ -23,6 +24,7 @@ namespace Evolution.Genetics.Creature.Modules.Body
             {
                 BodySteps = BodySteps.Cross(a.BodySteps),
                 BodyOffset = BodyOffset.Cross(a.BodyOffset),
+                Length = Length.Cross(a.Length),
                 Size = Size.Cross(a.Size),
                 ColourR = ColourR.Cross(a.ColourR),
                 ColourG = ColourG.Cross(a.ColourG),
@@ -36,6 +38,7 @@ namespace Evolution.Genetics.Creature.Modules.Body
             {
                 BodySteps = BodySteps.Mutate(),
                 BodyOffset = BodyOffset.Mutate(),
+                Length = Length.Mutate(),
                 ColourR = ColourR.Mutate(),
                 ColourG = ColourG.Mutate(),
                 ColourB = ColourB.Mutate()

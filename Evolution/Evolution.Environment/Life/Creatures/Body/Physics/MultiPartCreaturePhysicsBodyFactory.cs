@@ -2,6 +2,8 @@
 using Engine.Physics.Core.Shapes;
 using Evolution.Genetics;
 using Evolution.Genetics.Creature;
+using Evolution.Genetics.Creature.Modules;
+using Evolution.Genetics.Creature.Modules.Body;
 using System.Collections.Generic;
 using tainicom.Aether.Physics2D.Dynamics;
 using tainicom.Aether.Physics2D.Dynamics.Joints;
@@ -16,14 +18,16 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
 
         public override IEnumerable<PhysicsBody> CreateBody(in DNA dna, OpenTK.Mathematics.Vector2 position)
         {
-            var length = 6;
+            var bodyModule = (MultiPartBody)dna.GetModule(ModuleType.Body);
+
+            var length = bodyModule.Length.GetExpression();
             var bodies = new List<CirclePhysicsBody>();
 
             for (int i = 0; i < length; i++)
             {
                 var body = new CirclePhysicsBody(0.15f, i == 0 ? 5f : 3f)
                 {
-                    BodyType = BodyType.Dynamic,
+                    BodyType = tainicom.Aether.Physics2D.Dynamics.BodyType.Dynamic,
                     LinearDrag =   i == length - 1 ? 4f : 2f,
                     AngularDrag = 2f
                 };
