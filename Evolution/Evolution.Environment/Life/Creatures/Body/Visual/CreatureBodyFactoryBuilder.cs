@@ -1,4 +1,4 @@
-﻿using Evolution.Environment.Life.Creatures.Body.Enums;
+﻿using Evolution.Genetics.Creature.Modules.Body;
 using System;
 
 namespace Evolution.Environment.Life.Creatures.Body.Visual

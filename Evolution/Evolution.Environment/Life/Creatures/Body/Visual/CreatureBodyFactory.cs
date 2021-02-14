@@ -1,4 +1,5 @@
 ﻿using Engine.Render.Core.Data;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using System.Collections.Generic;
 

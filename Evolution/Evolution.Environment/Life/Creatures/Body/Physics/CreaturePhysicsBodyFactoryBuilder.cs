@@ -5,13 +5,13 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
 {
     public class CreaturePhysicsBodyFactoryBuilder
     {
-        public static CreaturePhysicsBodyFactory Get(Enums.BodyType type, World world)
+        public static CreaturePhysicsBodyFactory Get(Genetics.Creature.Modules.Body.BodyType type, World world)
         {
             switch (type)
             {
-                case Enums.BodyType.SinglePart:
+                case Genetics.Creature.Modules.Body.BodyType.SinglePart:
                     return new SinglePartCreaturePhysicsBodyFactory(world);
-                case Enums.BodyType.MultiPart:
+                case Genetics.Creature.Modules.Body.BodyType.MultiPart:
                     return new MultiPartCreaturePhysicsBodyFactory(world);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type));

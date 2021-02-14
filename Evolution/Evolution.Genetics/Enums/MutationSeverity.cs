@@ -2,6 +2,7 @@
 {
     public enum MutationSeverity
     {
+        None = 0,
         Minor = 1,
         Medium = 2,
         Major = 3,

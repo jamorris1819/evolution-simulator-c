@@ -8,7 +8,10 @@ using Engine.Render.Core.Data;
 using Evolution.Environment.Life.Creatures.Body.Physics;
 using Evolution.Environment.Life.Creatures.Body.Visual;
 using Evolution.Environment.Life.Creatures.Mouth.Factory;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
+using Evolution.Genetics.Creature.Modules;
+using Evolution.Genetics.Creature.Modules.Body;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -80,10 +83,17 @@ namespace Evolution.Environment.Life.Creatures
             return entity;
         }
 
-        private IEnumerable<VertexArray> CreateBodyParts(in DNA dna) => CreatureBodyFactoryBuilder.Get(Body.Enums.BodyType.MultiPart).CreateBody(dna);
+        private IEnumerable<VertexArray> CreateBodyParts(in DNA dna)
+        {
+            var bodyType = ((BodyModule)dna.GetModule(ModuleType.Body)).Type;
+            return CreatureBodyFactoryBuilder.Get(bodyType).CreateBody(dna);
+        }
 
         private IEnumerable<PhysicsBody> CreatePhysicsBodyParts(in DNA dna, Vector2 pos)
-            => CreaturePhysicsBodyFactoryBuilder.Get(Body.Enums.BodyType.MultiPart, _world).CreateBody(dna, pos);
+        {
+            var bodyType = ((BodyModule)dna.GetModule(ModuleType.Body)).Type;
+            return CreaturePhysicsBodyFactoryBuilder.Get(bodyType, _world).CreateBody(dna, pos);
+        }
 
         private Mouth.Mouth CreateMouth(in DNA dna, float scale) => MouthFactoryBuilder.GetFactory(Mouth.Enums.MouthType.Pincer).CreateMouth(dna, scale);
 

@@ -1,4 +1,5 @@
 ﻿using Engine.Core.Managers;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using System;
 

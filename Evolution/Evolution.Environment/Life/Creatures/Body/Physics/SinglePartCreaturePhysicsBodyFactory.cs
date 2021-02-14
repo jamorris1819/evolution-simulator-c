@@ -1,5 +1,6 @@
 ﻿using Engine.Physics.Core;
 using Engine.Physics.Core.Shapes;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using OpenTK.Mathematics;
 using System;
@@ -25,6 +26,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
             };
 
             body.CreateBody(_world, position);
+            body.Debug = true;
             
             return new[]
             {

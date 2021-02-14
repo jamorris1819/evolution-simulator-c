@@ -1,6 +1,7 @@
 ﻿using Engine.Core;
 using Engine.Core.Components;
 using Engine.Render;
+using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using System.Collections.Generic;
 
