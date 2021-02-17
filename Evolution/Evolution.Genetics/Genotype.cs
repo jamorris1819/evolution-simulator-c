@@ -64,11 +64,13 @@ namespace Evolution.Genetics.Creature
         public static Genotype Create()
         {
             Random random = new Random();
-            bool dominant = random.NextDouble() > 0.5;
+            return Create((byte)random.Next(0, 255), random.NextDouble() > 0.5);
+        }
 
-            int val = (int)(255 * random.NextDouble());
-            var separation = 15;
+        public static Genotype Create(byte val, bool dominant) => Create(val, dominant, 15);
 
+        public static Genotype Create(byte val, bool dominant, byte separation)
+        {
             return new Genotype(
                 new Gene((byte)(val - separation), dominant),
                 new Gene((byte)(val + separation), dominant));

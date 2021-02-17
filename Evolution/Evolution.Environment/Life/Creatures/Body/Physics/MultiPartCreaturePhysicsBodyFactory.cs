@@ -4,6 +4,7 @@ using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using Evolution.Genetics.Creature.Modules;
 using Evolution.Genetics.Creature.Modules.Body;
+using Evolution.Genetics.Creature.Readers;
 using System.Collections.Generic;
 using tainicom.Aether.Physics2D.Dynamics;
 using tainicom.Aether.Physics2D.Dynamics.Joints;
@@ -20,7 +21,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
         {
             var bodyModule = (MultiPartBody)dna.GetModule(ModuleType.Body);
 
-            var length = bodyModule.Length.GetExpression();
+            var length = DNAReader.ReadValueInt(bodyModule.Length, DNAReader.BodySegmentCountReader);
             var bodies = new List<CirclePhysicsBody>();
 
             for (int i = 0; i < length; i++)
@@ -43,13 +44,21 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
                    new tainicom.Aether.Physics2D.Common.Vector2(0, -0.5f),
                    new tainicom.Aether.Physics2D.Common.Vector2(0, 0.5f));
                 joint.LimitEnabled = true;
+
                 joint.LowerLimit = -1;
                 joint.UpperLimit = 1;
+
+                if(i > 1 && i < length * 0.5f)
+                {
+                    joint.LowerLimit = -0.2f;
+                    joint.UpperLimit = 0.2f;
+                }
             }
 
             //PathManager.AttachBodiesWithRevoluteJoint(_world, bodies.Select(x => x._body).ToList(), new tainicom.Aether.Physics2D.Common.Vector2(0, 0.01f), new tainicom.Aether.Physics2D.Common.Vector2(0, -0.01f), false, false);
 
             bodies[0].Debug = true;
+            bodies[1].Debug = true;
 
             return bodies;
         }

@@ -26,7 +26,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
 
             var bodyModule = (MultiPartBody)dna.GetModule(ModuleType.Body);
 
-            var length = bodyModule.Length.GetExpression();
+            var length = DNAReader.ReadValueInt(bodyModule.Length, DNAReader.BodySegmentCountReader);
 
             for (int i = 0; i < length; i++)
             {
@@ -69,9 +69,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
         {
             var bodyModule = (MultiPartBody)dna.GetModule(ModuleType.Body);
 
-            float borderThickness = 0.01f;
             var thoraxPoints = CreateThoraxCurve(dna).ToList();
-            var borderPoints = thoraxPoints.Select(x => x + x.Normalized() * borderThickness).ToList();
 
             var size = thoraxPoints.Count;
 
@@ -81,20 +79,10 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
             flippedPoints = flippedPoints.Reverse().Select(x => x * new Vector2(-1, 1)).ToArray();
             thoraxPoints.AddRange(flippedPoints);
 
-            // Add thorax border points
-            flippedPoints = new Vector2[size];
-            borderPoints.CopyTo(flippedPoints, 0);
-            flippedPoints = flippedPoints.Reverse().Select(x => x * new Vector2(-1, 1)).ToArray();
-            borderPoints.AddRange(flippedPoints);
-
-            var shape = Polygon.Generate(thoraxPoints);
+            var shape = Polygon.Generate(thoraxPoints.ToList());
             shape = VertexHelper.SetColour(shape, DNAReader.ReadValueColour(bodyModule.ColourR, bodyModule.ColourG, bodyModule.ColourB));
-            
 
-            var border = Polygon.Generate(borderPoints);
-            border = VertexHelper.SetColour(border, new Vector3(0));
-
-            return VertexHelper.Combine(border, shape);
+            return shape;
         }
 
         private VertexArray CreateEye(Vector2 pos)

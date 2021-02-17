@@ -19,7 +19,7 @@ namespace Engine.Render.Core
             return new VertexArray(vertices.ToArray(), va.Indices);
         }
 
-        public static Vertex SetColour(in Vertex v, Vector3 colour) => new Vertex(v.Position, colour);
+        public static Vertex SetColour(in Vertex v, Vector3 colour) => new Vertex(v.Position, colour, v.Normal);
 
         public static VertexArray Translate(in VertexArray va, Vector2 pos)
         {
@@ -28,7 +28,7 @@ namespace Engine.Render.Core
             return new VertexArray(vertices.ToArray(), va.Indices);
         }
 
-        public static Vertex Translate(in Vertex v, Vector2 pos) => new Vertex(v.Position + pos, v.Colour);
+        public static Vertex Translate(in Vertex v, Vector2 pos) => new Vertex(v.Position + pos, v.Colour, v.Normal);
 
         public static VertexArray Scale(in VertexArray va, float scale)
         {
@@ -37,7 +37,7 @@ namespace Engine.Render.Core
             return new VertexArray(vertices.ToArray(), va.Indices);
         }
 
-        public static Vertex Scale(in Vertex v, float scale) => new Vertex(v.Position * scale, v.Colour);
+        public static Vertex Scale(in Vertex v, float scale) => new Vertex(v.Position * scale, v.Colour, v.Normal);
 
         public static VertexArray Multiply(in VertexArray va, Vector2 m)
         {
@@ -45,7 +45,7 @@ namespace Engine.Render.Core
             return new VertexArray(vertices, va.Indices);
         }
 
-        public static Vertex Multiply(in Vertex v, Vector2 m) => new Vertex(v.Position * m, v.Colour);
+        public static Vertex Multiply(in Vertex v, Vector2 m) => new Vertex(v.Position * m, v.Colour, v.Normal);
 
         public static VertexArray Combine(in VertexArray va1, in VertexArray va2)
         {
@@ -90,7 +90,7 @@ namespace Engine.Render.Core
 
             var newPos = new Vector2(pos.X * c - pos.Y * s, pos.X * s + pos.Y * c);
 
-            return new Vertex(newPos, v.Colour);
+            return new Vertex(newPos, v.Colour, v.Normal);
         }
     }
 }

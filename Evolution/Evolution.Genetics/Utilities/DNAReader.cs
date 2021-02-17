@@ -7,7 +7,8 @@ namespace Evolution.Genetics.Creature.Readers
     {
         // Readers
         public static readonly GenotypeReader<int> BodyStepsReader = new GenotypeReader<int>(32, 64);
-        public static readonly GenotypeReader<float> BodyOffsetsReader = new GenotypeReader<float>(0, 100);
+        public static readonly GenotypeReader<float> BodyOffsetsReader = new GenotypeReader<float>(0, 10);
+        public static readonly GenotypeReader<int> BodySegmentCountReader = new GenotypeReader<int>(3, 12);
 
         /// <summary>
         /// Converts the genotype into a boolean value

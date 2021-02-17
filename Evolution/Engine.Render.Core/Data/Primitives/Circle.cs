@@ -1,6 +1,7 @@
 ﻿using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Engine.Render.Core.Data.Primitives
@@ -18,7 +19,7 @@ namespace Engine.Render.Core.Data.Primitives
                 points.Add(point);
             }
 
-            return Polygon.Generate(points);
+            return Polygon.Generate(points.Select(x => new Vertex(x)).ToList());
         }
     }
 }

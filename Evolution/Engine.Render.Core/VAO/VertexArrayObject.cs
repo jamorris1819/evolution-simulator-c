@@ -29,6 +29,8 @@ namespace Engine.Render.Core.VAO
 
         public IList<IBufferAttribute> Attributes { get; protected set; }
 
+        public bool Outlined { get; set; } = false;
+
         public VertexArrayObject(VertexArray va)
         {
             _alpha = 1;

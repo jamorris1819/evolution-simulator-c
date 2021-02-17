@@ -73,6 +73,7 @@ namespace Evolution.Environment.Life.Creatures
             entity.AddComponent(new PositionComponent(position));
             var rc = new RenderComponent(va);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            rc.VertexArrayObject.Outlined = true;
             entity.AddComponent(rc);
             entity.AddComponent(new PhysicsComponent(physBod));
 

@@ -24,6 +24,7 @@ namespace Engine
             var gameWindowSettings = new GameWindowSettings();
             var nativeWindowSettings = new NativeWindowSettings();
 
+
             nativeWindowSettings.Size = new OpenTK.Mathematics.Vector2i(1920, 1080);
 
             EventBus = new EventBus();

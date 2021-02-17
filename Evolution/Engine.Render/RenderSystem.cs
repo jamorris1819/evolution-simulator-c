@@ -8,6 +8,7 @@ using OpenTK.Graphics.ES30;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System;
+using System.Linq;
 
 namespace Engine.Render
 {
@@ -43,14 +44,35 @@ namespace Engine.Render
             if (comp.Shaders.Count == 0) throw new Exception("Cannot render object without any shaders");
 
             GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
+            if (comp.VertexArrayObject.Outlined)
+            {
+                GL.Enable(EnableCap.StencilTest);
+                GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
+            }
+            else
+            {
+                GL.StencilMask(0);
+                GL.Disable(EnableCap.StencilTest);
+                GL.Disable(EnableCap.DepthTest);
+            }
+
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.DepthFunc(DepthFunction.Less);
+
+            //var a = GL.GetError();
             var pos = GetWorldPosition(entity);
             var def = Matrix4.CreateRotationZ(GetWorldAngle(entity)) * Matrix4.CreateTranslation(new Vector3(pos.X, pos.Y, 0));
+            //var defOutline = Matrix4.CreateScale(1.1f) * Matrix4.CreateRotationZ(GetWorldAngle(entity)) * Matrix4.CreateTranslation(new Vector3(pos.X, pos.Y, 0));
 
             if (comp.VertexArrayObject.Alpha == 0) return;
 
             comp.VertexArrayObject.Bind();
+
+            var outlineShader = _shaderManager.GetShader(Core.Shaders.Enums.ShaderType.StandardOutline);
+            outlineShader.Bind();
+            outlineShader.SetUniformMat4(ShaderUniforms.Model, def);
+            outlineShader.SetUniform(ShaderUniforms.Alpha, comp.VertexArrayObject.Alpha);
 
             for (int i = 0; i < comp.Shaders.Count; i++)
             {
@@ -59,7 +81,28 @@ namespace Engine.Render
                 shader.SetUniformMat4(ShaderUniforms.Model, def);
                 shader.SetUniform(ShaderUniforms.Alpha, comp.VertexArrayObject.Alpha);
 
+
+                if (comp.VertexArrayObject.Outlined)
+                {
+                    GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
+                    GL.StencilMask(0xFF);
+                }
+
                 comp.VertexArrayObject.Render(shader);
+
+                if (comp.VertexArrayObject.Outlined)
+                {
+                    outlineShader.Bind();
+                    GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
+                    GL.StencilMask(0x00);
+
+                    GL.Disable(EnableCap.DepthTest);
+
+                    comp.VertexArrayObject.Render(outlineShader);
+
+                    GL.StencilMask(0xFF);
+                    GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
+                }
             }
         }
 

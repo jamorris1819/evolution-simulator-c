@@ -9,13 +9,16 @@ namespace Evolution.Genetics.Utilities
 {
     public static class DNACreator
     {
+        private static Random _random = new Random();
+
         public static DNA CreateDNA()
         {
-            var bodyModule = new SinglePartBody()
+            var bodyModule = new MultiPartBody()
             {
                 BodyOffset = Genotype.Create(),
                 BodySteps = Genotype.Create(),
                 Size = Genotype.Create(),
+                Length = Genotype.Create((byte)_random.Next(0, 256), true, 3),
                 ColourB = Genotype.Create(),
                 ColourG = Genotype.Create(),
                 ColourR = Genotype.Create()

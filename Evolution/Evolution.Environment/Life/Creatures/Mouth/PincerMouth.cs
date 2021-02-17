@@ -44,7 +44,7 @@ namespace Evolution.Environment.Life.Creatures.Mouth
             var pincer = new PincerModel(1, (float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble());
             var va1 = pincer.GenerateShape(16);
 
-            var colour = new Vector3(0);//Phenotype<Vector3>.GetFromGenotypes(dna.ColourR, dna.ColourG, dna.ColourB);
+            var colour = new Vector3(0);
 
             va1 = VertexHelper.SetColour(va1, colour * 1.5f);
 
