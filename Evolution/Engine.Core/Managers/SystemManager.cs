@@ -21,9 +21,9 @@ namespace Engine.Core.Managers
         {
             foreach (ISystem system in _systems) {
                 system.OnUpdate(0.0166f);
-                foreach (Entity entity in _entityManager.Entities)
+                for(int i = 0; i < _entityManager.Entities.Count(); i++)
                 {
-                    system.OnUpdate(entity, 0.0166f);
+                    system.OnUpdate(_entityManager.Entities.ElementAt(i), 0.0166f);
                 }
             }
         }

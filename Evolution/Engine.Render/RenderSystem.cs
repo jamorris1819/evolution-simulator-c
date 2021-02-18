@@ -41,6 +41,8 @@ namespace Engine.Render
 
             //if (!InView(posComp.Position)) return;
 
+            if (!comp.VertexArrayObject.Initialised) return;
+
             if (comp.Shaders.Count == 0) throw new Exception("Cannot render object without any shaders");
 
             GL.Enable(EnableCap.Blend);

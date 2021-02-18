@@ -107,6 +107,7 @@ namespace Engine.Render.Core.VAO
 
         public virtual void Render(Shader shader)
         {
+            if (!Enabled) return;
             GL.DrawElements(shader.PrimitiveType, VertexArray.Indices.Length, DrawElementsType.UnsignedShort, IntPtr.Zero);
         }
 

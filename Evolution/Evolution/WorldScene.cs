@@ -53,6 +53,8 @@ namespace Evolution
 
             dna = DNACreator.CreateDNA();
 
+            SystemManager.AddSystem(new LegsSystem(EntityManager));
+
             cb = new CreatureBuilder(EntityManager, SystemManager.GetSystem<PhysicsSystem>().World);
 
             /*bottomRow = new DNA[9];
@@ -89,7 +91,7 @@ namespace Evolution
             var topRow = new DNA[100];
             var bottomRow = new DNA[100];
 
-            for (int x = 0; x < 50; x++)
+            for (int x = 0; x < 1; x++)
             {
                 topRow[x] = DNACreator.CreateDNA();
                 bottomRow[x] = DNACreator.CreateDNA();

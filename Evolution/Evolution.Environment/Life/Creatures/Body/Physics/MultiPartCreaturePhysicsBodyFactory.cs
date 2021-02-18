@@ -54,7 +54,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
                    new tainicom.Aether.Physics2D.Common.Vector2(0, last + buffer),
                    new tainicom.Aether.Physics2D.Common.Vector2(0, first - buffer));
                 joint.LimitEnabled = true;
-
+                joint.CollideConnected = false;
                 joint.LowerLimit = -1;
                 joint.UpperLimit = 1;
 
