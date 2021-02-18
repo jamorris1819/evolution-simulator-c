@@ -19,7 +19,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
     {
         public override IEnumerable<VertexArray> CreateBody(in DNA dna)
         {
-            var thorax = CreateThorax(dna);
+            var thorax = NoiseBodyGenerator.CreateBody(dna);
 
 
             var vertexArrays = new List<VertexArray>();
@@ -34,55 +34,9 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
             }
 
             var eyes = CreateEyes(dna);
+            vertexArrays[0] = VertexHelper.SetColour(vertexArrays[0], vertexArrays[0].Vertices[0].Colour * new Vector3(0.35f));
             vertexArrays[0] = VertexHelper.Combine(vertexArrays[0], eyes);
             return vertexArrays;// new[] { VertexHelper.Combine(thorax, eyes) };
-        }
-
-        /// <summary>
-        /// Creates the Thorax curve (half of the shape)
-        /// </summary>
-        public IEnumerable<Vector2> CreateThoraxCurve(DNA dna)
-        {
-            var bodyModule = (MultiPartBody)dna.GetModule(ModuleType.Body);
-
-            FastNoise noise = new FastNoise();
-            noise.Octaves = 5;
-            noise.UsedNoiseType = FastNoise.NoiseType.PerlinFractal;
-
-            var offset = DNAReader.ReadValueFloat(bodyModule.BodyOffset, DNAReader.BodyOffsetsReader);
-
-            int steps = DNAReader.ReadValueInt(bodyModule.BodySteps, DNAReader.BodyStepsReader);
-            float stepSize = (float)Math.PI / steps;
-
-            for (int i = 0; i < steps; i++)
-            {
-                var point = new Vector2((float)Math.Sin(stepSize * i), (float)Math.Cos(stepSize * i));
-                point.Normalize();
-                var dist = Math.Abs(noise.GetNoise(i + offset, 0));
-                point *= Math.Max(dist, 0.1f);
-
-                yield return point;
-            }
-        }
-
-        private VertexArray CreateThorax(in DNA dna)
-        {
-            var bodyModule = (MultiPartBody)dna.GetModule(ModuleType.Body);
-
-            var thoraxPoints = CreateThoraxCurve(dna).ToList();
-
-            var size = thoraxPoints.Count;
-
-            // Add thorax points
-            Vector2[] flippedPoints = new Vector2[size];
-            thoraxPoints.CopyTo(flippedPoints, 0);
-            flippedPoints = flippedPoints.Reverse().Select(x => x * new Vector2(-1, 1)).ToArray();
-            thoraxPoints.AddRange(flippedPoints);
-
-            var shape = Polygon.Generate(thoraxPoints.ToList());
-            shape = VertexHelper.SetColour(shape, DNAReader.ReadValueColour(bodyModule.ColourR, bodyModule.ColourG, bodyModule.ColourB));
-
-            return shape;
         }
 
         private VertexArray CreateEye(Vector2 pos)
@@ -109,7 +63,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
 
         private VertexArray CreateEyes(in DNA dna)
         {
-            var points = CreateThoraxCurve(dna).ToArray();
+            var points = NoiseBodyGenerator.CreateThoraxCurve(dna).ToArray();
             var length = points.Length;
             int dist = (int)(length * 0.3f);
 

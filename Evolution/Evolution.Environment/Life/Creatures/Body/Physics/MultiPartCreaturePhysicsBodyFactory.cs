@@ -1,11 +1,14 @@
 ﻿using Engine.Physics.Core;
 using Engine.Physics.Core.Shapes;
+using Evolution.Environment.Life.Creatures.Body.Visual;
 using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using Evolution.Genetics.Creature.Modules;
 using Evolution.Genetics.Creature.Modules.Body;
 using Evolution.Genetics.Creature.Readers;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using tainicom.Aether.Physics2D.Dynamics;
 using tainicom.Aether.Physics2D.Dynamics.Joints;
 
@@ -21,6 +24,13 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
         {
             var bodyModule = (MultiPartBody)dna.GetModule(ModuleType.Body);
 
+            var points = NoiseBodyGenerator.CreateThoraxCurve(dna);
+
+            var first = points.First().Y * PhysicsSettings.Scale;
+            var last = points.Last().Y * PhysicsSettings.Scale;
+
+            var buffer = 0.1f;
+
             var length = DNAReader.ReadValueInt(bodyModule.Length, DNAReader.BodySegmentCountReader);
             var bodies = new List<CirclePhysicsBody>();
 
@@ -32,17 +42,17 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
                     LinearDrag =   i == length - 1 ? 4f : 2f,
                     AngularDrag = 2f
                 };
-                body.CreateBody(_world, (position - new OpenTK.Mathematics.Vector2(0, i * 0.25f)));
+                body.CreateBody(_world, position - new OpenTK.Mathematics.Vector2(0, i * (first - last) * PhysicsSettings.InvScale));
                 bodies.Add(body);
             }
 
-            for(int i = 1; i < length; i++)
+            for (int i = 1; i < length; i++)
             {
                 var joint = JointFactory.CreateRevoluteJoint(_world,
                    bodies[i - 1].Body,
                    bodies[i].Body,
-                   new tainicom.Aether.Physics2D.Common.Vector2(0, -0.5f),
-                   new tainicom.Aether.Physics2D.Common.Vector2(0, 0.5f));
+                   new tainicom.Aether.Physics2D.Common.Vector2(0, last + buffer),
+                   new tainicom.Aether.Physics2D.Common.Vector2(0, first - buffer));
                 joint.LimitEnabled = true;
 
                 joint.LowerLimit = -1;
@@ -50,8 +60,8 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
 
                 if(i > 1 && i < length * 0.5f)
                 {
-                    joint.LowerLimit = -0.2f;
-                    joint.UpperLimit = 0.2f;
+                    joint.LowerLimit = -0.75f;
+                    joint.UpperLimit = 0.75f;
                 }
             }
 

@@ -7,8 +7,6 @@ namespace Evolution.Genetics.Creature.Modules.Body
 {
     public class MultiPartBody : BodyModule
     {
-        public Genotype BodySteps { get; set; }
-        public Genotype BodyOffset { get; set; }
         public Genotype Length { get; set; }
 
         public MultiPartBody()

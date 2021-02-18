@@ -48,14 +48,14 @@ namespace Evolution.Environment.Life.Creatures
 
             var entities = new List<Entity>();
 
-            for(int i = 0; i < bodies.Length; i++)
+            for(int i = bodies.Length - 1; i >= 0; i--)
             {
                 var body = bodies[i];
                 var physBody = physicBodies[i];
                 entities.Add(CreateBodyPart(position + new Vector2(0, i * -0.05f), body, physBody));
             }            
 
-            mouth.SetParent(entities[0]);
+            mouth.SetParent(entities[bodies.Length - 1]);
         }
 
         private Entity BuildBaseEntity(Vector2 position)

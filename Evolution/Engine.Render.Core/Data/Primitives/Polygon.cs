@@ -7,13 +7,13 @@ namespace Engine.Render.Core.Data.Primitives
 {
     public class Polygon
     {
-        public static VertexArray Generate(IList<Vector2> points)
+        public static VertexArray Generate(IList<Vector2> points, bool centre = false)
         {
             var vertices = new List<Vector2>();
             var indices = new List<ushort>();
 
             vertices.Add(new Vector2(0, 0));
-            vertices.AddRange(Centre(points));
+            vertices.AddRange(centre ? Centre(points) : points);
 
             for (int i = 1; i < vertices.Count; i++)
             {

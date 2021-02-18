@@ -8,6 +8,8 @@
         public Genotype ColourR { get; set; }
         public Genotype ColourG { get; set; }
         public Genotype ColourB { get; set; }
+        public Genotype BodySteps { get; set; }
+        public Genotype BodyOffset { get; set; }
 
         public BodyType Type { get; protected set; }
 

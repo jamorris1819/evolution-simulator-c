@@ -36,11 +36,11 @@ namespace Engine.Physics.Core
             {
                 var pos = Body.Position;
 
-                return new Vector2(pos.X, pos.Y) * Physics.InvScale;
+                return new Vector2(pos.X, pos.Y) * PhysicsSettings.InvScale;
             }
             set
             {
-                var newPos = value * Physics.Scale;
+                var newPos = value * PhysicsSettings.Scale;
                 Body.Position = new tainicom.Aether.Physics2D.Common.Vector2(newPos.X, newPos.Y);
             }
         }
@@ -73,14 +73,14 @@ namespace Engine.Physics.Core
         /// Creates the body at the specified location
         /// </summary>
         public void CreateBody(World world, Vector2 pos)
-            => CreateBodyImpl(world, pos * Physics.Scale);
+            => CreateBodyImpl(world, pos * PhysicsSettings.Scale);
 
         /// <summary>
         /// Applies a force to the physics body
         /// </summary>
         public void ApplyForce(Vector2 force)
         {
-            force *= Physics.Scale;
+            force *= PhysicsSettings.Scale;
             Body.ApplyForce(new tainicom.Aether.Physics2D.Common.Vector2(force.X, force.Y));
         }
 
@@ -95,7 +95,7 @@ namespace Engine.Physics.Core
         /// </summary>
         public void ApplyTorque(float torque)
         {
-            torque *= Physics.Scale;
+            torque *= PhysicsSettings.Scale;
             Body.ApplyTorque(torque);
         }
     }

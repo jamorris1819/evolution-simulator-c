@@ -89,14 +89,14 @@ namespace Evolution
             var topRow = new DNA[100];
             var bottomRow = new DNA[100];
 
-            for (int x = 0; x < 6; x++)
+            for (int x = 0; x < 50; x++)
             {
                 topRow[x] = DNACreator.CreateDNA();
                 bottomRow[x] = DNACreator.CreateDNA();
 
                 createCreature(x, 0, topRow[x]);
                 //createCreature(x, 3, middle[x]);
-                createCreature(x, 3, bottomRow[x]);
+                //createCreature(x, 3, bottomRow[x]);
             }
 
             /*var bodyDef = new BodyDef();

@@ -3,7 +3,7 @@
     /// <summary>
     /// Holds global settings for the physics engine.
     /// </summary>
-    public static class Physics
+    public static class PhysicsSettings
     {
         public static float Scale = 4.0f;
         public static float InvScale = 1.0f / Scale;

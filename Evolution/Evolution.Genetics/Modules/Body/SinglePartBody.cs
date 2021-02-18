@@ -4,8 +4,6 @@ namespace Evolution.Genetics.Creature.Modules.Body
 {
     public class SinglePartBody : BodyModule
     {
-        public Genotype BodySteps { get; set; }
-        public Genotype BodyOffset { get; set; }
 
         public SinglePartBody()
         {

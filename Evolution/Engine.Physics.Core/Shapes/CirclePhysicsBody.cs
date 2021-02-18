@@ -9,7 +9,7 @@ namespace Engine.Physics.Core.Shapes
 
         public CirclePhysicsBody(float radius, float density) : base(density)
         {
-            _radius = radius * Physics.Scale;
+            _radius = radius * PhysicsSettings.Scale;
         }
 
         protected override void CreateBodyImpl(World world, Vector2 pos)
