@@ -59,6 +59,10 @@ namespace Engine.Physics.Core
         /// </summary>
         public BodyType BodyType { get; set; } = BodyType.Static;
 
+        public Vector2 LinearVelocity => new Vector2(Body.LinearVelocity.X, Body.LinearVelocity.Y);
+
+        public float AngularVelocity => Body.AngularVelocity;
+
         public PhysicsBody(float density)
         {
             Density = density;

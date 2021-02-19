@@ -1,6 +1,8 @@
 ﻿using Engine.Core;
 using Engine.Core.Components;
 using Engine.Core.Managers;
+using Engine.Physics;
+using Engine.Physics.Core;
 using Engine.Render;
 using Engine.Render.Core;
 using Engine.Render.Core.Data.Primitives;
@@ -33,15 +35,19 @@ namespace Evolution.Environment.Life.Creatures
 
             if (!legsComponent.Initialised)
             {
-                legsComponent.LeftSide = new Leg(entity, new Vector2(-0.1f, 0), 0.2f, 2);
-                legsComponent.RightSide = new Leg(entity, new Vector2(0.1f, 0), 0.2f, 2);
+                legsComponent.LeftSide = new Leg(entity, new Vector2(-0.1f, 0), new Vector2(-0.5f, 0.5f), 0.4f, 4);
+                legsComponent.RightSide = new Leg(entity, new Vector2(0.1f, 0), new Vector2(0.5f, 0.5f), 0.4f, 4);
                 legsComponent.RightSide.Initialise(_entityManager);
                 legsComponent.LeftSide.Initialise(_entityManager);
+                legsComponent.LeftSide.Counterpart = legsComponent.RightSide;
+                legsComponent.RightSide.Counterpart = legsComponent.LeftSide;
                 legsComponent.Initialised = true;
             }
 
-            legsComponent.LeftSide.SetFootPosition(new Vector2(0));
-            legsComponent.RightSide.SetFootPosition(new Vector2(0));
+            var speed = entity.GetComponent<PhysicsComponent>().PhysicsBody.LinearVelocity.Length * PhysicsSettings.InvScale;
+
+            legsComponent.LeftSide.Update(deltaTime, speed);
+            legsComponent.RightSide.Update(deltaTime, speed);
         }
 
         public void OnUpdate(float deltaTime)

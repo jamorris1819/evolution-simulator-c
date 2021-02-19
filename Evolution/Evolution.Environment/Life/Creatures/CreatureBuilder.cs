@@ -53,7 +53,7 @@ namespace Evolution.Environment.Life.Creatures
                 var body = bodies[i];
                 var physBody = physicBodies[i];
                 var entity = CreateBodyPart(position + new Vector2(0, i * -0.05f), body, physBody);
-                if (i == 2) entity.AddComponent(new LegsComponent());
+                if (i > 0 && i % 2 == 0) entity.AddComponent(new LegsComponent());
                 entities.Add(entity);
             }            
 
