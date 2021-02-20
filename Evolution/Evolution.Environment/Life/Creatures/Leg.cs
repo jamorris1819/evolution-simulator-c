@@ -13,18 +13,16 @@ namespace Evolution.Environment.Life.Creatures
 {
     public class Leg
     {
-        private readonly float _segmentLength;
-        private readonly int _segmentCount;
+        private PositionComponent _parentPosition;
+
         private readonly Entity[] _entities;
 
         private readonly Entity _parent;
         private readonly Vector2 _baseOffset;
-        private readonly Vector2 _targetOffset;
+        private readonly float _legDirection;
         private readonly float _length;
         private bool _isDown;
         private Vector2 _footPosition;
-
-        private float _calculatedMaxLength;
 
         public bool Initialised { get; private set; }
 
@@ -32,36 +30,30 @@ namespace Evolution.Environment.Life.Creatures
 
         public bool IsFootDown => _isDown;
 
-        Entity debugEntity;
+        public Vector2 BasePoint => _parentPosition.Position + Rotate(_baseOffset, _parentPosition.Angle);
 
-        public Leg(Entity parent, Vector2 baseOffset, Vector2 targetOffset, float length, int count)
+        Entity debugEntity;
+        Entity debugEntity2;
+        Entity debugEntity3;
+
+        public Leg(Entity parent, Vector2 baseOffset, float legDirection, float length, float initialProgress)
         {
             _parent = parent;
             _baseOffset = baseOffset;
-            _targetOffset = targetOffset;
+            _legDirection = legDirection;
+            _length = length;
 
-            _length = (targetOffset - new Vector2(0, (_targetOffset - _baseOffset).Y * 2)).Length;
+            _parentPosition = parent.GetComponent<PositionComponent>();
+            _footPosition = BasePoint + new Vector2(-(float)Math.Sin(_parentPosition.Angle + _legDirection),
+                                        (float)Math.Cos(_parentPosition.Angle + _legDirection)) * _length;
 
+            _entities = new Entity[2];
 
-            _segmentLength = length;
-            _segmentCount = count + 1;
-            _entities = new Entity[_segmentCount];
+            var dist = Math.Sin(_legDirection) * _length * -2 * initialProgress;
 
-            var baseToTarget = (_targetOffset - _baseOffset).Normalized();
-            _targetOffset = _baseOffset + (baseToTarget * (_segmentCount - 1) * _segmentLength);
-            
-            _footPosition = Rotate(new Vector2(_targetOffset.X, 0) + _parent.GetComponent<PositionComponent>().Position, _parent.GetComponent<PositionComponent>().Angle);
+            _footPosition += new Vector2(-(float)Math.Sin(_parentPosition.Angle), (float)Math.Cos(_parentPosition.Angle)) * (float)dist;
 
-            if (_targetOffset.X > 0)
-            {
-                _footPosition = _targetOffset;
-                StepDown();
-            }
-            else
-            {
-
-                _footPosition -= new Vector2(0, _footPosition.Y * 0.5f);
-            }
+            _isDown = true;
         }
 
         public void Initialise(EntityManager entityManager)
@@ -69,129 +61,110 @@ namespace Evolution.Environment.Life.Creatures
             if (Initialised) return;
 
             // create shape
-            var legShape = Rectangle.Generate(_segmentLength, _segmentLength * 0.2f);
-            legShape = VertexHelper.Translate(legShape, new Vector2(_segmentLength * 0.5f, 0));
+            var legShape = Rectangle.Generate(_length * 0.5f, 0.025f);
+            legShape = VertexHelper.Translate(legShape, new Vector2(_length * 0.25f, 0));
             legShape = VertexHelper.SetColour(legShape, new Vector3(0.4f));
 
-            _calculatedMaxLength = _segmentLength * (_segmentCount - 1);
-
-            for (int i = 0; i < _segmentCount; i++)
+            for (int i = 0; i < 2; i++)
             {
                 _entities[i] = new Entity("leg");
-                _entities[i].AddComponent(new PositionComponent(new Vector2(_segmentLength * i, 0)));
+                _entities[i].AddComponent(new PositionComponent(new Vector2(0, 0)));
                 var rc = new RenderComponent(legShape);
                 rc.VertexArrayObject.Outlined = true;
                 rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
                 _entities[i].AddComponent(rc);
             }
 
-            _entities[0].GetComponent<RenderComponent>().VertexArrayObject.Enabled = false;
             entityManager.AddEntities(_entities);
 
             debugEntity = new Entity("debug");
             debugEntity.AddComponent(new PositionComponent());
-             var rc2 = new RenderComponent(VertexHelper.SetColour(Circle.Generate(0.075f, 32), new Vector3(1, 0, 0)));
+            var rc2 = new RenderComponent(VertexHelper.SetColour(Circle.Generate(0.075f, 32), new Vector3(1, 0, 0)));
             rc2.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             rc2.VertexArrayObject.Outlined = true;
             debugEntity.AddComponent(rc2);
 
             entityManager.AddEntity(debugEntity);
+
+            debugEntity2 = new Entity("debug");
+            debugEntity2.AddComponent(new PositionComponent());
+            rc2 = new RenderComponent(VertexHelper.SetColour(Circle.Generate(0.075f, 32), new Vector3(0, 1, 0)));
+            rc2.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            rc2.VertexArrayObject.Outlined = true;
+            debugEntity2.AddComponent(rc2);
+
+            entityManager.AddEntity(debugEntity2);
+
+            debugEntity3 = new Entity("debug");
+            debugEntity3.AddComponent(new PositionComponent());
+            rc2 = new RenderComponent(VertexHelper.SetColour(Circle.Generate(0.075f, 32), new Vector3(0, 0, 1)));
+            rc2.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            rc2.VertexArrayObject.Outlined = true;
+            debugEntity3.AddComponent(rc2);
+
+            entityManager.AddEntity(debugEntity3);
+
+            Initialised = true;
         }
 
-        public void SetFootPosition(Vector2 target)
+        public void StepDown()
         {
-            var originalTarget = target;
+            var delta = _footPosition - BasePoint;
 
-            for(int i = 0; i < _segmentCount - 1; i++)
+            if(delta.Length < _length)
             {
-                var r = Reach(_entities[i].GetComponent<PositionComponent>().Position, _entities[i + 1].GetComponent<PositionComponent>().Position, target);
-                _entities[i].GetComponent<PositionComponent>().Position = r.Item1;
-                target = r.Item2;
+                _isDown = true;
             }
-
-            _entities[_segmentCount - 1].GetComponent<PositionComponent>().Position = target;
-
-
-            target = _parent.GetComponent<PositionComponent>().Position + Rotate(_baseOffset, _parent.GetComponent<PositionComponent>().Angle);
-
-            for (int i = _segmentCount - 1; i > 0; i--)
-            {
-                var r = Reach(_entities[i].GetComponent<PositionComponent>().Position, _entities[i - 1].GetComponent<PositionComponent>().Position, target);
-                _entities[i].GetComponent<PositionComponent>().Position = r.Item1;
-                target = r.Item2;
-            }
-            _entities[0].GetComponent<PositionComponent>().Position = target;
-
-            for (int i = _segmentCount - 1; i >= 0; i--)
-            {
-                var pos1 = _entities[i].GetComponent<PositionComponent>().Position;
-                var pos2 = i == 0 ? originalTarget : _entities[i - 1].GetComponent<PositionComponent>().Position;
-                var angle = GetAngle(pos1, pos2);
-                _entities[i].GetComponent<PositionComponent>().Angle = angle;// * (pos1.Y > pos2.Y ? 1 : -1);
-            }
-
-            //_entities[0].GetComponent<PositionComponent>().Angle = GetAngle(_entities[0].GetComponent<PositionComponent>().Position, target);
-
-            /*for (int i = 0; i < _segmentCount; i++)
-            {
-                if(i == _segmentCount - 1)
-                {
-                    target = _parent.GetComponent<PositionComponent>().Position + _offset;
-                }
-                else
-                {
-                    target = _entities[i + 1].GetComponent<PositionComponent>().Position;
-                }
-
-                var angle = GetAngle(target, _entities[i].GetComponent<PositionComponent>().Position);
-                _entities[i].GetComponent<PositionComponent>().Angle = -angle;
-            }*/
         }
-
-        public void StepDown() => _isDown = true;
 
         public void Update(float deltaTime, float bodySpeed)
         {
-            var actualTarget = Rotate(_targetOffset, _parent.GetComponent<PositionComponent>().Angle) + _parent.GetComponent<PositionComponent>().Position;
-            float distance = Vector2.Distance(actualTarget, _footPosition);
+            if (!Initialised) return;
 
-            var actualBase = Rotate(_baseOffset, _parent.GetComponent<PositionComponent>().Angle) + _parent.GetComponent<PositionComponent>().Position;
-            float legLength = Vector2.Distance(_footPosition, actualBase);
+            // Calculate updated positions
+            var delta = _footPosition - BasePoint;
 
             if (_isDown)
             {
-
-                if(distance > _length || (legLength > _calculatedMaxLength && distance > _length * 0.1f))
+                if(delta.Length > _length)
                 {
                     _isDown = false;
 
-                    if(!Counterpart.IsFootDown)
-                        Counterpart?.StepDown();
-                }
-
-
-                if (_isDown && Counterpart.IsFootDown)
-                {
-                    _isDown = false;
+                    Counterpart?.StepDown();
                 }
             }
             else
             {
-                var aim = (actualTarget - _footPosition);
-                float lengthAim = aim.Length;
+                var aim = BasePoint + new Vector2(
+                        -(float)Math.Sin(_parentPosition.Angle + _legDirection) * _length,
+                        (float)Math.Cos(_parentPosition.Angle + _legDirection) * _length
+                    );
 
-                if (lengthAim < _length * 0.1f)
+                var deltaAim = aim - _footPosition;
+
+                if (deltaAim.Length < _length * 0.1f)
                 {
                     _isDown = true;
                 }
                 else
                 {
-                    _footPosition += (aim / _calculatedMaxLength) * deltaTime * (3 + bodySpeed);
+                    _footPosition += deltaAim.Normalized() * deltaTime * (bodySpeed) * 4f;
                 }
             }
-            SetFootPosition(_footPosition);
 
             debugEntity.GetComponent<PositionComponent>().Position = _footPosition;
+            debugEntity3.GetComponent<PositionComponent>().Position = BasePoint;
+
+            // Move entities to represent joints
+            var elbowAngle = Math.Acos(delta.Length / _length) * Math.Sign(_legDirection);
+            var footDirection = Math.Atan2(_footPosition.Y - BasePoint.Y, _footPosition.X - BasePoint.X);
+
+            var elbowX = BasePoint.X + Math.Cos(footDirection + elbowAngle) * _length * 0.5f;
+            var elbowY = BasePoint.Y + Math.Sin(footDirection + elbowAngle) * _length * 0.5f;
+
+            debugEntity2.GetComponent<PositionComponent>().Position = new Vector2((float)elbowX, (float)elbowY);
+
+            Console.WriteLine(Vector2.Distance(new Vector2((float)elbowX, (float)elbowY), BasePoint));
         }
 
         private static Vector2 Rotate(Vector2 v, float rad)

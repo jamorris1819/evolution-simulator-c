@@ -91,7 +91,7 @@ namespace Evolution
             var topRow = new DNA[100];
             var bottomRow = new DNA[100];
 
-            for (int x = 0; x < 50; x++)
+            for (int x = 0; x < 1; x++)
             {
                 topRow[x] = DNACreator.CreateDNA();
                 bottomRow[x] = DNACreator.CreateDNA();
