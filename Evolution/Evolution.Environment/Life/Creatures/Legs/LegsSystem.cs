@@ -6,6 +6,7 @@ using Engine.Physics.Core;
 using Engine.Render;
 using Engine.Render.Core;
 using Engine.Render.Core.Data.Primitives;
+using Evolution.Environment.Life.Creatures.Legs;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -35,11 +36,8 @@ namespace Evolution.Environment.Life.Creatures
 
             if (!legsComponent.Initialised)
             {
-                Random random = new Random();
-                legsComponent.LeftSide = new Leg(entity, new Vector2(-0.05f, 0), 0.75f, 0.2f, (float)random.NextDouble());
-                legsComponent.RightSide = new Leg(entity, new Vector2(0.05f, 0), -0.75f, 0.2f, (float)random.NextDouble());
-                legsComponent.RightSide.Initialise(_entityManager);
-                legsComponent.LeftSide.Initialise(_entityManager);
+                legsComponent.LeftSide = new Leg(entity, _entityManager, legsComponent.LegModel);
+                legsComponent.RightSide = new Leg(entity, _entityManager, legsComponent.LegModel.Flip());
                 legsComponent.LeftSide.Counterpart = legsComponent.RightSide;
                 legsComponent.RightSide.Counterpart = legsComponent.LeftSide;
                 legsComponent.Initialised = true;

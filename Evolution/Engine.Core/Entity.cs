@@ -17,10 +17,13 @@ namespace Engine.Core
 
         public Entity Parent { get; set; }
 
+        public Guid Id { get; }
+
         public Entity(string name)
         {
             _name = name;
             _components = new List<IComponent>();
+            Id = Guid.NewGuid();
         }
 
         public void AddComponent(IComponent component)

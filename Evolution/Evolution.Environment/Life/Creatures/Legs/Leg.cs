@@ -9,20 +9,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Evolution.Environment.Life.Creatures
+namespace Evolution.Environment.Life.Creatures.Legs
 {
-    public class Leg
+    public sealed class Leg
     {
         private PositionComponent _parentPosition;
+        private bool _isDown;
+        private Vector2 _footPosition;
 
         private readonly Entity[] _entities;
-
-        private readonly Entity _parent;
         private readonly Vector2 _baseOffset;
         private readonly float _legDirection;
         private readonly float _length;
-        private bool _isDown;
-        private Vector2 _footPosition;
 
         public bool Initialised { get; private set; }
 
@@ -32,87 +30,66 @@ namespace Evolution.Environment.Life.Creatures
 
         public Vector2 BasePoint => _parentPosition.Position + Rotate(_baseOffset, _parentPosition.Angle);
 
-        Entity debugEntity;
-        Entity debugEntity2;
-        Entity debugEntity3;
-
-        public Leg(Entity parent, Vector2 baseOffset, float legDirection, float length, float initialProgress)
+        /// <summary>
+        /// Constructs a leg
+        /// </summary>
+        public Leg(Entity parent, EntityManager entityManager, LegModel legModel)
         {
-            _parent = parent;
-            _baseOffset = baseOffset;
-            _legDirection = legDirection;
-            _length = length;
+            _baseOffset = legModel.BaseOffset;
+            _legDirection = legModel.LegDirection;
+            _length = legModel.Length;
 
             _parentPosition = parent.GetComponent<PositionComponent>();
-            _footPosition = BasePoint + new Vector2(-(float)Math.Sin(_parentPosition.Angle + _legDirection),
-                                        (float)Math.Cos(_parentPosition.Angle + _legDirection)) * _length;
 
             _entities = new Entity[2];
 
-            var dist = Math.Sin(_legDirection) * _length * -2 * initialProgress;
+            var random = new Random();
+            var dist = Math.Sin(_legDirection) * _length * -2 * random.NextDouble();
 
+            _footPosition = BasePoint + new Vector2(-(float)Math.Sin(_parentPosition.Angle + _legDirection),
+                                        (float)Math.Cos(_parentPosition.Angle + _legDirection)) * _length;
             _footPosition += new Vector2(-(float)Math.Cos(_parentPosition.Angle), (float)Math.Sin(_parentPosition.Angle)) * (float)dist;
 
             _isDown = true;
+
+            Initialise(entityManager, legModel);
         }
 
-        public void Initialise(EntityManager entityManager)
+        /// <summary>
+        /// Initialises the leg and creates entities for rendering
+        /// </summary>
+        private void Initialise(EntityManager entityManager, LegModel model)
         {
             if (Initialised) return;
 
-            // create shape
-            var legShape = Rectangle.Generate(_length * 0.5f, _length * 0.1f);
-            legShape = VertexHelper.Translate(legShape, new Vector2(_length * 0.25f, 0));
-            legShape = VertexHelper.SetColour(legShape, new Vector3(0.4f));
+            // Create entity for segment 1
+            _entities[0] = new Entity("leg");
+            _entities[0].AddComponent(new PositionComponent(new Vector2(0, 0)));
+            var rc = new RenderComponent(model.Segment1);
+            rc.VertexArrayObject.Outlined = true;
+            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            _entities[0].AddComponent(rc);
 
-            for (int i = 0; i < 2; i++)
-            {
-                _entities[i] = new Entity("leg");
-                _entities[i].AddComponent(new PositionComponent(new Vector2(0, 0)));
-                var rc = new RenderComponent(legShape);
-                rc.VertexArrayObject.Outlined = true;
-                rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
-                _entities[i].AddComponent(rc);
-            }
+            // Create entity for segment 2
+            _entities[1] = new Entity("leg");
+            _entities[1].AddComponent(new PositionComponent(new Vector2(0, 0)));
+            rc = new RenderComponent(model.Segment2);
+            rc.VertexArrayObject.Outlined = true;
+            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            _entities[1].AddComponent(rc);
 
             entityManager.AddEntities(_entities);
-
-            debugEntity = new Entity("debug");
-            debugEntity.AddComponent(new PositionComponent());
-            var rc2 = new RenderComponent(VertexHelper.SetColour(Circle.Generate(0.075f, 32), new Vector3(1, 0, 0)));
-            rc2.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
-            rc2.VertexArrayObject.Outlined = true;
-            debugEntity.AddComponent(rc2);
-
-            //entityManager.AddEntity(debugEntity);
-
-            debugEntity2 = new Entity("debug");
-            debugEntity2.AddComponent(new PositionComponent());
-            rc2 = new RenderComponent(VertexHelper.SetColour(Circle.Generate(0.075f, 32), new Vector3(0, 1, 0)));
-            rc2.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
-            rc2.VertexArrayObject.Outlined = true;
-            debugEntity2.AddComponent(rc2);
-
-            //entityManager.AddEntity(debugEntity2);
-
-            debugEntity3 = new Entity("debug");
-            debugEntity3.AddComponent(new PositionComponent());
-            rc2 = new RenderComponent(VertexHelper.SetColour(Circle.Generate(0.075f, 32), new Vector3(0, 0, 1)));
-            rc2.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
-            rc2.VertexArrayObject.Outlined = true;
-            debugEntity3.AddComponent(rc2);
-
-            //entityManager.AddEntity(debugEntity3);
-
             Initialised = true;
-
         }
 
+        /// <summary>
+        /// Causes the foot to step down.
+        /// </summary>
         public void StepDown()
         {
             var delta = _footPosition - BasePoint;
 
-            if(delta.Length < _length)
+            if (delta.Length < _length)
             {
                 _isDown = true;
             }
@@ -122,12 +99,20 @@ namespace Evolution.Environment.Life.Creatures
         {
             if (!Initialised) return;
 
-            // Calculate updated positions
+            UpdateFootPosition(deltaTime, bodySpeed);
+            UpdateRenderEntities();
+        }
+
+        /// <summary>
+        /// Calculates if and where the foot should move
+        /// </summary>
+        private void UpdateFootPosition(float deltaTime, float bodySpeed)
+        {
             var delta = _footPosition - BasePoint;
 
             if (_isDown)
             {
-                if(delta.Length > _length)
+                if (delta.Length > _length)
                 {
                     _isDown = false;
 
@@ -149,14 +134,17 @@ namespace Evolution.Environment.Life.Creatures
                 }
                 else
                 {
-                    _footPosition += deltaAim.Normalized() * deltaTime * (bodySpeed) * 4f;
+                    _footPosition += deltaAim.Normalized() * deltaTime * (0.25f + bodySpeed) * 4f;
                 }
             }
+        }
 
-
-            // Move entities to represent joints
-            debugEntity.GetComponent<PositionComponent>().Position = _footPosition;
-            debugEntity3.GetComponent<PositionComponent>().Position = BasePoint;
+        /// <summary>
+        /// Updates the leg segments in order to animate the legs.
+        /// </summary>
+        private void UpdateRenderEntities()
+        {
+            var delta = _footPosition - BasePoint;
 
             var elbowAngle = Math.Acos(delta.Length / _length) * Math.Sign(_legDirection);
             var footDirection = Math.Atan2(_footPosition.Y - BasePoint.Y, _footPosition.X - BasePoint.X);
@@ -166,8 +154,6 @@ namespace Evolution.Environment.Life.Creatures
 
             if (!double.IsNaN(elbowX))
             {
-                debugEntity2.GetComponent<PositionComponent>().Position = new Vector2((float)elbowX, (float)elbowY);
-
                 var firstLimbDir = new Vector2((float)elbowX, (float)elbowY) - BasePoint;
                 var firstLimbAngle = GetAngle(new Vector2(0, 0), firstLimbDir.Normalized());
                 _entities[0].GetComponent<PositionComponent>().Position = BasePoint;
@@ -187,8 +173,8 @@ namespace Evolution.Environment.Life.Creatures
 
             float tx = v.X;
             float ty = v.Y;
-            v.X = (cos * tx) - (sin * ty);
-            v.Y = (sin * tx) + (cos * ty);
+            v.X = cos * tx - sin * ty;
+            v.Y = sin * tx + cos * ty;
             return v;
         }
 
