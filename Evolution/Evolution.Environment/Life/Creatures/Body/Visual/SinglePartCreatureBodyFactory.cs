@@ -1,17 +1,11 @@
-﻿using DotnetNoise;
-using Engine.Render.Core;
+﻿using Engine.Render.Core;
 using Engine.Render.Core.Data;
 using Engine.Render.Core.Data.Primitives;
 using Evolution.Genetics;
-using Evolution.Genetics.Creature;
-using Evolution.Genetics.Creature.Modules;
-using Evolution.Genetics.Creature.Modules.Body;
-using Evolution.Genetics.Creature.Readers;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Evolution.Environment.Life.Creatures.Body.Visual
 {

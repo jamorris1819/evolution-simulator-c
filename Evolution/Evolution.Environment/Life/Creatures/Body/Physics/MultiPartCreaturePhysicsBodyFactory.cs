@@ -40,7 +40,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
                 {
                     BodyType = tainicom.Aether.Physics2D.Dynamics.BodyType.Dynamic,
                     LinearDrag =   i == length - 1 ? 4f : 2f,
-                    AngularDrag = 2f
+                    AngularDrag = 5f
                 };
                 body.CreateBody(_world, position - new OpenTK.Mathematics.Vector2(0, i * (first - last) * PhysicsSettings.InvScale));
                 bodies.Add(body);
@@ -68,7 +68,6 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
             //PathManager.AttachBodiesWithRevoluteJoint(_world, bodies.Select(x => x._body).ToList(), new tainicom.Aether.Physics2D.Common.Vector2(0, 0.01f), new tainicom.Aether.Physics2D.Common.Vector2(0, -0.01f), false, false);
 
             bodies[0].Debug = true;
-            bodies[1].Debug = true;
 
             return bodies;
         }

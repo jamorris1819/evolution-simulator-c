@@ -32,14 +32,14 @@ namespace Evolution.Environment.Life.Creatures
         {
             if (!MaskMatch(entity)) return;
 
-            var legsComponent = entity.GetComponent<LegsComponent>();
+            var legsComponent = entity.GetComponent<LimbComponent>();
 
             if (!legsComponent.Initialised)
             {
-                legsComponent.LeftSide = new Leg(entity, _entityManager, legsComponent.LegModel);
-                legsComponent.RightSide = new Leg(entity, _entityManager, legsComponent.LegModel.Flip());
+                /*legsComponent.LeftSide = new WalkingLimb(entity, _entityManager, legsComponent.LegModel);
+                legsComponent.RightSide = new WalkingLimb(entity, _entityManager, legsComponent.LegModel.Flip());
                 legsComponent.LeftSide.Counterpart = legsComponent.RightSide;
-                legsComponent.RightSide.Counterpart = legsComponent.LeftSide;
+                legsComponent.RightSide.Counterpart = legsComponent.LeftSide;*/
                 legsComponent.Initialised = true;
             }
 
@@ -47,6 +47,21 @@ namespace Evolution.Environment.Life.Creatures
 
             legsComponent.LeftSide.Update(deltaTime, speed);
             legsComponent.RightSide.Update(deltaTime, speed);
+
+            var leftMoving = !((WalkingLimb)legsComponent.LeftSide).IsFootDown;
+            var rightMoving = !((WalkingLimb)legsComponent.RightSide).IsFootDown;
+
+            if (entity.GetComponent<PhysicsComponent>().PhysicsBody.LinearVelocity.Length > 1)
+            {
+                if (leftMoving)
+                {
+                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(4);
+                }
+                if (rightMoving)
+                {
+                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(-4);
+                }
+            }
         }
 
         public void OnUpdate(float deltaTime)

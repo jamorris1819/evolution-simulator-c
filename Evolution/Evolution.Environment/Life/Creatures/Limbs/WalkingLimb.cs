@@ -4,6 +4,8 @@ using Engine.Core.Managers;
 using Engine.Render;
 using Engine.Render.Core;
 using Engine.Render.Core.Data.Primitives;
+using Evolution.Environment.Life.Creatures.Limbs;
+using Evolution.Genetics.Modules.Limbs;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -11,61 +13,63 @@ using System.Text;
 
 namespace Evolution.Environment.Life.Creatures.Legs
 {
-    public sealed class Leg
+    public sealed class WalkingLimb : Limb
     {
-        private PositionComponent _parentPosition;
         private bool _isDown;
-        private Vector2 _footPosition;
+        private readonly LegModel _model;
 
         private readonly Entity[] _entities;
         private readonly Vector2 _baseOffset;
         private readonly float _legDirection;
         private readonly float _length;
 
-        public bool Initialised { get; private set; }
-
-        public Leg Counterpart { get; set; }
-
         public bool IsFootDown => _isDown;
 
         public Vector2 BasePoint => _parentPosition.Position + Rotate(_baseOffset, _parentPosition.Angle);
 
+        public override LimbType LimbType => LimbType.WalkingLeg;
+
         /// <summary>
         /// Constructs a leg
         /// </summary>
-        public Leg(Entity parent, EntityManager entityManager, LegModel legModel)
+        public WalkingLimb(Entity parent, EntityManager entityManager, LegModel legModel) : base(parent, entityManager)
         {
             _baseOffset = legModel.BaseOffset;
             _legDirection = legModel.LegDirection;
             _length = legModel.Length;
 
-            _parentPosition = parent.GetComponent<PositionComponent>();
+            _model = legModel;
 
             _entities = new Entity[2];
 
             var random = new Random();
             var dist = Math.Sin(_legDirection) * _length * -2 * random.NextDouble();
 
-            _footPosition = BasePoint + new Vector2(-(float)Math.Sin(_parentPosition.Angle + _legDirection),
+            _footPosition = BasePoint + new Vector2((float)Math.Sin(_parentPosition.Angle + _legDirection),
                                         (float)Math.Cos(_parentPosition.Angle + _legDirection)) * _length;
-            _footPosition += new Vector2(-(float)Math.Cos(_parentPosition.Angle), (float)Math.Sin(_parentPosition.Angle)) * (float)dist;
+            _footPosition += new Vector2((float)Math.Cos(_parentPosition.Angle), -(float)Math.Sin(_parentPosition.Angle)) * (float)dist;
 
-            _isDown = true;
+           /* _footPosition = BasePoint + new Vector2(
+                        -(float)Math.Sin(_parentPosition.Angle + _legDirection) * _length,
+                        (float)Math.Cos(_parentPosition.Angle + _legDirection) * _length
+                    );*/
 
-            Initialise(entityManager, legModel);
+            _isDown = legModel.BaseOffset.X > 0;
+
+            Initialise(entityManager);
         }
 
         /// <summary>
         /// Initialises the leg and creates entities for rendering
         /// </summary>
-        private void Initialise(EntityManager entityManager, LegModel model)
+        public override void Initialise(EntityManager entityManager)
         {
             if (Initialised) return;
 
             // Create entity for segment 1
             _entities[0] = new Entity("leg");
             _entities[0].AddComponent(new PositionComponent(new Vector2(0, 0)));
-            var rc = new RenderComponent(model.Segment1);
+            var rc = new RenderComponent(_model.Segment1);
             rc.VertexArrayObject.Outlined = true;
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             _entities[0].AddComponent(rc);
@@ -73,7 +77,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
             // Create entity for segment 2
             _entities[1] = new Entity("leg");
             _entities[1].AddComponent(new PositionComponent(new Vector2(0, 0)));
-            rc = new RenderComponent(model.Segment2);
+            rc = new RenderComponent(_model.Segment2);
             rc.VertexArrayObject.Outlined = true;
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             _entities[1].AddComponent(rc);
@@ -95,7 +99,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
             }
         }
 
-        public void Update(float deltaTime, float bodySpeed)
+        public override void Update(float deltaTime, float bodySpeed)
         {
             if (!Initialised) return;
 
@@ -116,7 +120,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
                 {
                     _isDown = false;
 
-                    Counterpart?.StepDown();
+                    ((WalkingLimb)Counterpart)?.StepDown();
                 }
             }
             else
@@ -146,7 +150,9 @@ namespace Evolution.Environment.Life.Creatures.Legs
         {
             var delta = _footPosition - BasePoint;
 
-            var elbowAngle = Math.Acos(delta.Length / _length) * Math.Sign(_legDirection);
+            var d = delta.Length / _length;
+
+            var elbowAngle = Math.Acos(Math.Abs(d) > 1 ? 1 : d) * Math.Sign(_legDirection);
             var footDirection = Math.Atan2(_footPosition.Y - BasePoint.Y, _footPosition.X - BasePoint.X);
 
             var elbowX = BasePoint.X + Math.Cos(footDirection + elbowAngle) * _length * 0.5f;

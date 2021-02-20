@@ -96,7 +96,7 @@ namespace Evolution
                 topRow[x] = DNACreator.CreateDNA();
                 bottomRow[x] = DNACreator.CreateDNA();
 
-                createCreature(x, 0, topRow[x]);
+                createCreature(x, 0, aDNA.Mutate());
                 //createCreature(x, 3, middle[x]);
                 //createCreature(x, 3, bottomRow[x]);
             }

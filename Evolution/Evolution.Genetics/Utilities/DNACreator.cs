@@ -1,6 +1,7 @@
 ﻿using Evolution.Genetics.Creature;
 using Evolution.Genetics.Creature.Modules;
 using Evolution.Genetics.Creature.Modules.Body;
+using Evolution.Genetics.Modules.Limbs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,7 +25,14 @@ namespace Evolution.Genetics.Utilities
                 ColourR = Genotype.Create()
             };
 
-            return new DNA(new IModule[] { bodyModule });
+            var limbsModule = new WalkingLimbModule()
+            {
+                LegDirection = Genotype.Create(),
+                Length = Genotype.Create(),
+                LegThickness = Genotype.Create()
+            };
+
+            return new DNA(new IModule[] { bodyModule, limbsModule });
         }
     }
 }

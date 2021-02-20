@@ -8,7 +8,11 @@ namespace Evolution.Genetics.Creature.Readers
         // Readers
         public static readonly GenotypeReader<int> BodyStepsReader = new GenotypeReader<int>(32, 64);
         public static readonly GenotypeReader<float> BodyOffsetsReader = new GenotypeReader<float>(0, 1000);
-        public static readonly GenotypeReader<int> BodySegmentCountReader = new GenotypeReader<int>(3, 12);
+        public static readonly GenotypeReader<int> BodySegmentCountReader = new GenotypeReader<int>(3, 6);
+
+        public static readonly GenotypeReader<float> LegLength = new GenotypeReader<float>(0.1f, 2f);
+        public static readonly GenotypeReader<float> LegDirection = new GenotypeReader<float>(0.25f, 1f);
+        public static readonly GenotypeReader<float> LegThickness = new GenotypeReader<float>(0.05f, 0.8f);
 
         /// <summary>
         /// Converts the genotype into a boolean value

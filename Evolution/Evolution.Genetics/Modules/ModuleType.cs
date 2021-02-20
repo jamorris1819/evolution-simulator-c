@@ -7,6 +7,7 @@ namespace Evolution.Genetics.Creature.Modules
     public enum ModuleType
     {
         Body,
-        Mouth
+        Mouth,
+        WalkingLimbs
     }
 }

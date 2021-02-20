@@ -10,11 +10,13 @@ using Engine.Render.Core.Data.Primitives;
 using Evolution.Environment.Life.Creatures.Body.Physics;
 using Evolution.Environment.Life.Creatures.Body.Visual;
 using Evolution.Environment.Life.Creatures.Legs;
+using Evolution.Environment.Life.Creatures.Limbs.Factory;
 using Evolution.Environment.Life.Creatures.Mouth.Factory;
 using Evolution.Genetics;
 using Evolution.Genetics.Creature;
 using Evolution.Genetics.Creature.Modules;
 using Evolution.Genetics.Creature.Modules.Body;
+using Evolution.Genetics.Modules.Limbs;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -56,28 +58,20 @@ namespace Evolution.Environment.Life.Creatures
                 var body = bodies[i];
                 var physBody = physicBodies[i];
                 var entity = CreateBodyPart(position + new Vector2(0, i * -0.05f), body, physBody);
-                if (i > 0 && i % 2 == 0) AddLegs(bodies[i], entity, 1f); // 0.5f + (i / (float)bodies.Length));
+                if (i % 2 == 1) AddLegs(dna, entity, 1f); // 0.5f + (i / (float)bodies.Length));
                 entities.Add(entity);
             }            
 
             mouth.SetParent(entities[bodies.Length - 1]);
         }
 
-        private void AddLegs(VertexArray bodyBase, Entity entity, float mult)
+        private void AddLegs(DNA dna, Entity entity, float mult)
         {
-            float legLength = 0.5f * mult;
-            var baseOffset = bodyBase.Vertices.OrderBy(x => x.Position.X).First();
-
-            var legShape = Rectangle.Generate(legLength * 0.5f, legLength * 0.15f);
-            legShape = VertexHelper.Translate(legShape, new Vector2(legLength * 0.25f, 0));
-
-            var ball = Circle.Generate(legLength * 0.15f * 0.5f, 16);
-
-            legShape = VertexHelper.Combine(ball, legShape);
-            legShape = VertexHelper.SetColour(legShape, baseOffset.Colour * 0.5f);
-
-            var legComponent = new LegsComponent();
-            legComponent.LegModel = new LegModel(legShape, legShape, legLength, 0.3f, baseOffset.Position);
+            var legComponent = new LimbComponent();
+            legComponent.LeftSide = LimbFactoryCreator.Get(_entityManager, LimbType.WalkingLeg).CreateLimb(entity, dna, true);
+            legComponent.RightSide = LimbFactoryCreator.Get(_entityManager, LimbType.WalkingLeg).CreateLimb(entity, dna, false);
+            legComponent.LeftSide.Counterpart = legComponent.RightSide;
+            legComponent.RightSide.Counterpart = legComponent.LeftSide;
             entity.AddComponent(legComponent);
         }
 
