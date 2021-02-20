@@ -36,8 +36,8 @@ namespace Evolution.Environment.Life.Creatures
             if (!legsComponent.Initialised)
             {
                 Random random = new Random();
-                legsComponent.LeftSide = new Leg(entity, new Vector2(-0.3f, 0), 0.75f, 0.5f, (float)random.NextDouble());
-                legsComponent.RightSide = new Leg(entity, new Vector2(0.3f, 0), -0.75f, 0.5f, (float)random.NextDouble());
+                legsComponent.LeftSide = new Leg(entity, new Vector2(-0.05f, 0), 0.75f, 0.2f, (float)random.NextDouble());
+                legsComponent.RightSide = new Leg(entity, new Vector2(0.05f, 0), -0.75f, 0.2f, (float)random.NextDouble());
                 legsComponent.RightSide.Initialise(_entityManager);
                 legsComponent.LeftSide.Initialise(_entityManager);
                 legsComponent.LeftSide.Counterpart = legsComponent.RightSide;

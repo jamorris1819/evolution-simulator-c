@@ -58,7 +58,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
                 joint.LowerLimit = -1;
                 joint.UpperLimit = 1;
 
-                if(i > 1 && i < length * 0.5f)
+                if(i > length * 0.3f)
                 {
                     joint.LowerLimit = -0.75f;
                     joint.UpperLimit = 0.75f;

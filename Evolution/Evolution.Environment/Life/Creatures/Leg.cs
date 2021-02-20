@@ -51,7 +51,7 @@ namespace Evolution.Environment.Life.Creatures
 
             var dist = Math.Sin(_legDirection) * _length * -2 * initialProgress;
 
-            _footPosition += new Vector2(-(float)Math.Sin(_parentPosition.Angle), (float)Math.Cos(_parentPosition.Angle)) * (float)dist;
+            _footPosition += new Vector2(-(float)Math.Cos(_parentPosition.Angle), (float)Math.Sin(_parentPosition.Angle)) * (float)dist;
 
             _isDown = true;
         }
@@ -61,7 +61,7 @@ namespace Evolution.Environment.Life.Creatures
             if (Initialised) return;
 
             // create shape
-            var legShape = Rectangle.Generate(_length * 0.5f, 0.025f);
+            var legShape = Rectangle.Generate(_length * 0.5f, _length * 0.1f);
             legShape = VertexHelper.Translate(legShape, new Vector2(_length * 0.25f, 0));
             legShape = VertexHelper.SetColour(legShape, new Vector3(0.4f));
 
@@ -84,7 +84,7 @@ namespace Evolution.Environment.Life.Creatures
             rc2.VertexArrayObject.Outlined = true;
             debugEntity.AddComponent(rc2);
 
-            entityManager.AddEntity(debugEntity);
+            //entityManager.AddEntity(debugEntity);
 
             debugEntity2 = new Entity("debug");
             debugEntity2.AddComponent(new PositionComponent());
@@ -93,7 +93,7 @@ namespace Evolution.Environment.Life.Creatures
             rc2.VertexArrayObject.Outlined = true;
             debugEntity2.AddComponent(rc2);
 
-            entityManager.AddEntity(debugEntity2);
+            //entityManager.AddEntity(debugEntity2);
 
             debugEntity3 = new Entity("debug");
             debugEntity3.AddComponent(new PositionComponent());
@@ -102,9 +102,10 @@ namespace Evolution.Environment.Life.Creatures
             rc2.VertexArrayObject.Outlined = true;
             debugEntity3.AddComponent(rc2);
 
-            entityManager.AddEntity(debugEntity3);
+            //entityManager.AddEntity(debugEntity3);
 
             Initialised = true;
+
         }
 
         public void StepDown()
@@ -152,19 +153,31 @@ namespace Evolution.Environment.Life.Creatures
                 }
             }
 
+
+            // Move entities to represent joints
             debugEntity.GetComponent<PositionComponent>().Position = _footPosition;
             debugEntity3.GetComponent<PositionComponent>().Position = BasePoint;
 
-            // Move entities to represent joints
             var elbowAngle = Math.Acos(delta.Length / _length) * Math.Sign(_legDirection);
             var footDirection = Math.Atan2(_footPosition.Y - BasePoint.Y, _footPosition.X - BasePoint.X);
 
             var elbowX = BasePoint.X + Math.Cos(footDirection + elbowAngle) * _length * 0.5f;
             var elbowY = BasePoint.Y + Math.Sin(footDirection + elbowAngle) * _length * 0.5f;
 
-            debugEntity2.GetComponent<PositionComponent>().Position = new Vector2((float)elbowX, (float)elbowY);
+            if (!double.IsNaN(elbowX))
+            {
+                debugEntity2.GetComponent<PositionComponent>().Position = new Vector2((float)elbowX, (float)elbowY);
 
-            Console.WriteLine(Vector2.Distance(new Vector2((float)elbowX, (float)elbowY), BasePoint));
+                var firstLimbDir = new Vector2((float)elbowX, (float)elbowY) - BasePoint;
+                var firstLimbAngle = GetAngle(new Vector2(0, 0), firstLimbDir.Normalized());
+                _entities[0].GetComponent<PositionComponent>().Position = BasePoint;
+                _entities[0].GetComponent<PositionComponent>().Angle = firstLimbAngle;
+
+                var secondLimbDir = _footPosition - new Vector2((float)elbowX, (float)elbowY);
+                var secondLimbAngle = GetAngle(new Vector2(0, 0), secondLimbDir.Normalized());
+                _entities[1].GetComponent<PositionComponent>().Position = new Vector2((float)elbowX, (float)elbowY);
+                _entities[1].GetComponent<PositionComponent>().Angle = secondLimbAngle;
+            }
         }
 
         private static Vector2 Rotate(Vector2 v, float rad)
@@ -182,32 +195,6 @@ namespace Evolution.Environment.Life.Creatures
         private float GetAngle(Vector2 pos1, Vector2 pos2)
         {
             return (float)Math.Atan2(pos2.Y - pos1.Y, pos2.X - pos1.X);
-        }
-
-        private (Vector2, Vector2) Reach(Vector2 head, Vector2 tail, Vector2 target)
-        {
-            // returns new head and tail in the format of:
-            //   [new_head, new_tail]
-            // where `new_head` has been moved to `tgt`
-
-            // calculate the current length
-            // (in practice, this should be calculated once and saved,
-            //  not re-calculated every time `reach` is called)
-            var c_dx = tail.X - head.X;
-            var c_dy = tail.Y - head.Y;
-            var c_dist = (float)Math.Sqrt(c_dx * c_dx + c_dy * c_dy);
-
-            // calculate the stretched length
-            var s_dx = tail.X - target.X;
-            var s_dy = tail.Y - target.Y;
-            var s_dist = (float)Math.Sqrt(s_dx * s_dx + s_dy * s_dy);
-
-            // calculate how much to scale the stretched line
-            var scale = c_dist / s_dist;
-
-            return (
-                target,
-                new Vector2(target.X + s_dx * scale, target.Y + s_dy * scale));
         }
     }
 }
