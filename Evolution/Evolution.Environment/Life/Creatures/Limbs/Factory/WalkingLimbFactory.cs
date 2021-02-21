@@ -33,8 +33,11 @@ namespace Evolution.Environment.Life.Creatures.Limbs.Factory
             var legThickness = DNAReader.ReadValueFloat(module.LegThickness, DNAReader.LegThickness) * height * 0.7f * legLength;
 
             var baseOffset = leftSide
-                ? body.Vertices.OrderBy(x => x.Position.X).First()
-                : body.Vertices.OrderBy(x => x.Position.X).Last();
+                ? body.Vertices.OrderBy(x => x.Position.X).First().Position
+                : body.Vertices.OrderBy(x => x.Position.X).Last().Position;
+
+            var colour = body.Vertices.First().Colour;
+            baseOffset *= 0.75f;
 
             var legShape = Rectangle.Generate(legLength * 0.5f, legThickness);
             legShape = VertexHelper.Translate(legShape, new Vector2(legLength * 0.25f, 0));
@@ -42,10 +45,10 @@ namespace Evolution.Environment.Life.Creatures.Limbs.Factory
             var ball = Circle.Generate(legThickness * 0.5f, 16);
 
             legShape = VertexHelper.Combine(ball, legShape);
-            legShape = VertexHelper.SetColour(legShape, baseOffset.Colour * 0.9f);
+            legShape = VertexHelper.SetColour(legShape, colour * 0.9f);
 
 
-            var legModel = new LegModel(legShape, legShape, legLength, legDirection, baseOffset.Position);
+            var legModel = new LegModel(legShape, legShape, legLength, legDirection, baseOffset);
 
             return new WalkingLimb(parent, EntityManager, legModel);
         }

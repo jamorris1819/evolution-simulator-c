@@ -1,16 +1,8 @@
 ﻿using Engine.Core;
-using Engine.Core.Components;
 using Engine.Core.Managers;
 using Engine.Physics;
 using Engine.Physics.Core;
-using Engine.Render;
-using Engine.Render.Core;
-using Engine.Render.Core.Data.Primitives;
 using Evolution.Environment.Life.Creatures.Legs;
-using OpenTK.Mathematics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Evolution.Environment.Life.Creatures
 {
@@ -34,15 +26,6 @@ namespace Evolution.Environment.Life.Creatures
 
             var legsComponent = entity.GetComponent<LimbComponent>();
 
-            if (!legsComponent.Initialised)
-            {
-                /*legsComponent.LeftSide = new WalkingLimb(entity, _entityManager, legsComponent.LegModel);
-                legsComponent.RightSide = new WalkingLimb(entity, _entityManager, legsComponent.LegModel.Flip());
-                legsComponent.LeftSide.Counterpart = legsComponent.RightSide;
-                legsComponent.RightSide.Counterpart = legsComponent.LeftSide;*/
-                legsComponent.Initialised = true;
-            }
-
             var speed = entity.GetComponent<PhysicsComponent>().PhysicsBody.LinearVelocity.Length * PhysicsSettings.InvScale;
 
             legsComponent.LeftSide.Update(deltaTime, speed);
@@ -55,11 +38,11 @@ namespace Evolution.Environment.Life.Creatures
             {
                 if (leftMoving)
                 {
-                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(4);
+                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(4 * speed);
                 }
                 if (rightMoving)
                 {
-                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(-4);
+                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(-4 * speed);
                 }
             }
         }
