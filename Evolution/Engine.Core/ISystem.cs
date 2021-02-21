@@ -10,5 +10,6 @@ namespace Engine.Core
         void OnUpdate(Entity entity, float deltaTime);
         void OnUpdate(float deltaTime);
         void OnRender(Entity entity);
+        void OnRender();
     }
 }

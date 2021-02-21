@@ -6,6 +6,7 @@ namespace Engine.Render.Core.Shaders.Enums
 {
     public enum ShaderType
     {
+        None,
         Standard,
         StandardOutline,
         StandardInstanced,

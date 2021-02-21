@@ -19,7 +19,7 @@ namespace Engine.Render.Core.Data.Primitives
                 points.Add(point);
             }
 
-            return Polygon.Generate(points.Select(x => new Vertex(x)).ToList());
+            return Polygon.Generate(points.ToList());
         }
     }
 }

@@ -55,11 +55,11 @@ namespace Engine.Physics
                 }
                 if (InputManager.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.D))
                 {
-                    physicsComponent.PhysicsBody.ApplyTorque(-4);
+                    physicsComponent.PhysicsBody.ApplyTorque(-8);
                 }
                 if (InputManager.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.A))
                 {
-                    physicsComponent.PhysicsBody.ApplyTorque(4);
+                    physicsComponent.PhysicsBody.ApplyTorque(8);
                 }
             }
 

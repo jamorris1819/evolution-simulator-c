@@ -4,6 +4,7 @@ using Engine.Render.Core.Data.Zoom;
 using Engine.Render.Core.Shaders.Enums;
 using Engine.Render.Core.VAO;
 using Engine.Render.Core.VAO.Instanced;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,15 +12,32 @@ namespace Engine.Render
 {
     public class RenderComponent : IComponent
     {
+        private float _alpha = 1f;
+
         public VertexArray VertexArray { get; set; }
 
         public VertexArrayObject VertexArrayObject { get; set; }
 
         public List<ShaderType> Shaders { get; set; } = new List<ShaderType>();
 
+        public bool Outlined { get; set; }
+
+        public ShaderType OutlineShader { get; set; }
+
         public ComponentType Type => ComponentType.COMPONENT_RENDER;
 
         public ZoomProfile? ZoomProfile { get; set; }
+
+        public int Layer { get; set; }
+
+        public float Alpha
+        {
+            get => _alpha;
+            set
+            {
+                _alpha = Math.Max(0, Math.Min(1, value));
+            }
+        }
 
         public RenderComponent(VertexArray va)
         {

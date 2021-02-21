@@ -38,11 +38,11 @@ namespace Evolution.Environment.Life.Creatures
             {
                 if (leftMoving)
                 {
-                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(4 * speed);
+                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(-4 * speed);
                 }
                 if (rightMoving)
                 {
-                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(-4 * speed);
+                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(4 * speed);
                 }
             }
         }

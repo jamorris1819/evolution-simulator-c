@@ -32,6 +32,7 @@ namespace Engine.Core.Managers
         {
             foreach (ISystem system in _systems)
             {
+                system.OnRender();
                 foreach (Entity entity in _entityManager.Entities)
                 {
                     system.OnRender(entity);

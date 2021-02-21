@@ -9,10 +9,10 @@ namespace Engine.Render.Core.Data.Primitives
         {
 			var vertices = new[]
 				{
-					new Vertex(new Vector2(-w * 0.5f, h * 0.5f)),
-					new Vertex(new Vector2(-w * 0.5f, -h * 0.5f)),
-					new Vertex(new Vector2(w * 0.5f, -h * 0.5f)),
-					new Vertex(new Vector2(w * 0.5f, h * 0.5f))
+					new Vertex(new Vector2(-w * 0.5f, h * 0.5f), new Vector3(), new Vector2(-1, 1)),
+					new Vertex(new Vector2(-w * 0.5f, -h * 0.5f), new Vector3(), new Vector2(-1, -1)),
+					new Vertex(new Vector2(w * 0.5f, -h * 0.5f), new Vector3(), new Vector2(1, -1)),
+					new Vertex(new Vector2(w * 0.5f, h * 0.5f), new Vector3(), new Vector2(1, 1))
 				};
 
 			var indices = new[]

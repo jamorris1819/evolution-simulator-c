@@ -71,9 +71,9 @@ namespace Evolution.Environment.Life.Creatures.Mouth
 
         private void CreatePincerEntity(VertexArray va)
         {
-            var entity = new Entity("claw2");
+            var entity = new Entity("claw");
             entity.AddComponent(new PositionComponent(0, 0));
-            entity.AddComponent(new RenderComponent(va));
+            entity.AddComponent(new RenderComponent(va) { Layer = 2, Outlined = true, OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline });
             entity.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             entity.Parent = MouthEntity;
             _positions.Add(entity.GetComponent<PositionComponent>());

@@ -9,22 +9,47 @@ namespace Engine.Render.Core.Data.Primitives
     {
         public static VertexArray Generate(IList<Vector2> points, bool centre = false)
         {
-            var vertices = new List<Vector2>();
+            var vertices = new List<Vertex>();
             var indices = new List<ushort>();
 
-            vertices.Add(new Vector2(0, 0));
-            vertices.AddRange(centre ? Centre(points) : points);
+            points = centre ? Centre(points).ToList() : points;
+            var tempVerts = points.Select(x => new Vertex(x)).ToArray();
 
-            for (int i = 1; i < vertices.Count; i++)
+            for (int i = 0; i < tempVerts.Length; i++)
             {
-                indices.Add((ushort)i);
-                indices.Add(0);
-                indices.Add(i == vertices.Count - 1 ? (ushort)1 : (ushort)(i + 1));
+                var previous = i == 0 ? tempVerts[tempVerts.Length - 1] : tempVerts[i - 1];
+                var current = tempVerts[i];
+                var next = i == tempVerts.Length - 1 ? tempVerts[0] : tempVerts[i + 1];
+
+                var dirOne = current.Position - previous.Position;
+                var dirTwo = current.Position - next.Position;
+
+                var angle = (float)Math.PI * 0.5f;
+
+                var newNormal = (Rotate(dirOne, angle) + Rotate(dirTwo, -angle)).Normalized();
+
+                var dx = next.Position.X - current.Position.X;
+                var dy = next.Position.Y - current.Position.Y;
+
+                tempVerts[i] = new Vertex(tempVerts[i].Position, tempVerts[i].Colour, newNormal);
             }
 
+            for (int i = 0; i < tempVerts.Length; i++)
+            {
+                var v1 = tempVerts[i];
+                var v2 = i == tempVerts.Length - 1 ? tempVerts[0] : tempVerts[i + 1];
+
+                var v3 = new Vertex(new Vector2(0, 0));
+
+                vertices.Add(v1);
+                vertices.Add(v2);
+                vertices.Add(v3);
+            }
+
+
             return new VertexArray(
-                vertices.Select(x => new Vertex(x)).ToArray(),
-                indices.ToArray()
+                vertices.ToArray(),
+                Enumerable.Range(0, vertices.Count).Select(x => (ushort)x).ToArray()
             );
         }
 

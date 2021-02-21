@@ -8,46 +8,131 @@ using OpenTK.Graphics.ES30;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Engine.Render
 {
     public class RenderSystem : SystemBase, ISystem
     {
+        private HashSet<Guid> _registeredEntities;
+        private Dictionary<int, List<Entity>> _renderComponents;
+
         private IEventBus _eventBus;
         private ShaderManager _shaderManager;
         private Camera _camera;
-
-        private float _scale;
 
         public RenderSystem(IEventBus eventBus, ShaderManager shaderManager)
         {
             _eventBus = eventBus;
             _shaderManager = shaderManager;
-            _scale = 1;
 
             Mask = ComponentType.COMPONENT_RENDER | ComponentType.COMPONENT_POSITION;
 
-            eventBus.Subscribe<CameraZoomEvent>(x => { _scale = x.Scale; Console.WriteLine(x.Scale); });
-            eventBus.Subscribe<CameraChangeEvent>(x => _camera = x.Camera);
+            _eventBus.Subscribe<CameraChangeEvent>(x => _camera = x.Camera);
+
+            _registeredEntities = new HashSet<Guid>();
+            _renderComponents = new Dictionary<int, List<Entity>>();
         }
 
-        public override void OnRender(Entity entity)
+        public override void OnRender()
         {
-            if (!MaskMatch(entity)) return;
+            var layers = _renderComponents.Keys.OrderBy(x => x).ToArray();
 
-            RenderComponent comp = entity.GetComponent<RenderComponent>();
-            PositionComponent posComp = entity.GetComponent<PositionComponent>();
+            for(int i = 0; i < layers.Length; i++)
+            {
+                RenderLayer(layers[i]);
+            }
+        }
 
-            //if (!InView(posComp.Position)) return;
+        /// <summary>
+        /// Renders all the tracked entities on the given layer.
+        /// </summary>
+        private void RenderLayer(int layer)
+        {
+            if (!_renderComponents.ContainsKey(layer)) return;
 
-            if (!comp.VertexArrayObject.Initialised) return;
+            var toRender = _renderComponents[layer];
 
-            if (comp.Shaders.Count == 0) throw new Exception("Cannot render object without any shaders");
+            for (int i = 0; i < toRender.Count; i++)
+            {
+                RenderEntity(toRender[i]);
+            }
+        }
 
+        private void RenderEntity(Entity entity)
+        {
+            var positionComponent = entity.GetComponent<PositionComponent>();
+            var renderComponent = entity.GetComponent<RenderComponent>();
+
+            // Ensure this entity should be drawn.
+            if (positionComponent == null || renderComponent == null) return;
+            if (!IsEntityInView(entity)) return;
+            if (!IsVAOReady(renderComponent)) return;
+
+            // Ensure there are no critical issues.
+            if (renderComponent.Shaders.Count == 0) throw new RenderException("An entity must have at least 1 shader in order to be rendered");
+            if (renderComponent.Outlined && renderComponent.OutlineShader == Core.Shaders.Enums.ShaderType.None) throw new RenderException("An entity must have an outline shader assigned in order to render an outline.");
+
+            // Calculate the matrix to render at.
+            var entityPosition = GetWorldPosition(entity);
+            var matrix = Matrix4.CreateRotationZ(GetWorldAngle(entity)) * Matrix4.CreateTranslation(new Vector3(entityPosition.X, entityPosition.Y, 0));
+
+            // Set opengl flags.
+            EnableGLFeaturesPredraw(renderComponent.Outlined);
+
+            for (int i = 0; i < renderComponent.Shaders.Count; i++)
+            {
+                RenderEntityWithShader(renderComponent, matrix, renderComponent.Shaders[i]);
+            }
+        }
+
+        private void RenderEntityWithShader(RenderComponent renderComponent, Matrix4 matrix, Core.Shaders.Enums.ShaderType shader)
+        {
+            bool outline = renderComponent.Outlined;
+
+            // Load shaders.
+            Shader desiredShader = PrimeShader(shader, matrix, renderComponent.Alpha);
+            Shader outlineShader = outline ? PrimeShader(renderComponent.OutlineShader, matrix, renderComponent.Alpha) : null;
+
+            // If outline is required, then set the stencil buffer to writeable.
+            if (outline)
+            {
+                GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
+                GL.StencilMask(0xFF);
+                desiredShader.Bind();
+            }
+
+            // Bind and render the shape.
+            renderComponent.VertexArrayObject.Bind();
+            renderComponent.VertexArrayObject.Render(desiredShader);
+
+            // If we wanted an outline, then disable writing to stencil buffer and draw with the outline shader.
+            if (outline)
+            {
+                outlineShader.Bind();
+
+                GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
+                GL.StencilMask(0x00);
+
+                GL.Disable(EnableCap.DepthTest);
+
+                renderComponent.VertexArrayObject.Render(outlineShader);
+
+                GL.StencilMask(0xFF);
+                GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
+            }
+        }
+
+        /// <summary>
+        /// Enables the required OpenGL flags required for rendering.
+        /// </summary>
+        /// <param name="outlined">Whether a stencil buffer should be used</param>
+        private void EnableGLFeaturesPredraw(bool outlined)
+        {
             GL.Enable(EnableCap.Blend);
 
-            if (comp.VertexArrayObject.Outlined)
+            if (outlined)
             {
                 GL.Enable(EnableCap.StencilTest);
                 GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
@@ -61,53 +146,34 @@ namespace Engine.Render
 
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.DepthFunc(DepthFunction.Less);
-
-            //var a = GL.GetError();
-            var pos = GetWorldPosition(entity);
-            var def = Matrix4.CreateRotationZ(GetWorldAngle(entity)) * Matrix4.CreateTranslation(new Vector3(pos.X, pos.Y, 0));
-            //var defOutline = Matrix4.CreateScale(1.1f) * Matrix4.CreateRotationZ(GetWorldAngle(entity)) * Matrix4.CreateTranslation(new Vector3(pos.X, pos.Y, 0));
-
-            if (comp.VertexArrayObject.Alpha == 0) return;
-
-            comp.VertexArrayObject.Bind();
-
-            var outlineShader = _shaderManager.GetShader(Core.Shaders.Enums.ShaderType.StandardOutline);
-            outlineShader.Bind();
-            outlineShader.SetUniformMat4(ShaderUniforms.Model, def);
-            outlineShader.SetUniform(ShaderUniforms.Alpha, comp.VertexArrayObject.Alpha);
-
-            for (int i = 0; i < comp.Shaders.Count; i++)
-            {
-                var shader = _shaderManager.GetShader(comp.Shaders[i]);
-                shader.Bind();
-                shader.SetUniformMat4(ShaderUniforms.Model, def);
-                shader.SetUniform(ShaderUniforms.Alpha, comp.VertexArrayObject.Alpha);
-
-
-                if (comp.VertexArrayObject.Outlined)
-                {
-                    GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
-                    GL.StencilMask(0xFF);
-                }
-
-                comp.VertexArrayObject.Render(shader);
-
-                if (comp.VertexArrayObject.Outlined)
-                {
-                    outlineShader.Bind();
-                    GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
-                    GL.StencilMask(0x00);
-
-                    GL.Disable(EnableCap.DepthTest);
-
-                    comp.VertexArrayObject.Render(outlineShader);
-
-                    GL.StencilMask(0xFF);
-                    GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
-                }
-            }
         }
 
+        private bool IsEntityInView(Entity entity) => true; // TODO: implement
+
+        private bool IsVAOReady(RenderComponent component) => component.VertexArrayObject.Initialised;
+
+        /// <summary>
+        /// Loads the shader and primes it for use by setting uniform values.
+        /// </summary>
+        private Shader PrimeShader(Core.Shaders.Enums.ShaderType shaderType, Matrix4 model, float alpha)
+        {
+            var shader = _shaderManager.GetShader(shaderType);
+
+            shader.Bind();
+            shader.SetUniformMat4(ShaderUniforms.Model, model);
+            shader.SetUniform(ShaderUniforms.Alpha, alpha);
+
+            return shader;
+        }
+
+        /// <summary>
+        /// Loads the shader and primes it for use by setting uniform values.
+        /// </summary>
+        private Shader PrimeShader(Core.Shaders.Enums.ShaderType shaderType, Matrix4 model) => PrimeShader(shaderType, model, 1f);
+
+        /// <summary>
+        /// Retrieves the world position of the given entity.
+        /// </summary>
         private Vector2 GetWorldPosition(Entity entity)
         {
             var position = entity.GetComponent<PositionComponent>().Position;
@@ -147,12 +213,16 @@ namespace Engine.Render
         {
             if (!MaskMatch(entity)) return;
 
+            // Track it if we're not already
+            if (!_registeredEntities.Contains(entity.Id))
+                AddEntityToTracking(entity);
+
             RenderComponent comp = entity.GetComponent<RenderComponent>();
 
             if(comp.ZoomProfile.HasValue)
             {
                 var alpha = comp.ZoomProfile.Value.GetAlpha(_camera.Scale);
-                comp.VertexArrayObject.Alpha = alpha;
+                comp.Alpha = alpha;
             }
 
             if (!comp.VertexArrayObject.Initialised)
@@ -165,6 +235,30 @@ namespace Engine.Render
             {
                 comp.VertexArrayObject.Reload();
             }
+        }
+
+        /// <summary>
+        /// Adds the entity to the tracking system.
+        /// </summary>
+        private void AddEntityToTracking(Entity entity)
+        {
+            // Check if we are already tracking
+            if (_registeredEntities.Contains(entity.Id)) return;
+
+            var renderComponent = entity.GetComponent<RenderComponent>();
+            int layer = renderComponent.Layer;
+
+            // Check that we are currently rendering at this layer. If not, create the layer
+            if(!_renderComponents.ContainsKey(layer))
+            {
+                _renderComponents.Add(layer, new List<Entity>());
+            }
+
+            // Insert the rendercomponent
+            _renderComponents[layer].Add(entity);
+
+            // Register the entity
+            _registeredEntities.Add(entity.Id);
         }
 
         private bool InView(Vector2 pos)

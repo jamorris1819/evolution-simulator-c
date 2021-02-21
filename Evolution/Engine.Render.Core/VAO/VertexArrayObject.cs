@@ -14,22 +14,12 @@ namespace Engine.Render.Core.VAO
         protected Shader _outline;
 
         public bool Initialised { get; protected set; }
-        public float Alpha
-        {
-            get => _alpha;
-            set
-            {
-                _alpha = Math.Max(0, Math.Min(1, value));
-            }
-        }
         public bool NeedsUpdate => VBO.Any(x => x.NeedsUpdate);
         public bool Enabled { get; set; }
         public VertexArray VertexArray { get; set; }
         public IVertexBufferObject[] VBO { get; set; }
 
         public IList<IBufferAttribute> Attributes { get; protected set; }
-
-        public bool Outlined { get; set; } = false;
 
         public VertexArrayObject(VertexArray va)
         {

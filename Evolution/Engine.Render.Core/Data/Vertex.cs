@@ -28,6 +28,7 @@ namespace Engine.Render.Core.Data
             Position = pos;
             Colour = colour;
             Normal = normal;
+            if (double.IsNaN(normal.X)) Normal = new Vector2(0, 0);
         }
     }
 }
