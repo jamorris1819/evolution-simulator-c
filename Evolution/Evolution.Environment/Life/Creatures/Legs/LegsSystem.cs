@@ -34,16 +34,13 @@ namespace Evolution.Environment.Life.Creatures
             var leftMoving = !((WalkingLimb)legsComponent.LeftSide).IsFootDown;
             var rightMoving = !((WalkingLimb)legsComponent.RightSide).IsFootDown;
 
-            if (entity.GetComponent<PhysicsComponent>().PhysicsBody.LinearVelocity.Length > 1)
+            if (leftMoving)
             {
-                if (leftMoving)
-                {
-                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(-4 * speed);
-                }
-                if (rightMoving)
-                {
-                    entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(4 * speed);
-                }
+                entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(-6 * speed);
+            }
+            if (rightMoving)
+            {
+                entity.GetComponent<PhysicsComponent>().PhysicsBody.ApplyTorque(6 * speed);
             }
         }
 

@@ -30,7 +30,8 @@ namespace Evolution.Environment.Life.Creatures.Body.Visual
 
             for (int i = 0; i < length; i++)
             {
-                vertexArrays.Add(thorax);
+                if(i % 2 == 1) vertexArrays.Add(thorax);
+                else vertexArrays.Add(VertexHelper.SetColour(thorax, thorax.Vertices[0].Colour * 0.85f));
             }
 
             var eyes = CreateEyes(dna);

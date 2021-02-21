@@ -45,10 +45,10 @@ namespace Evolution.Environment.Life.Creatures.Limbs.Factory
             var ball = Circle.Generate(legThickness * 0.5f, 16);
 
             legShape = VertexHelper.Combine(ball, legShape);
-            legShape = VertexHelper.SetColour(legShape, colour * 0.9f);
+            legShape = VertexHelper.SetColour(legShape, colour * 0.7f);
 
 
-            var legModel = new LegModel(legShape, legShape, legLength, legDirection, baseOffset);
+            var legModel = new LegModel(legShape, legShape, legLength, legDirection, baseOffset, legThickness);
 
             return new WalkingLimb(parent, EntityManager, legModel);
         }

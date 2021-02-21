@@ -40,7 +40,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
 
             _model = legModel;
 
-            _entities = new Entity[2];
+            _entities = new Entity[3];
 
             var random = new Random();
             var dist = Math.Sin(_legDirection) * _length * -2 * random.NextDouble();
@@ -83,6 +83,17 @@ namespace Evolution.Environment.Life.Creatures.Legs
             rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             _entities[1].AddComponent(rc);
+
+            // Create entity for segment 2
+            _entities[2] = new Entity("foot");
+            _entities[2].AddComponent(new PositionComponent(new Vector2(0, 0)));
+            var foot = Circle.Generate(_model.LegThickness, 32);
+            foot = VertexHelper.SetColour(foot, rc.VertexArray.Vertices[0].Colour);
+            rc = new RenderComponent(foot);
+            rc.Outlined = true;
+            rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
+            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            _entities[2].AddComponent(rc);
 
             entityManager.AddEntities(_entities);
             Initialised = true;
@@ -172,6 +183,8 @@ namespace Evolution.Environment.Life.Creatures.Legs
                 _entities[1].GetComponent<PositionComponent>().Position = new Vector2((float)elbowX, (float)elbowY);
                 _entities[1].GetComponent<PositionComponent>().Angle = secondLimbAngle;
             }
+
+            _entities[2].GetComponent<PositionComponent>().Position = _footPosition;
         }
 
         private static Vector2 Rotate(Vector2 v, float rad)
