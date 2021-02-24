@@ -46,7 +46,7 @@ namespace Evolution.Environment.Life.Creatures
             var length = GetSegmentLength(bodies[0]);
 
             var mouth = CreateMouth(dna, length * 0.5f);
-            mouth.MouthEntity.GetComponent<PositionComponent>().Position = GetMouthPos(bodies[0]);
+            mouth.MouthEntity.GetComponent<TransformComponent>().Position = GetMouthPos(bodies[0]);
             _entityManager.AddEntities(mouth.GetEntities());
 
             if (bodies.Length != physicBodies.Length) throw new Exception();
@@ -78,7 +78,7 @@ namespace Evolution.Environment.Life.Creatures
         private Entity BuildBaseEntity(Vector2 position)
         {
             var entity = new Entity("creature");
-            entity.AddComponent(new PositionComponent(position));
+            entity.AddComponent(new TransformComponent(position));
             _entityManager.AddEntity(entity);
             return entity;
         }
@@ -87,7 +87,7 @@ namespace Evolution.Environment.Life.Creatures
         {
             var entity = new Entity("body part");
 
-            entity.AddComponent(new PositionComponent(position));
+            entity.AddComponent(new TransformComponent(position));
             var rc = new RenderComponent(va);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             rc.Outlined = true;

@@ -114,7 +114,7 @@ namespace Evolution.Environment.Life.Plants
             _instances[dna] = new List<PlantInstance>();
 
             var entity = new Entity("plant");
-            entity.AddComponent(new PositionComponent());
+            entity.AddComponent(new TransformComponent());
             var shape = plant.GenerateShape();
             var renderComponent = new RenderComponent(shape, instanceSettings);
             renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Outline);

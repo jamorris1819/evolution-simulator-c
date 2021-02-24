@@ -11,7 +11,7 @@ namespace Evolution.Environment.Life.Creatures.Limbs
 {
     public abstract class Limb
     {
-        protected readonly PositionComponent _parentPosition;
+        protected readonly TransformComponent _parentPosition;
 
         protected Vector2 _footPosition;
 
@@ -23,7 +23,7 @@ namespace Evolution.Environment.Life.Creatures.Limbs
 
         public Limb(Entity parent, EntityManager entityManager)
         {
-            _parentPosition = parent.GetComponent<PositionComponent>();
+            _parentPosition = parent.GetComponent<TransformComponent>();
         }
 
         public abstract void Initialise(EntityManager entityManager);

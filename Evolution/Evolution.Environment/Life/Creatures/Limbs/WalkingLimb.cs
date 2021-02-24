@@ -68,7 +68,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
 
             // Create entity for segment 1
             _entities[0] = new Entity("leg");
-            _entities[0].AddComponent(new PositionComponent(new Vector2(0, 0)));
+            _entities[0].AddComponent(new TransformComponent(new Vector2(0, 0)));
             var rc = new RenderComponent(_model.Segment1);
             rc.Outlined = true;
             rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
@@ -77,7 +77,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
 
             // Create entity for segment 2
             _entities[1] = new Entity("leg");
-            _entities[1].AddComponent(new PositionComponent(new Vector2(0, 0)));
+            _entities[1].AddComponent(new TransformComponent(new Vector2(0, 0)));
             rc = new RenderComponent(_model.Segment2);
             rc.Outlined = true;
             rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
@@ -86,7 +86,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
 
             // Create entity for segment 2
             _entities[2] = new Entity("foot");
-            _entities[2].AddComponent(new PositionComponent(new Vector2(0, 0)));
+            _entities[2].AddComponent(new TransformComponent(new Vector2(0, 0)));
             var foot = Circle.Generate(_model.LegThickness, 32);
             foot = VertexHelper.SetColour(foot, rc.VertexArray.Vertices[0].Colour);
             rc = new RenderComponent(foot);
@@ -175,16 +175,16 @@ namespace Evolution.Environment.Life.Creatures.Legs
             {
                 var firstLimbDir = new Vector2((float)elbowX, (float)elbowY) - BasePoint;
                 var firstLimbAngle = GetAngle(new Vector2(0, 0), firstLimbDir.Normalized());
-                _entities[0].GetComponent<PositionComponent>().Position = BasePoint;
-                _entities[0].GetComponent<PositionComponent>().Angle = firstLimbAngle;
+                _entities[0].GetComponent<TransformComponent>().Position = BasePoint;
+                _entities[0].GetComponent<TransformComponent>().Angle = firstLimbAngle;
 
                 var secondLimbDir = _footPosition - new Vector2((float)elbowX, (float)elbowY);
                 var secondLimbAngle = GetAngle(new Vector2(0, 0), secondLimbDir.Normalized());
-                _entities[1].GetComponent<PositionComponent>().Position = new Vector2((float)elbowX, (float)elbowY);
-                _entities[1].GetComponent<PositionComponent>().Angle = secondLimbAngle;
+                _entities[1].GetComponent<TransformComponent>().Position = new Vector2((float)elbowX, (float)elbowY);
+                _entities[1].GetComponent<TransformComponent>().Angle = secondLimbAngle;
             }
 
-            _entities[2].GetComponent<PositionComponent>().Position = _footPosition;
+            _entities[2].GetComponent<TransformComponent>().Position = _footPosition;
         }
 
         private static Vector2 Rotate(Vector2 v, float rad)

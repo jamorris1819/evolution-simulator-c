@@ -59,7 +59,7 @@ namespace Engine.Terrain
             _renderComponent.Shaders.Add(ShaderType.StandardInstanced);
             //_renderComponent.Shaders.Add(ShaderType.StandardInstancedLoop);
             entity.AddComponent(_renderComponent);
-            entity.AddComponent(new PositionComponent());
+            entity.AddComponent(new TransformComponent());
             _entityManager.AddEntity(entity);
         }
 

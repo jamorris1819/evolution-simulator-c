@@ -27,7 +27,7 @@ namespace Engine.Render
             _eventBus = eventBus;
             _shaderManager = shaderManager;
 
-            Mask = ComponentType.COMPONENT_RENDER | ComponentType.COMPONENT_POSITION;
+            Mask = ComponentType.COMPONENT_RENDER | ComponentType.COMPONENT_TRANSFORM;
 
             _eventBus.Subscribe<CameraChangeEvent>(x => _camera = x.Camera);
 
@@ -62,7 +62,7 @@ namespace Engine.Render
 
         private void RenderEntity(Entity entity)
         {
-            var positionComponent = entity.GetComponent<PositionComponent>();
+            var positionComponent = entity.GetComponent<TransformComponent>();
             var renderComponent = entity.GetComponent<RenderComponent>();
 
             // Ensure this entity should be drawn.
@@ -176,11 +176,11 @@ namespace Engine.Render
         /// </summary>
         private Vector2 GetWorldPosition(Entity entity)
         {
-            var position = entity.GetComponent<PositionComponent>().Position;
+            var position = entity.GetComponent<TransformComponent>().Position;
 
             if (entity.Parent == null) return position;
 
-            var parentPosComp = entity.Parent.GetComponent<PositionComponent>();
+            var parentPosComp = entity.Parent.GetComponent<TransformComponent>();
             var parentRotation = parentPosComp.Angle;
 
             var rotPos = Rotate(position, parentRotation);
@@ -202,7 +202,7 @@ namespace Engine.Render
 
         private float GetWorldAngle(Entity entity)
         {
-            var angle = entity.GetComponent<PositionComponent>().Angle;
+            var angle = entity.GetComponent<TransformComponent>().Angle;
 
             if (entity.Parent == null) return angle;
 

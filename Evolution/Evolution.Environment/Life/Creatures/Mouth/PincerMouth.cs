@@ -17,11 +17,11 @@ namespace Evolution.Environment.Life.Creatures.Mouth
 {
     public class PincerMouth : Mouth
     {
-        private List<PositionComponent> _positions;
+        private List<TransformComponent> _positions;
 
         public PincerMouth()
         {
-            _positions = new List<PositionComponent>();
+            _positions = new List<TransformComponent>();
         }
 
         public override void Build(in DNA dna, float scale)
@@ -72,11 +72,11 @@ namespace Evolution.Environment.Life.Creatures.Mouth
         private void CreatePincerEntity(VertexArray va)
         {
             var entity = new Entity("claw");
-            entity.AddComponent(new PositionComponent(0, 0));
+            entity.AddComponent(new TransformComponent(0, 0));
             entity.AddComponent(new RenderComponent(va) { Layer = 2, Outlined = true, OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline });
             entity.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             entity.Parent = MouthEntity;
-            _positions.Add(entity.GetComponent<PositionComponent>());
+            _positions.Add(entity.GetComponent<TransformComponent>());
             _entities.Add(entity);
         }
 

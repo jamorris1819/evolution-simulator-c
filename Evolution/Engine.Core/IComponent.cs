@@ -9,7 +9,7 @@ namespace Engine.Core
     {
         COMPONENT_NONE = 0,
         COMPONENT_RENDER = 1 << 0,
-        COMPONENT_POSITION = 1 << 1,
+        COMPONENT_TRANSFORM = 1 << 1,
         COMPONENT_PHYSICS = 1 << 2,
         COMPONENT_LEGS = 1 << 3
     }

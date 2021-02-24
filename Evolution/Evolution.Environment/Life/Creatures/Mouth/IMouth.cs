@@ -22,7 +22,7 @@ namespace Evolution.Environment.Life.Creatures.Mouth
         protected void CreateMouthEntity()
         {
             MouthEntity = new Entity("Mouth Entity");
-            MouthEntity.AddComponent(new PositionComponent());
+            MouthEntity.AddComponent(new TransformComponent());
             _entities.Add(MouthEntity);
         }
     }

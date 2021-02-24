@@ -24,7 +24,7 @@ namespace Engine.Physics
         {
             _world = new World(new tainicom.Aether.Physics2D.Common.Vector2(gravity.X, gravity.Y));
 
-            Mask = ComponentType.COMPONENT_PHYSICS | ComponentType.COMPONENT_POSITION;
+            Mask = ComponentType.COMPONENT_PHYSICS | ComponentType.COMPONENT_TRANSFORM;
 
             _eventBus = eventBus;
 
@@ -43,7 +43,7 @@ namespace Engine.Physics
             if (!MaskMatch(entity)) return;
 
             var physicsComponent = entity.GetComponent<PhysicsComponent>();
-            var positionComponent = entity.GetComponent<PositionComponent>();
+            var positionComponent = entity.GetComponent<TransformComponent>();
 
             if (physicsComponent.PhysicsBody.Debug)
             {
