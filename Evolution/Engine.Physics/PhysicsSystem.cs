@@ -47,7 +47,7 @@ namespace Engine.Physics
 
             if (physicsComponent.PhysicsBody.Debug)
             {
-                var speed = 15f;
+                var speed = 40f;
                 if (InputManager.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.LeftShift)) speed *= 2.75f;
                 if (InputManager.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.W))
                 {

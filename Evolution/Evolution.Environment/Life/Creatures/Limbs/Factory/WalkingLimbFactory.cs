@@ -1,5 +1,6 @@
 ﻿using Engine.Core;
 using Engine.Render.Core;
+using Engine.Render.Core.Data;
 using Engine.Render.Core.Data.Primitives;
 using Evolution.Environment.Life.Creatures.Body.Visual;
 using Evolution.Environment.Life.Creatures.Legs;
@@ -52,5 +53,31 @@ namespace Evolution.Environment.Life.Creatures.Limbs.Factory
 
             return new WalkingLimb(parent, EntityManager, legModel);
         }
+
+        /*private VertexArray CreateUpperLimb(in DNA dna)
+        {
+            var module = (WalkingLimbModule)dna.GetModule(ModuleType.WalkingLimbs); // todo: sort this
+            var body = NoiseBodyGenerator.CreateBody(dna);
+
+            var orderedY = body.Vertices.OrderBy(x => x.Position.Y);
+            var height = Math.Abs(orderedY.First().Position.Y) + orderedY.Last().Position.Y;
+            var legLength = DNAReader.ReadValueFloat(module.Length, DNAReader.LegLength) * height;
+            var legThickness = DNAReader.ReadValueFloat(module.LegThickness, DNAReader.LegThickness) * height * 0.7f * legLength;
+
+            var legShape = Rectangle.Generate(legLength * 0.5f, legThickness);
+            legShape = VertexHelper.Translate(legShape, new Vector2(legLength * 0.25f, 0));
+
+
+
+            int resolution = 16;
+            float step = 1f / (resolution - 1);
+            float curveHeight = Math.Max(CurveHeight, 0.2f);
+            var curve = new BezierCurveQuadric(new Vector2(0), new Vector2(1, 0), new Vector2(0.5f, curveHeight));
+
+            for (int i = 0; i < resolution; i++)
+            {
+                yield return curve.CalculatePoint(i * step) * new Vector2(Length, 1);
+            }
+        }*/
     }
 }
