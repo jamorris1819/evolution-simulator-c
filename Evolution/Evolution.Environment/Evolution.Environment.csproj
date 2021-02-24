@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Life\Creatures\Limbs\Data\**" />
+    <EmbeddedResource Remove="Life\Creatures\Limbs\Data\**" />
+    <None Remove="Life\Creatures\Limbs\Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Aether.Physics2D" Version="1.5.0" />
   </ItemGroup>
 
@@ -13,10 +19,6 @@
     <ProjectReference Include="..\Engine.Physics\Engine.Physics.csproj" />
     <ProjectReference Include="..\Engine.Terrain\Engine.Terrain.csproj" />
     <ProjectReference Include="..\Evolution.Genetics\Evolution.Genetics.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Life\Creatures\Limbs\Data\" />
   </ItemGroup>
 
 </Project>
