@@ -8,6 +8,7 @@ using Redbus.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Engine.Render
 {
@@ -76,7 +77,6 @@ namespace Engine.Render
 
             Renderer(args);
             _uiManager.Render();
-
             Context.SwapBuffers();
         }
     }

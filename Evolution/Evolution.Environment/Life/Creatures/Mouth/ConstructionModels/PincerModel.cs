@@ -86,18 +86,18 @@ namespace Evolution.Environment.Life.Creatures.Mouth.ConstructionModels
 
             for (int i = 0; i < topCurve.Length - 1; i++)
             {
-                var t1v1 = new Vertex(topCurve[i]);
-                var t1v2 = new Vertex(bottomCurve[i]);
-                var t1v3 = new Vertex(bottomCurve[i + 1]);
+                var t1v1 = new Vertex(topCurve[i].ToVector3());
+                var t1v2 = new Vertex(bottomCurve[i].ToVector3());
+                var t1v3 = new Vertex(bottomCurve[i + 1].ToVector3());
 
                 vertices.Add(t1v1);
                 vertices.Add(t1v2);
                 vertices.Add(t1v3);
 
 
-                var t2v1 = new Vertex(topCurve[i + 1]);
-                var t2v2 = new Vertex(topCurve[i]);
-                var t2v3 = new Vertex(bottomCurve[i + 1]);
+                var t2v1 = new Vertex(topCurve[i + 1].ToVector3());
+                var t2v2 = new Vertex(topCurve[i].ToVector3());
+                var t2v3 = new Vertex(bottomCurve[i + 1].ToVector3());
 
                 vertices.Add(t2v1);
                 vertices.Add(t2v2);

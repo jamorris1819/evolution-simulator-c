@@ -7,13 +7,13 @@ namespace Engine.Render.Core.Data.Primitives
 {
     public class Polygon
     {
-        public static VertexArray Generate(IList<Vector2> points, bool centre = false)
+        public static VertexArray Generate(IList<Vector2> points, bool centre = false, float height = 1)
         {
             var vertices = new List<Vertex>();
             var indices = new List<ushort>();
 
             points = centre ? Centre(points).ToList() : points;
-            var tempVerts = points.Select(x => new Vertex(x)).ToArray();
+            var tempVerts = points.Select(x => new Vertex(new Vector3(x.X, x.Y, height))).ToArray();
 
             for (int i = 0; i < tempVerts.Length; i++)
             {
@@ -26,7 +26,7 @@ namespace Engine.Render.Core.Data.Primitives
 
                 var angle = (float)Math.PI * 0.5f;
 
-                var newNormal = (Rotate(dirOne, angle) + Rotate(dirTwo, -angle)).Normalized();
+                var newNormal = (Rotate(dirOne.ToVector2(), angle) + Rotate(dirTwo.ToVector2(), -angle)).Normalized();
 
                 var dx = next.Position.X - current.Position.X;
                 var dy = next.Position.Y - current.Position.Y;
@@ -39,7 +39,7 @@ namespace Engine.Render.Core.Data.Primitives
                 var v1 = tempVerts[i];
                 var v2 = i == tempVerts.Length - 1 ? tempVerts[0] : tempVerts[i + 1];
 
-                var v3 = new Vertex(new Vector2(0, 0));
+                var v3 = new Vertex(new Vector3(0, 0, height));
 
                 vertices.Add(v1);
                 vertices.Add(v2);
@@ -77,7 +77,7 @@ namespace Engine.Render.Core.Data.Primitives
             var verts = new List<Vertex>();
             var indices = new List<ushort>();
 
-            verts.Add(new Vertex(new Vector2(0, -0.01f)));
+            verts.Add(new Vertex(new Vector3(0, -0.01f, 0)));
             verts.AddRange(vertices);
 
             for (int i = 1; i < vertices.Count; i++)

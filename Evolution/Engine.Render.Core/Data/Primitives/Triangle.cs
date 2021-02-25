@@ -9,9 +9,9 @@ namespace Engine.Render.Core.Data.Primitives
         {
             var vertices = new[]
             {
-                    new Vertex(new Vector2(-w * 0.5f, 0)),
-                    new Vertex(new Vector2(w * 0.5f, 0)),
-                    new Vertex(new Vector2(0, h))
+                    new Vertex(new Vector3(-w * 0.5f, 0, 0)),
+                    new Vertex(new Vector3(w * 0.5f, 0, 0)),
+                    new Vertex(new Vector3(0, h, 0))
             };
             var indices = new[]
             {

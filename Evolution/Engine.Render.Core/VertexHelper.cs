@@ -28,7 +28,7 @@ namespace Engine.Render.Core
             return new VertexArray(vertices.ToArray(), va.Indices);
         }
 
-        public static Vertex Translate(in Vertex v, Vector2 pos) => new Vertex(v.Position + pos, v.Colour, v.Normal);
+        public static Vertex Translate(in Vertex v, Vector2 pos) => new Vertex(v.Position + pos.ToVector3(), v.Colour, v.Normal);
 
         public static VertexArray Scale(in VertexArray va, float scale)
         {
@@ -45,7 +45,7 @@ namespace Engine.Render.Core
             return new VertexArray(vertices, va.Indices);
         }
 
-        public static Vertex Multiply(in Vertex v, Vector2 m) => new Vertex(v.Position * m, v.Colour, v.Normal);
+        public static Vertex Multiply(in Vertex v, Vector2 m) => new Vertex(v.Position * m.ToVector3(), v.Colour, v.Normal);
 
         public static VertexArray Combine(in VertexArray va1, in VertexArray va2)
         {
@@ -88,7 +88,7 @@ namespace Engine.Render.Core
             float s = (float)Math.Sin(rotation);
             float c = (float)Math.Cos(rotation);
 
-            var newPos = new Vector2(pos.X * c - pos.Y * s, pos.X * s + pos.Y * c);
+            var newPos = new Vector3(pos.X * c - pos.Y * s, pos.X * s + pos.Y * c, v.Position.Z);
 
             return new Vertex(newPos, v.Colour, v.Normal);
         }

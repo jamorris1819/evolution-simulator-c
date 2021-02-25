@@ -39,7 +39,7 @@ namespace Evolution.Environment.Life.Creatures.Body.Physics
                 var body = new CirclePhysicsBody(0.15f, i == 0 ? 5f : 3f)
                 {
                     BodyType = tainicom.Aether.Physics2D.Dynamics.BodyType.Dynamic,
-                    LinearDrag =   4f,
+                    LinearDrag =  4f,
                     AngularDrag = 5f
                 };
                 body.CreateBody(_world, position - new OpenTK.Mathematics.Vector2(0, i * (first - last) * PhysicsSettings.InvScale));

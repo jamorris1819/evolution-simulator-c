@@ -11,6 +11,8 @@ namespace Engine.Render.Core.Shaders
 
         public int ProgramId { get; private set; }
 
+        public bool Outline { get; set; }
+
         public PrimitiveType PrimitiveType { get; set; } = PrimitiveType.Triangles;
 
         public Shader(int programId)

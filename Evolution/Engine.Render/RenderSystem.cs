@@ -78,8 +78,6 @@ namespace Engine.Render
             var entityPosition = GetWorldPosition(entity);
             var matrix = Matrix4.CreateRotationZ(GetWorldAngle(entity)) * Matrix4.CreateTranslation(new Vector3(entityPosition.X, entityPosition.Y, 0));
 
-            // Set opengl flags.
-            EnableGLFeaturesPredraw(renderComponent.Outlined);
 
             for (int i = 0; i < renderComponent.Shaders.Count; i++)
             {
@@ -89,11 +87,15 @@ namespace Engine.Render
 
         private void RenderEntityWithShader(RenderComponent renderComponent, Matrix4 matrix, Core.Shaders.Enums.ShaderType shader)
         {
-            bool outline = renderComponent.Outlined;
-
             // Load shaders.
             Shader desiredShader = PrimeShader(shader, matrix, renderComponent.Alpha);
+
+            bool outline = renderComponent.Outlined && desiredShader.Outline;
             Shader outlineShader = outline ? PrimeShader(renderComponent.OutlineShader, matrix, renderComponent.Alpha) : null;
+
+
+            // Set opengl flags.
+            EnableGLFeaturesPredraw(outline);
 
             // If outline is required, then set the stencil buffer to writeable.
             if (outline)

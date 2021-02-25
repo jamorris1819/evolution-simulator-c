@@ -5,14 +5,14 @@ namespace Engine.Render.Core.Data.Primitives
 {
     public class Rectangle
     {
-		public static VertexArray Generate(float w, float h)
+		public static VertexArray Generate(float w, float h, float z1 = 0, float z2 = 0)
         {
 			var vertices = new[]
 				{
-					new Vertex(new Vector2(-w * 0.5f, h * 0.5f), new Vector3(), new Vector2(-1, 1)),
-					new Vertex(new Vector2(-w * 0.5f, -h * 0.5f), new Vector3(), new Vector2(-1, -1)),
-					new Vertex(new Vector2(w * 0.5f, -h * 0.5f), new Vector3(), new Vector2(1, -1)),
-					new Vertex(new Vector2(w * 0.5f, h * 0.5f), new Vector3(), new Vector2(1, 1))
+					new Vertex(new Vector3(-w * 0.5f, h * 0.5f, z1), new Vector3(), new Vector2(-1, 1)),
+					new Vertex(new Vector3(-w * 0.5f, -h * 0.5f, z1), new Vector3(), new Vector2(-1, -1)),
+					new Vertex(new Vector3(w * 0.5f, -h * 0.5f, z2), new Vector3(), new Vector2(1, -1)),
+					new Vertex(new Vector3(w * 0.5f, h * 0.5f, z2), new Vector3(), new Vector2(1, 1))
 				};
 
 			var indices = new[]

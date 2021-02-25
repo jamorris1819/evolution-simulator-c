@@ -8,7 +8,7 @@ namespace Engine.Render.Core.Data.Primitives
 {
     public static class Circle
     {
-        public static VertexArray Generate(float radius, int steps)
+        public static VertexArray Generate(float radius, int steps, float height = 0)
         {
             List<Vector2> points = new List<Vector2>();
             float step = (float)(Math.PI * 2) / (float)steps;
@@ -19,7 +19,7 @@ namespace Engine.Render.Core.Data.Primitives
                 points.Add(point);
             }
 
-            return Polygon.Generate(points.ToList());
+            return Polygon.Generate(points.ToList(), false, height);
         }
     }
 }

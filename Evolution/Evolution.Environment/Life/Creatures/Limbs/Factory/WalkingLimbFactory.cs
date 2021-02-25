@@ -40,16 +40,25 @@ namespace Evolution.Environment.Life.Creatures.Limbs.Factory
             var colour = body.Vertices.First().Colour;
             baseOffset *= 0.75f;
 
-            var legShape = Rectangle.Generate(legLength * 0.5f, legThickness);
-            legShape = VertexHelper.Translate(legShape, new Vector2(legLength * 0.25f, 0));
+            var lowerLegShape = Rectangle.Generate(legLength * 0.5f, legThickness, 0.5f, 0);
+            lowerLegShape = VertexHelper.Translate(lowerLegShape, new Vector2(legLength * 0.25f, 0));
 
-            var ball = Circle.Generate(legThickness * 0.5f, 16);
+            var ball = Circle.Generate(legThickness * 0.5f, 16, 0.5f);
 
-            legShape = VertexHelper.Combine(ball, legShape);
-            legShape = VertexHelper.SetColour(legShape, colour * 0.7f);
+            lowerLegShape = VertexHelper.Combine(ball, lowerLegShape);
+            lowerLegShape = VertexHelper.SetColour(lowerLegShape, colour * 0.7f);
 
 
-            var legModel = new LegModel(legShape, legShape, legLength, legDirection, baseOffset, legThickness);
+            var upperLegShape = Rectangle.Generate(legLength * 0.5f, legThickness, 1.0f, 0.5f);
+            upperLegShape = VertexHelper.Translate(upperLegShape, new Vector2(legLength * 0.25f, 0));
+
+            ball = Circle.Generate(legThickness * 0.5f, 16, 1f);
+
+            upperLegShape = VertexHelper.Combine(ball, upperLegShape);
+            upperLegShape = VertexHelper.SetColour(upperLegShape, colour * 0.7f);
+
+
+            var legModel = new LegModel(upperLegShape, lowerLegShape, legLength, legDirection, baseOffset.ToVector2(), legThickness);
 
             return new WalkingLimb(parent, EntityManager, legModel);
         }

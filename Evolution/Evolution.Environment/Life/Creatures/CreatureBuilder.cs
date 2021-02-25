@@ -53,13 +53,22 @@ namespace Evolution.Environment.Life.Creatures
 
             var entities = new List<Entity>();
 
+            int legSpacing = bodies.Length > 4 ? 3 : 2;
+
             for(int i = bodies.Length - 1; i >= 0; i--)
             {
                 var body = bodies[i];
                 var physBody = physicBodies[i];
                 var entity = CreateBodyPart(position + new Vector2(0, i * -0.05f), body, physBody);
-                if (i % 2 == 1) AddLegs(dna, entity, 1f); // 0.5f + (i / (float)bodies.Length));
-                entities.Add(entity);
+                 // 0.5f + (i / (float)bodies.Length));
+
+                if(bodies.Length == 3)
+                {
+                    if(i == 1 || i == 2) AddLegs(dna, entity, 1f);
+                }
+                else if (i % legSpacing == 1 && i > 0)  AddLegs(dna, entity, 1f); 
+
+                    entities.Add(entity);
             }            
 
             mouth.SetParent(entities[bodies.Length - 1]);
@@ -89,6 +98,7 @@ namespace Evolution.Environment.Life.Creatures
 
             entity.AddComponent(new TransformComponent(position));
             var rc = new RenderComponent(va);
+            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardShadow);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             rc.Outlined = true;
             rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
@@ -121,7 +131,7 @@ namespace Evolution.Environment.Life.Creatures
         {
             var points = va.Vertices.Where(x => x.Position.X == 0).OrderByDescending(x => x.Position.Y);
 
-            return points.First().Position;
+            return points.First().Position.ToVector2();
         }
 
         private float GetSegmentLength(VertexArray va)

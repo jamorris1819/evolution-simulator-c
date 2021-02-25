@@ -9,6 +9,7 @@ namespace Engine.Render.Core.Shaders.Enums
         None,
         Standard,
         StandardOutline,
+        StandardShadow,
         StandardInstanced,
         StandardInstancedLoop,
         InstancedRotated,

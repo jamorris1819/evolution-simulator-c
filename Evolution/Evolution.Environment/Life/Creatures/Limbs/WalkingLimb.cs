@@ -72,6 +72,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
             var rc = new RenderComponent(_model.Segment1);
             rc.Outlined = true;
             rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
+            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardShadow);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             _entities[0].AddComponent(rc);
 
@@ -81,6 +82,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
             rc = new RenderComponent(_model.Segment2);
             rc.Outlined = true;
             rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
+            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardShadow);
             rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             _entities[1].AddComponent(rc);
 
