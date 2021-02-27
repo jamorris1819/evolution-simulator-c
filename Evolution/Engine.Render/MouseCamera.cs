@@ -9,8 +9,8 @@ namespace Engine.Render
 {
     public class MouseCamera : Camera
     {
-        public MouseCamera(int width, int height, IEventBus eventBus, ShaderManager shaderManager)
-            : base(width, height, eventBus, shaderManager)
+        public MouseCamera(int width, int height, IEventBus eventBus)
+            : base(width, height, eventBus)
         {
             _eventBus.Subscribe<MouseDragEvent>(x =>
             {

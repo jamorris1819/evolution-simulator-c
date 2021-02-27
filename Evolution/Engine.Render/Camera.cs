@@ -9,7 +9,6 @@ namespace Engine.Render
     public abstract class Camera
     {
         protected IEventBus _eventBus;
-        protected ShaderManager _shaderManager;
         protected int _width;
         protected int _height;
         private int ppm;
@@ -38,12 +37,11 @@ namespace Engine.Render
 
         public Vector4 Viewport { get; private set; }
 
-        public Camera(int width, int height, IEventBus eventBus, ShaderManager shaderManager)
+        public Camera(int width, int height, IEventBus eventBus)
         {
             _width = width;
             _height = height;
             _eventBus = eventBus;
-            _shaderManager = shaderManager;
             PixelsPerMetre = 64;
         }
 
@@ -64,12 +62,12 @@ namespace Engine.Render
             Matrix4 position = Matrix4.CreateTranslation(new Vector3(Position.X, Position.Y, 0));
             CreateProjection();
             
-            for(int i = 0; i < _shaderManager.All.Count; i++)
+            for(int i = 0; i < Shaders.All.Length; i++)
             {
-                Shader shader = _shaderManager.All[i];
+                Shader shader = Shaders.All[i];
                 shader.Bind();
-                shader.SetUniformMat4(ShaderUniforms.View, position);
-                shader.SetUniformMat4(ShaderUniforms.Projection, Projection);
+                shader.SetUniformMat4("uView", position);
+                shader.SetUniformMat4("uProjection", Projection);
             }
         }
 

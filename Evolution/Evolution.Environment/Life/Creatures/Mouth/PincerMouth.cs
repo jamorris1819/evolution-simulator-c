@@ -73,8 +73,8 @@ namespace Evolution.Environment.Life.Creatures.Mouth
         {
             var entity = new Entity("claw");
             entity.AddComponent(new TransformComponent(0, 0));
-            entity.AddComponent(new RenderComponent(va) { Layer = 2, Outlined = true, OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline });
-            entity.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            entity.AddComponent(new RenderComponent(va) { Layer = 2 });
+            //entity.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
             entity.Parent = MouthEntity;
             _positions.Add(entity.GetComponent<TransformComponent>());
             _entities.Add(entity);

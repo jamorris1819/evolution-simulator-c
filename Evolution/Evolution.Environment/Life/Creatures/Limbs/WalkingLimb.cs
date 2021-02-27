@@ -4,6 +4,7 @@ using Engine.Core.Managers;
 using Engine.Render;
 using Engine.Render.Core;
 using Engine.Render.Core.Data.Primitives;
+using Engine.Render.Core.Shaders;
 using Evolution.Environment.Life.Creatures.Limbs;
 using Evolution.Genetics.Modules.Limbs;
 using OpenTK.Mathematics;
@@ -70,20 +71,28 @@ namespace Evolution.Environment.Life.Creatures.Legs
             _entities[0] = new Entity("leg");
             _entities[0].AddComponent(new TransformComponent(new Vector2(0, 0)));
             var rc = new RenderComponent(_model.Segment1);
-            rc.Outlined = true;
-            rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
-            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardShadow);
-            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
+            {
+                StencilWrite = true
+            });
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
+            {
+                StencilRead = true
+            });
             _entities[0].AddComponent(rc);
 
             // Create entity for segment 2
             _entities[1] = new Entity("leg");
             _entities[1].AddComponent(new TransformComponent(new Vector2(0, 0)));
             rc = new RenderComponent(_model.Segment2);
-            rc.Outlined = true;
-            rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
-            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardShadow);
-            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
+            {
+                StencilWrite = true
+            });
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
+            {
+                StencilRead = true
+            });
             _entities[1].AddComponent(rc);
 
             // Create entity for segment 2
@@ -92,9 +101,14 @@ namespace Evolution.Environment.Life.Creatures.Legs
             var foot = Circle.Generate(_model.LegThickness, 32);
             foot = VertexHelper.SetColour(foot, rc.VertexArray.Vertices[0].Colour);
             rc = new RenderComponent(foot);
-            rc.Outlined = true;
-            rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
-            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
+            {
+                StencilWrite = true
+            });
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
+            {
+                StencilRead = true
+            });
             _entities[2].AddComponent(rc);
 
             entityManager.AddEntities(_entities);

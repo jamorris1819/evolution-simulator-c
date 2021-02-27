@@ -3,6 +3,7 @@ using Engine.Core.Components;
 using Engine.Core.Managers;
 using Engine.Render;
 using Engine.Render.Core.Data.Zoom;
+using Engine.Render.Core.Shaders;
 using Engine.Render.Core.VAO.Instanced;
 using Evolution.Environment.Life.Plants.Data;
 using Evolution.Genetics;
@@ -117,8 +118,7 @@ namespace Evolution.Environment.Life.Plants
             entity.AddComponent(new TransformComponent());
             var shape = plant.GenerateShape();
             var renderComponent = new RenderComponent(shape, instanceSettings);
-            renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Outline);
-            renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.InstancedRotated);
+            renderComponent.Shaders.Add(new ShaderConfiguration(Shaders.InstancedRotated));
 
             if (dna.MinHeight.HasValue && dna.MaxHeight.HasValue)
             {

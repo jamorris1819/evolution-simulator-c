@@ -7,6 +7,7 @@ using Engine.Render;
 using Engine.Render.Core;
 using Engine.Render.Core.Data;
 using Engine.Render.Core.Data.Primitives;
+using Engine.Render.Core.Shaders;
 using Evolution.Environment.Life.Creatures.Body.Physics;
 using Evolution.Environment.Life.Creatures.Body.Visual;
 using Evolution.Environment.Life.Creatures.Legs;
@@ -98,10 +99,19 @@ namespace Evolution.Environment.Life.Creatures
 
             entity.AddComponent(new TransformComponent(position));
             var rc = new RenderComponent(va);
-            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.StandardShadow);
-            rc.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
-            rc.Outlined = true;
-            rc.OutlineShader = Engine.Render.Core.Shaders.Enums.ShaderType.StandardOutline;
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
+            {
+                StencilWrite = true
+            });
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
+            {
+                StencilRead = true
+            });
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
+            {
+                SortingLayer = -1
+            });
+
             rc.Layer = 1;
             entity.AddComponent(rc);
             entity.AddComponent(new PhysicsComponent(physBod));

@@ -33,6 +33,8 @@ namespace Engine.Render
 
             _registeredEntities = new HashSet<Guid>();
             _renderComponents = new Dictionary<int, Dictionary<int, List<Entity>>>();
+
+            Shaders.Initialise();
         }
 
         public override void OnRender()
@@ -82,14 +84,7 @@ namespace Engine.Render
             if (!IsVAOReady(renderComponent)) return;
 
             // Ensure there are no critical issues.
-            if (renderComponent.Shaders.Count == 0) throw new RenderException("An entity must have at least 1 shader in order to be rendered");
-            if (renderComponent.Outlined && renderComponent.OutlineShader == Core.Shaders.Enums.ShaderType.None) throw new RenderException("An entity must have an outline shader assigned in order to render an outline.");
-
-            if(renderComponent.Layer == 1)
-            {
-                var a = "";
-
-            }
+            if (renderComponent.Shaders.Count == 0) return; // throw new RenderException("An entity must have at least 1 shader in order to be rendered");
 
             // Calculate the matrix to render at.
             var entityPosition = GetWorldPosition(entity);
@@ -103,42 +98,37 @@ namespace Engine.Render
             }
         }
 
-        private void RenderEntityWithShader(RenderComponent renderComponent, Matrix4 matrix, ShaderConfiguration shader)
+        private void RenderEntityWithShader(RenderComponent renderComponent, Matrix4 matrix, ShaderConfiguration shaderConfig)
         {
             // Load shaders.
-            Shader desiredShader = PrimeShader(shader.MainShader, matrix, renderComponent.Alpha);
-
-            bool outline = renderComponent.Outlined && desiredShader.Outline;
-            Shader outlineShader = outline ? PrimeShader(_shaderManager.GetShader(renderComponent.OutlineShader), matrix, renderComponent.Alpha) : null;
-
+            Shader desiredShader = PrimeShader(shaderConfig.MainShader, matrix, renderComponent.Alpha);
 
             // Set opengl flags.
-            EnableGLFeaturesPredraw(outline);
+            EnableGLFeaturesPredraw(shaderConfig.StencilWrite || shaderConfig.StencilRead);
 
-            // If outline is required, then set the stencil buffer to writeable.
-            if (outline)
+            if (shaderConfig.StencilWrite)
             {
                 GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
                 GL.StencilMask(0xFF);
-                desiredShader.Bind();
             }
+
+            if (shaderConfig.StencilRead)
+            {
+                GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
+                GL.StencilMask(0x00);
+
+                GL.Disable(EnableCap.DepthTest);
+            }
+
+            desiredShader.Bind();
 
             // Bind and render the shape.
             renderComponent.VertexArrayObject.Bind();
             renderComponent.VertexArrayObject.Render(desiredShader);
 
             // If we wanted an outline, then disable writing to stencil buffer and draw with the outline shader.
-            if (outline)
+            if (shaderConfig.StencilRead)
             {
-                outlineShader.Bind();
-
-                GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
-                GL.StencilMask(0x00);
-
-                GL.Disable(EnableCap.DepthTest);
-
-                renderComponent.VertexArrayObject.Render(outlineShader);
-
                 GL.StencilMask(0xFF);
                 GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
             }
@@ -147,12 +137,12 @@ namespace Engine.Render
         /// <summary>
         /// Enables the required OpenGL flags required for rendering.
         /// </summary>
-        /// <param name="outlined">Whether a stencil buffer should be used</param>
-        private void EnableGLFeaturesPredraw(bool outlined)
+        /// <param name="useStencilBuffer">Whether a stencil buffer should be used</param>
+        private void EnableGLFeaturesPredraw(bool useStencilBuffer)
         {
             GL.Enable(EnableCap.Blend);
 
-            if (outlined)
+            if (useStencilBuffer)
             {
                 GL.Enable(EnableCap.StencilTest);
                 GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
@@ -178,8 +168,8 @@ namespace Engine.Render
         private Shader PrimeShader(Shader shader, Matrix4 model, float alpha)
         {
             shader.Bind();
-            shader.SetUniformMat4(ShaderUniforms.Model, model);
-            shader.SetUniform(ShaderUniforms.Alpha, alpha);
+            shader.SetUniformMat4("uModel", model);
+            shader.SetUniform("alpha", alpha);
 
             return shader;
         }
@@ -245,7 +235,7 @@ namespace Engine.Render
 
             if (!comp.VertexArrayObject.Initialised)
             {
-                comp.VertexArrayObject.Initialise(_shaderManager);
+                comp.VertexArrayObject.Initialise(Shaders.All);
                 comp.VertexArrayObject.Load();
             }
 
@@ -272,7 +262,7 @@ namespace Engine.Render
 
             }
 
-            int[] sortingLayers = renderComponent.Shaders.Select(_shaderManager.GetShader).Select(x => x.SortingLayer).Distinct().ToArray();
+            int[] sortingLayers = renderComponent.Shaders.Select(x => x.SortingLayer).Distinct().ToArray();
 
             // Check that we are currently rendering at this sorting layer
             for (int i = 0; i < sortingLayers.Length; i++)

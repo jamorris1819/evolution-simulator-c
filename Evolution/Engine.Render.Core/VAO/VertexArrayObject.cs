@@ -11,7 +11,6 @@ namespace Engine.Render.Core.VAO
     {
         private int _handle;
         private float _alpha;
-        protected Shader _outline;
 
         public bool Initialised { get; protected set; }
         public bool NeedsUpdate => VBO.Any(x => x.NeedsUpdate);
@@ -37,7 +36,7 @@ namespace Engine.Render.Core.VAO
             };
         }
 
-        public virtual void Initialise(ShaderManager shaderManager)
+        public virtual void Initialise(Shader[] shaders)
         {
             if (Initialised) throw new Exception("The VAO is already initialised");
             AddAttributes();
@@ -51,10 +50,8 @@ namespace Engine.Render.Core.VAO
 
             for (int i = 0; i < VBO.Length; i++)
             {
-                VBO[i].Initialise(shaderManager.All);
+                VBO[i].Initialise(shaders);
             }
-
-            _outline = shaderManager.GetShader(Shaders.Enums.ShaderType.Outline);
         }
 
         public void Load()

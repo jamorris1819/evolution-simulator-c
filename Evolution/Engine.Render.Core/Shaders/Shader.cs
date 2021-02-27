@@ -14,7 +14,7 @@ namespace Engine.Render.Core.Shaders
         private readonly string _fragmentLocation;
         private bool _initialised;
 
-        private Dictionary<ShaderUniforms, int> _uniforms;
+        private readonly Dictionary<string, int> _uniforms;
 
         public int ProgramId { get; protected set; }
 
@@ -28,7 +28,7 @@ namespace Engine.Render.Core.Shaders
         {
             _vertexLocation = vertexLocation;
             _fragmentLocation = fragmentLocation;
-            _uniforms = new Dictionary<ShaderUniforms, int>();
+            _uniforms = new Dictionary<string, int>();
         }
 
         /// <summary>
@@ -49,7 +49,8 @@ namespace Engine.Render.Core.Shaders
             // Create the program
             ProgramId = CreateShaderProgram(vShader, fShader);
 
-            // TODO: set uniforms
+            // Set up uniforms
+            GetUniforms();
 
             _initialised = true;
         }
@@ -59,11 +60,20 @@ namespace Engine.Render.Core.Shaders
             GL.UseProgram(ProgramId);
         }
 
-        public int GetUniform(ShaderUniforms name) => _uniforms.ContainsKey(name) ? _uniforms[name] : -1;
+        public int GetUniform(string name)
+        {
+            if(!_uniforms.TryGetValue(name, out int location))
+            {
+                location = GL.GetUniformLocation(ProgramId, name);
+                _uniforms.Add(name, location);
+            }
 
-        public void AddUniform(ShaderUniforms name, int id) => _uniforms.Add(name, id);
+            return location;
+        }
 
-        public void SetUniformMat4(ShaderUniforms name, Matrix4 mat)
+        public void AddUniform(string name, int id) => _uniforms.Add(name, id);
+
+        public void SetUniformMat4(string name, Matrix4 mat)
         {
             int id = GetUniform(name);
             if (id == -1) return;
@@ -71,12 +81,47 @@ namespace Engine.Render.Core.Shaders
             GL.UniformMatrix4(id, false, ref mat);
         }
 
-        public void SetUniform(ShaderUniforms name, float value)
+        public void SetUniform(string name, float value)
         {
             int id = GetUniform(name);
             if (id == -1) return;
 
             GL.Uniform1(id, value);
+        }
+
+        /// <summary>
+        /// Initialise the uniforms in the shader program.
+        /// </summary>
+        private void InitialiseUniforms()
+        {
+            var uniforms = GetUniforms();
+
+            foreach(var uniform in uniforms)
+            {
+                _uniforms.Add(uniform.Name, uniform.Location);
+            }
+        }
+
+        private UniformFieldInfo[] GetUniforms()
+        {
+            GL.GetProgram(ProgramId, GetProgramParameterName.ActiveUniforms, out int UnifromCount);
+
+            UniformFieldInfo[] Uniforms = new UniformFieldInfo[UnifromCount];
+
+            for (int i = 0; i < UnifromCount; i++)
+            {
+                string Name = GL.GetActiveUniform(ProgramId, i, out int Size, out ActiveUniformType Type);
+
+                UniformFieldInfo FieldInfo;
+                FieldInfo.Location = GetUniform(Name);
+                FieldInfo.Name = Name;
+                FieldInfo.Size = Size;
+                FieldInfo.Type = Type;
+
+                Uniforms[i] = FieldInfo;
+            }
+
+            return Uniforms;
         }
 
         /// <summary>

@@ -46,7 +46,7 @@ namespace Evolution
             game.UIManager.Windows.Add(new TerrainWindow(_environment.TerrainManager, Game.EventBus));
             game.UIManager.Windows.Add(new TestWindow(Game.EventBus));
 
-            cam = new MouseCamera(1920, 1080, EventBus, Game.ShaderManager);
+            cam = new MouseCamera(1920, 1080, EventBus);
 
             EventBus.Publish(new CameraChangeEvent() { Camera = cam });
             Random random = new Random();

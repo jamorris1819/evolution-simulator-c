@@ -21,10 +21,6 @@ namespace Engine.Render
 
         public List<ShaderConfiguration> Shaders { get; set; } = new List<ShaderConfiguration>();
 
-        public bool Outlined { get; set; }
-
-        public ShaderType OutlineShader { get; set; }
-
         public ComponentType Type => ComponentType.COMPONENT_RENDER;
 
         public ZoomProfile? ZoomProfile { get; set; }
