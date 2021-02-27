@@ -1,4 +1,5 @@
-﻿using Engine.Render.Core.Shaders.Enums;
+﻿using Engine.Render.Core.Data;
+using Engine.Render.Core.Shaders.Enums;
 using OpenTK.Graphics.ES30;
 using OpenTK.Mathematics;
 using System.Collections.Generic;
@@ -9,11 +10,13 @@ namespace Engine.Render.Core.Shaders
     {
         private Dictionary<ShaderUniforms, int> _uniforms;
 
-        public int ProgramId { get; private set; }
+        public int ProgramId { get; protected set; }
 
         public bool Outline { get; set; }
 
         public PrimitiveType PrimitiveType { get; set; } = PrimitiveType.Triangles;
+
+        public int SortingLayer { get; set; }
 
         public Shader(int programId)
         {

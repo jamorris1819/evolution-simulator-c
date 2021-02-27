@@ -16,7 +16,8 @@ namespace Engine.Render
     public class RenderSystem : SystemBase, ISystem
     {
         private HashSet<Guid> _registeredEntities;
-        private Dictionary<int, List<Entity>> _renderComponents;
+        private Dictionary<int, Dictionary<int, List<Entity>>> _renderComponents;
+
 
         private IEventBus _eventBus;
         private ShaderManager _shaderManager;
@@ -32,35 +33,46 @@ namespace Engine.Render
             _eventBus.Subscribe<CameraChangeEvent>(x => _camera = x.Camera);
 
             _registeredEntities = new HashSet<Guid>();
-            _renderComponents = new Dictionary<int, List<Entity>>();
+            _renderComponents = new Dictionary<int, Dictionary<int, List<Entity>>>();
         }
 
         public override void OnRender()
         {
-            var layers = _renderComponents.Keys.OrderBy(x => x).ToArray();
+            // Order the sorting layers
+            var sortingLayers = _renderComponents.Keys.OrderBy(x => x).ToArray();
 
-            for(int i = 0; i < layers.Length; i++)
+            for (int i = 0; i < sortingLayers.Length; i++)
             {
-                RenderLayer(layers[i]);
+                RenderSortingLayer(sortingLayers[i]);
+            }
+        }
+
+        public void RenderSortingLayer(int sortingLayer)
+        {
+            var layers = _renderComponents[sortingLayer].Keys.OrderBy(x => x).ToArray();
+
+            for (int i = 0; i < layers.Length; i++)
+            {
+                RenderLayer(sortingLayer, layers[i]);
             }
         }
 
         /// <summary>
         /// Renders all the tracked entities on the given layer.
         /// </summary>
-        private void RenderLayer(int layer)
+        private void RenderLayer(int sortingLayer, int layer)
         {
-            if (!_renderComponents.ContainsKey(layer)) return;
+            if (!_renderComponents[sortingLayer].ContainsKey(layer)) return;
 
-            var toRender = _renderComponents[layer];
+            var toRender = _renderComponents[sortingLayer][layer];
 
             for (int i = 0; i < toRender.Count; i++)
             {
-                RenderEntity(toRender[i]);
+                RenderEntity(toRender[i], sortingLayer);
             }
         }
 
-        private void RenderEntity(Entity entity)
+        private void RenderEntity(Entity entity, int sortingLayer)
         {
             var positionComponent = entity.GetComponent<TransformComponent>();
             var renderComponent = entity.GetComponent<RenderComponent>();
@@ -74,24 +86,31 @@ namespace Engine.Render
             if (renderComponent.Shaders.Count == 0) throw new RenderException("An entity must have at least 1 shader in order to be rendered");
             if (renderComponent.Outlined && renderComponent.OutlineShader == Core.Shaders.Enums.ShaderType.None) throw new RenderException("An entity must have an outline shader assigned in order to render an outline.");
 
+            if(renderComponent.Layer == 1)
+            {
+                var a = "";
+
+            }
+
             // Calculate the matrix to render at.
             var entityPosition = GetWorldPosition(entity);
             var matrix = Matrix4.CreateRotationZ(GetWorldAngle(entity)) * Matrix4.CreateTranslation(new Vector3(entityPosition.X, entityPosition.Y, 0));
 
+            var shadersToUse = renderComponent.Shaders.Select(_shaderManager.GetShader).Where(x => x.SortingLayer == sortingLayer).ToArray();
 
-            for (int i = 0; i < renderComponent.Shaders.Count; i++)
+            for (int i = 0; i < shadersToUse.Length; i++)
             {
-                RenderEntityWithShader(renderComponent, matrix, renderComponent.Shaders[i]);
+                RenderEntityWithShader(renderComponent, matrix, shadersToUse[i]);
             }
         }
 
-        private void RenderEntityWithShader(RenderComponent renderComponent, Matrix4 matrix, Core.Shaders.Enums.ShaderType shader)
+        private void RenderEntityWithShader(RenderComponent renderComponent, Matrix4 matrix, Shader shader)
         {
             // Load shaders.
             Shader desiredShader = PrimeShader(shader, matrix, renderComponent.Alpha);
 
             bool outline = renderComponent.Outlined && desiredShader.Outline;
-            Shader outlineShader = outline ? PrimeShader(renderComponent.OutlineShader, matrix, renderComponent.Alpha) : null;
+            Shader outlineShader = outline ? PrimeShader(_shaderManager.GetShader(renderComponent.OutlineShader), matrix, renderComponent.Alpha) : null;
 
 
             // Set opengl flags.
@@ -157,10 +176,8 @@ namespace Engine.Render
         /// <summary>
         /// Loads the shader and primes it for use by setting uniform values.
         /// </summary>
-        private Shader PrimeShader(Core.Shaders.Enums.ShaderType shaderType, Matrix4 model, float alpha)
+        private Shader PrimeShader(Shader shader, Matrix4 model, float alpha)
         {
-            var shader = _shaderManager.GetShader(shaderType);
-
             shader.Bind();
             shader.SetUniformMat4(ShaderUniforms.Model, model);
             shader.SetUniform(ShaderUniforms.Alpha, alpha);
@@ -171,7 +188,7 @@ namespace Engine.Render
         /// <summary>
         /// Loads the shader and primes it for use by setting uniform values.
         /// </summary>
-        private Shader PrimeShader(Core.Shaders.Enums.ShaderType shaderType, Matrix4 model) => PrimeShader(shaderType, model, 1f);
+        private Shader PrimeShader(Shader shaderType, Matrix4 model) => PrimeShader(shaderType, model, 1f);
 
         /// <summary>
         /// Retrieves the world position of the given entity.
@@ -250,14 +267,31 @@ namespace Engine.Render
             var renderComponent = entity.GetComponent<RenderComponent>();
             int layer = renderComponent.Layer;
 
-            // Check that we are currently rendering at this layer. If not, create the layer
-            if(!_renderComponents.ContainsKey(layer))
+            if (renderComponent.Layer == 1)
             {
-                _renderComponents.Add(layer, new List<Entity>());
+                var a = "";
+
             }
 
-            // Insert the rendercomponent
-            _renderComponents[layer].Add(entity);
+            int[] sortingLayers = renderComponent.Shaders.Select(_shaderManager.GetShader).Select(x => x.SortingLayer).Distinct().ToArray();
+
+            // Check that we are currently rendering at this sorting layer
+            for (int i = 0; i < sortingLayers.Length; i++)
+            {
+                if (!_renderComponents.ContainsKey(sortingLayers[i]))
+                {
+                    _renderComponents.Add(sortingLayers[i], new Dictionary<int, List<Entity>>());
+                }
+
+                // Add layer if doesn't exist.
+                if (!_renderComponents[sortingLayers[i]].ContainsKey(renderComponent.Layer))
+                {
+                    _renderComponents[sortingLayers[i]].Add(renderComponent.Layer, new List<Entity>());
+                }
+
+                // Register the layer
+                _renderComponents[sortingLayers[i]][renderComponent.Layer].Add(entity);
+            }
 
             // Register the entity
             _registeredEntities.Add(entity.Id);

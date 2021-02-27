@@ -1,6 +1,7 @@
 ﻿using Engine.Core;
 using Engine.Render.Core.Data;
 using Engine.Render.Core.Data.Zoom;
+using Engine.Render.Core.Shaders;
 using Engine.Render.Core.Shaders.Enums;
 using Engine.Render.Core.VAO;
 using Engine.Render.Core.VAO.Instanced;
