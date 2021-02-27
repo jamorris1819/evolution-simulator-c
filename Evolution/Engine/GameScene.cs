@@ -26,15 +26,7 @@ namespace Engine
             EntityManager = new EntityManager(EventBus);
             SystemManager = new SystemManager(EntityManager, EventBus);
 
-            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.Standard, "Shaders/vshader.glsl", "Shaders/fshaderoutline.glsl", 1, PrimitiveType.Triangles, true);
-            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.StandardOutline, "Shaders/vshaderoutline.glsl", "Shaders/fshader.glsl");
-            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.StandardShadow, "Shaders/vshadershadow.glsl", "Shaders/fshadershadow.glsl", 0, PrimitiveType.Triangles, false);
-            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.StandardInstanced, "Shaders/vshaderinstanced.glsl", "Shaders/fshader.glsl", 0);
-            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.StandardInstancedLoop, "Shaders/vshaderinstancedloop.glsl", "Shaders/fshader.glsl");
-            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.InstancedRotated, "Shaders/vshaderinstancedrotated.glsl", "Shaders/fshader.glsl");
-            Game.ShaderManager.CreateShader(Render.Core.Shaders.Enums.ShaderType.Outline, "Shaders/vshaderinstancedrotatedoutline.glsl", "Shaders/fshaderinstancedrotatedoutline.glsl");
-
-            var renderSystem = new RenderSystem(EventBus, Game.ShaderManager);
+            var renderSystem = new RenderSystem(EventBus);
             SystemManager.AddSystem(renderSystem);
 
             var physicsSystem = new PhysicsSystem(new OpenTK.Mathematics.Vector2(0, 0), EventBus);

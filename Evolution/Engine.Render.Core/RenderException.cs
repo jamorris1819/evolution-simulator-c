@@ -1,6 +1,6 @@
 ﻿using Engine.Core;
 
-namespace Engine.Render
+namespace Engine.Render.Core
 {
     public class RenderException : EngineException
     {

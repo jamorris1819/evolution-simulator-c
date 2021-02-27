@@ -1,5 +1,6 @@
 ﻿using Engine.Core;
 using Engine.Core.Components;
+using Engine.Render.Core;
 using Engine.Render.Core.Shaders;
 using Engine.Render.Core.Shaders.Enums;
 using Engine.Render.Core.VAO;
@@ -20,13 +21,11 @@ namespace Engine.Render
 
 
         private IEventBus _eventBus;
-        private ShaderManager _shaderManager;
         private Camera _camera;
 
-        public RenderSystem(IEventBus eventBus, ShaderManager shaderManager)
+        public RenderSystem(IEventBus eventBus)
         {
             _eventBus = eventBus;
-            _shaderManager = shaderManager;
 
             Mask = ComponentType.COMPONENT_RENDER | ComponentType.COMPONENT_TRANSFORM;
 
@@ -96,7 +95,7 @@ namespace Engine.Render
             var entityPosition = GetWorldPosition(entity);
             var matrix = Matrix4.CreateRotationZ(GetWorldAngle(entity)) * Matrix4.CreateTranslation(new Vector3(entityPosition.X, entityPosition.Y, 0));
 
-            var shadersToUse = renderComponent.Shaders.Select(_shaderManager.GetShader).Where(x => x.SortingLayer == sortingLayer).ToArray();
+            var shadersToUse = renderComponent.Shaders.Where(x => x.SortingLayer == sortingLayer).ToArray();
 
             for (int i = 0; i < shadersToUse.Length; i++)
             {
@@ -104,10 +103,10 @@ namespace Engine.Render
             }
         }
 
-        private void RenderEntityWithShader(RenderComponent renderComponent, Matrix4 matrix, Shader shader)
+        private void RenderEntityWithShader(RenderComponent renderComponent, Matrix4 matrix, ShaderConfiguration shader)
         {
             // Load shaders.
-            Shader desiredShader = PrimeShader(shader, matrix, renderComponent.Alpha);
+            Shader desiredShader = PrimeShader(shader.MainShader, matrix, renderComponent.Alpha);
 
             bool outline = renderComponent.Outlined && desiredShader.Outline;
             Shader outlineShader = outline ? PrimeShader(_shaderManager.GetShader(renderComponent.OutlineShader), matrix, renderComponent.Alpha) : null;

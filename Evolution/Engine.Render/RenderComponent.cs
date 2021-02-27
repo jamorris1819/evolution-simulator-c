@@ -19,7 +19,7 @@ namespace Engine.Render
 
         public VertexArrayObject VertexArrayObject { get; set; }
 
-        public List<ShaderType> Shaders { get; set; } = new List<ShaderType>();
+        public List<ShaderConfiguration> Shaders { get; set; } = new List<ShaderConfiguration>();
 
         public bool Outlined { get; set; }
 

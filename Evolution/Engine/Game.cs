@@ -15,8 +15,6 @@ namespace Engine
 
         public IEventBus EventBus { get; }
 
-        public ShaderManager ShaderManager { get; }
-
         public UIManager UIManager { get; }
 
         public Game()
@@ -28,7 +26,6 @@ namespace Engine
             nativeWindowSettings.Size = new OpenTK.Mathematics.Vector2i(1920, 1080);
 
             EventBus = new EventBus();
-            ShaderManager = new ShaderManager();
 
             _sceneManager = new SceneManager(gameWindowSettings, nativeWindowSettings, EventBus);
             UIManager = new UIManager(_sceneManager, EventBus);
