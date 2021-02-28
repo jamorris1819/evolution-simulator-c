@@ -5,7 +5,7 @@ using Engine.Render.Core.Shaders;
 using Engine.Render.Core.Shaders.Enums;
 using Engine.Render.Core.VAO;
 using Engine.Render.Events;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
 using System;
@@ -174,7 +174,7 @@ namespace Engine.Render
                 GL.Disable(EnableCap.DepthTest);
             }
 
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.DepthFunc(DepthFunction.Less);
         }
 

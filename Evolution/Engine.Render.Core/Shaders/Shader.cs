@@ -1,6 +1,6 @@
 ﻿using Engine.Render.Core.Data;
 using Engine.Render.Core.Shaders.Enums;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -43,8 +43,8 @@ namespace Engine.Render.Core.Shaders
             string fsData = File.ReadAllText(_fragmentLocation);
 
             // Compile the shaders
-            int vShader = CompileShader(OpenTK.Graphics.ES30.ShaderType.VertexShader, vsData);
-            int fShader = CompileShader(OpenTK.Graphics.ES30.ShaderType.FragmentShader, fsData);
+            int vShader = CompileShader(OpenTK.Graphics.OpenGL4.ShaderType.VertexShader, vsData);
+            int fShader = CompileShader(OpenTK.Graphics.OpenGL4.ShaderType.FragmentShader, fsData);
 
             // Create the program
             ProgramId = CreateShaderProgram(vShader, fShader);
@@ -127,7 +127,7 @@ namespace Engine.Render.Core.Shaders
         /// <summary>
         /// Creates the shader and compile from given data
         /// </summary>
-        private static int CompileShader(OpenTK.Graphics.ES30.ShaderType type, string data)
+        private static int CompileShader(OpenTK.Graphics.OpenGL4.ShaderType type, string data)
         {
             int shader = GL.CreateShader(type);
             GL.ShaderSource(shader, data);

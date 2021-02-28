@@ -1,7 +1,7 @@
 ﻿using Engine.Render;
 using Engine.Render.Core.Shaders;
 using Engine.UI;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Desktop;
 using Redbus;
 using Redbus.Interfaces;
@@ -33,7 +33,7 @@ namespace Engine
             _sceneManager.SetUIManager(UIManager);
 
             GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
         }
 
         public void Run()

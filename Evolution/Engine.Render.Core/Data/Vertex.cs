@@ -10,13 +10,13 @@ namespace Engine.Render.Core.Data
     {
         public static int BytesPerVertex = 8;
 
-        [AttributeName("vPosition", 3, OpenTK.Graphics.ES30.VertexAttribPointerType.Float)]
+        [AttributeName("vPosition", 3, OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Float)]
         public Vector3 Position { get; }
 
-        [AttributeName("vColour", 3, OpenTK.Graphics.ES30.VertexAttribPointerType.Float)]
+        [AttributeName("vColour", 3, OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Float)]
         public Vector3 Colour { get; }
 
-        [AttributeName("vNormal", 2, OpenTK.Graphics.ES30.VertexAttribPointerType.Float)] // todo: could this be vector3 and be used to add outline depth..?
+        [AttributeName("vNormal", 2, OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Float)] // todo: could this be vector3 and be used to add outline depth..?
         public Vector2 Normal { get; }
 
         public Vertex(Vector3 pos) : this(pos, new Vector3(0, 0, 0)) { }

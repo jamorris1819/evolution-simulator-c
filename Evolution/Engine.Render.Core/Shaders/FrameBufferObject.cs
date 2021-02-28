@@ -11,6 +11,8 @@ namespace Engine.Render.Core.Shaders
         private int _textureId = -1;
         private int _rboId = -1;
 
+        public int Id => _bufferId;
+
         public void Initialise()
         {
             CreateFrameBuffer();
@@ -41,8 +43,8 @@ namespace Engine.Render.Core.Shaders
             //GL.TexImage2D(TextureTarget2d.Texture2D, 0, TextureComponentCount.Rgb, 1920, 1080, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero);
             GL.TexImage2DMultisample(TextureTargetMultisample.Texture2DMultisample, 4, PixelInternalFormat.Rgb, 1920, 1080, true);
 
-            GL.TexParameter(TextureTarget.Texture2DMultisample, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2DMultisample, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            //GL.TexParameter(TextureTarget.Texture2DMultisample, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            //GL.TexParameter(TextureTarget.Texture2DMultisample, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
             GL.BindTexture(TextureTarget.Texture2DMultisample, 0);
         }

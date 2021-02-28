@@ -1,6 +1,6 @@
 ﻿using Engine.Render.Core.Data.Primitives;
 using Engine.Render.Core.VAO;
-using OpenTK.Graphics.ES30;
+using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,11 +26,9 @@ namespace Engine.Render.Core.Shaders
         public void Render(FrameBufferObject fbo)
         {
             Shaders.FBORender.Bind();
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            fbo.BindTexture();
-
-            _vao.Bind();
-            _vao.Render(Shaders.FBORender);
-        }
+            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, fbo.Id);
+            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
+            GL.BlitFramebuffer(0, 0, 1920, 1080, 0, 0, 1920, 1080, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+         }
     }
 }
