@@ -24,6 +24,7 @@ namespace Engine
 
 
             nativeWindowSettings.Size = new OpenTK.Mathematics.Vector2i(1920, 1080);
+            nativeWindowSettings.NumberOfSamples = 4;
 
             EventBus = new EventBus();
 

@@ -101,6 +101,7 @@ namespace Engine.Render.Core.VAO
                 var attrib = attributes[i];
 
                 int location = GL.GetAttribLocation(shader.ProgramId, attrib.Name);
+                //if (location == -1) continue;
                 GL.EnableVertexAttribArray(location);
                 GL.VertexAttribPointer(location, attrib.Size, attrib.Type, false, size * sizeof(float), cumulative * sizeof(float));
 

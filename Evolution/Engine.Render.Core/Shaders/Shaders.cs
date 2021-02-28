@@ -14,6 +14,8 @@
         public static StandardShader Instanced = new StandardShader("Shaders/Instanced/vshaderinstanced.glsl", "Shaders/Instanced/fshaderinstanced.glsl");
         public static StandardShader InstancedRotated = new StandardShader("Shaders/Instanced/Rotated/vshaderinstancedrotated.glsl", "Shaders/Instanced/Rotated/fshaderinstancedrotated.glsl");
 
+        public static PostShader FBORender = new PostShader("Shaders/vshaderfbo.glsl", "Shaders/fshaderfbo.glsl");
+
 
         public static Shader[] All => new Shader[]
         {
@@ -22,7 +24,9 @@
             StandardOutline,
 
             Instanced,
-            InstancedRotated
+            InstancedRotated,
+
+            FBORender
         };
 
 

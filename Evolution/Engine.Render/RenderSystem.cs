@@ -18,7 +18,8 @@ namespace Engine.Render
     {
         private HashSet<Guid> _registeredEntities;
         private Dictionary<int, Dictionary<int, List<Entity>>> _renderComponents;
-
+        private FrameBufferObject _mainFBO;
+        private FrameBufferRenderer _fboRenderer;
 
         private IEventBus _eventBus;
         private Camera _camera;
@@ -35,10 +36,22 @@ namespace Engine.Render
             _renderComponents = new Dictionary<int, Dictionary<int, List<Entity>>>();
 
             Shaders.Initialise();
+
+            _mainFBO = new FrameBufferObject();
+            _mainFBO.Initialise();
+            _mainFBO.Bind();
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            _fboRenderer = new FrameBufferRenderer();
+            _fboRenderer.Load();
         }
 
         public override void OnRender()
         {
+            _mainFBO.Bind();
+            _mainFBO.Clear();
+
+            GL.Enable(EnableCap.MultisampleSgis);
+
             // Order the sorting layers
             var sortingLayers = _renderComponents.Keys.OrderBy(x => x).ToArray();
 
@@ -46,6 +59,13 @@ namespace Engine.Render
             {
                 RenderSortingLayer(sortingLayers[i]);
             }
+
+            GL.Disable(EnableCap.DepthTest);
+
+            _fboRenderer.Render(_mainFBO);
+
+
+            //_mainFBO.Bind();
         }
 
         public void RenderSortingLayer(int sortingLayer)
