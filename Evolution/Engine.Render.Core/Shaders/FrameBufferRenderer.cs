@@ -1,4 +1,5 @@
-﻿using Engine.Render.Core.Data.Primitives;
+﻿using Engine.Render.Core.Buffers;
+using Engine.Render.Core.Data.Primitives;
 using Engine.Render.Core.VAO;
 using OpenTK.Graphics.OpenGL4;
 using System;

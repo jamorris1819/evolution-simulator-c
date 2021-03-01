@@ -1,8 +1,11 @@
 ﻿using Engine.Core;
 using Engine.Core.Components;
 using Engine.Render.Core;
+using Engine.Render.Core.Buffers;
+using Engine.Render.Core.Buffers.RenderBuffers;
 using Engine.Render.Core.Shaders;
 using Engine.Render.Core.Shaders.Enums;
+using Engine.Render.Core.Textures;
 using Engine.Render.Core.VAO;
 using Engine.Render.Events;
 using OpenTK.Graphics.OpenGL4;
@@ -18,7 +21,10 @@ namespace Engine.Render
     {
         private HashSet<Guid> _registeredEntities;
         private Dictionary<int, Dictionary<int, List<Entity>>> _renderComponents;
-        private FrameBufferObject _mainFBO;
+
+        private FrameBufferObject _multisampledFBO;
+
+
         private FrameBufferRenderer _fboRenderer;
 
         private IEventBus _eventBus;
@@ -37,18 +43,16 @@ namespace Engine.Render
 
             Shaders.Initialise();
 
-            _mainFBO = new FrameBufferObject();
-            _mainFBO.Initialise();
-            _mainFBO.Bind();
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            _multisampledFBO = new FrameBufferObject(new Texture2DMultisample(), new RenderBufferObjectMultisample());
+            _multisampledFBO.Initialise(1920, 1080);
             _fboRenderer = new FrameBufferRenderer();
             _fboRenderer.Load();
         }
 
         public override void OnRender()
         {
-            _mainFBO.Bind();
-            _mainFBO.Clear();
+            _multisampledFBO.Bind();
+            _multisampledFBO.Clear();
 
             GL.Enable(EnableCap.MultisampleSgis);
 
@@ -62,7 +66,7 @@ namespace Engine.Render
 
             GL.Disable(EnableCap.DepthTest);
 
-            _fboRenderer.Render(_mainFBO);
+            _fboRenderer.Render(_multisampledFBO);
 
 
             //_mainFBO.Bind();
