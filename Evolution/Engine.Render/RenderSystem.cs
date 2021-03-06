@@ -20,11 +20,9 @@ namespace Engine.Render
 {
     public class RenderSystem : SystemBase, ISystem
     {
+        private readonly FrameBufferManager _fboManager;
         private HashSet<Guid> _registeredEntities;
         private Dictionary<int, Dictionary<int, List<Entity>>> _renderComponents;
-
-        private FrameBufferObject _multisampledFBO;
-
 
         private FrameBufferRenderer _fboRenderer;
 
@@ -44,16 +42,14 @@ namespace Engine.Render
 
             Shaders.Initialise();
 
-            _multisampledFBO = new FrameBufferObject(new Texture2DMultisample(), new RenderBufferObjectMultisample());
-            _multisampledFBO.Initialise(1920, 1080);
             _fboRenderer = new FrameBufferRenderer();
             _fboRenderer.Load();
+
+            _fboManager = new FrameBufferManager(_fboRenderer, 1920, 1080);
         }
 
         public override void OnRender()
         {
-            _multisampledFBO.Bind();
-            _multisampledFBO.Clear();
 
             GL.Enable(EnableCap.MultisampleSgis);
 
@@ -66,8 +62,10 @@ namespace Engine.Render
             }
 
             GL.Disable(EnableCap.DepthTest);
+            GL.Disable(EnableCap.StencilTest);
 
-            _fboRenderer.Render(_multisampledFBO);
+            _fboManager.CombineLayers();
+            _fboRenderer.RenderToScreen(_fboManager.CombinedBuffer);
 
 
             //_mainFBO.Bind();
@@ -76,6 +74,9 @@ namespace Engine.Render
         public void RenderSortingLayer(int sortingLayer)
         {
             var layers = _renderComponents[sortingLayer].Keys.OrderBy(x => x).ToArray();
+
+            var fbo = _fboManager.GetFBO(sortingLayer);
+            fbo.Clear();
 
             for (int i = 0; i < layers.Length; i++)
             {
@@ -131,6 +132,8 @@ namespace Engine.Render
             // Set opengl flags.
             EnableGLFeaturesPredraw(shaderConfig.StencilWrite || shaderConfig.StencilRead);
 
+            GL.StencilMask(0x00);
+
             if (shaderConfig.StencilWrite)
             {
                 GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
@@ -179,7 +182,8 @@ namespace Engine.Render
                 GL.Disable(EnableCap.DepthTest);
             }
 
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            
+            GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
             GL.DepthFunc(DepthFunction.Less);
         }
 

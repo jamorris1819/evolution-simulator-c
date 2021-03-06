@@ -34,6 +34,8 @@ namespace Engine.Render.Core.Buffers.RenderBuffers
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, RenderbufferTarget.Renderbuffer, _bufferId);
         }
 
+        public void Bind() => GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _bufferId);
+
         protected virtual void Configure(int width, int height)
         {
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Depth24Stencil8, width, height);

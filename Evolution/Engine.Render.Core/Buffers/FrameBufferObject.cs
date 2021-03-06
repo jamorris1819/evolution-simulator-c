@@ -15,6 +15,10 @@ namespace Engine.Render.Core.Buffers
 
         public bool Initialised { get; private set; }
 
+        public Texture Texture => _texture;
+
+        public RenderBufferObject RenderBuffer => _rbo;
+
         public FrameBufferObject(Texture tex, RenderBufferObject rbo)
         {
             _texture = tex;
@@ -50,7 +54,7 @@ namespace Engine.Render.Core.Buffers
         public void Clear()
         {
             Bind();
-            GL.ClearColor(3 / 255.0f, 94 / 255.0f, 123 / 255.0f, 1);
+            GL.ClearColor(0, 0, 0, 0);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
         }
 

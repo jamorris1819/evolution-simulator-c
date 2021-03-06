@@ -8,7 +8,7 @@ namespace Engine.Render.Core.Buffers.Util
         {
             GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, fbo1.Id);
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, fbo2.Id);
-            GL.BlitFramebuffer(0, 0, 1920, 1080, 0, 0, 1920, 1080, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+            GL.BlitFramebuffer(0, 0, 1920, 1080, 0, 0, 1920, 1080, ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit | ClearBufferMask.DepthBufferBit, BlitFramebufferFilter.Nearest);
         }
     }
 }

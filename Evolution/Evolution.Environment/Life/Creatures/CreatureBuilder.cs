@@ -100,12 +100,10 @@ namespace Evolution.Environment.Life.Creatures
             entity.AddComponent(new TransformComponent(position));
             var rc = new RenderComponent(va);
             rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
-            {
-                StencilWrite = true
+            { SortingLayer = 1
             });
             rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
             {
-                StencilRead = true
             });
             rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
             {

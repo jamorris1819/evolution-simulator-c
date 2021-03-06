@@ -73,11 +73,10 @@ namespace Evolution.Environment.Life.Creatures.Legs
             var rc = new RenderComponent(_model.Segment1);
             rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
             {
-                StencilWrite = true
+                SortingLayer = 1
             });
             rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
             {
-                StencilRead = true
             });
             _entities[0].AddComponent(rc);
 
@@ -87,11 +86,10 @@ namespace Evolution.Environment.Life.Creatures.Legs
             rc = new RenderComponent(_model.Segment2);
             rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
             {
-                StencilWrite = true
+                SortingLayer = 1
             });
             rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
             {
-                StencilRead = true
             });
             _entities[1].AddComponent(rc);
 
@@ -103,11 +101,10 @@ namespace Evolution.Environment.Life.Creatures.Legs
             rc = new RenderComponent(foot);
             rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
             {
-                StencilWrite = true
+                SortingLayer = 1
             });
             rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
             {
-                StencilRead = true
             });
             _entities[2].AddComponent(rc);
 
