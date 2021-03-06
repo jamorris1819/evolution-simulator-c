@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine.Render.Core.Shaders
+namespace Engine.Render.Core.Buffers.Util
 {
     public class FrameBufferRenderer
     {
@@ -20,16 +20,16 @@ namespace Engine.Render.Core.Shaders
 
         public void Load()
         {
-            _vao.Initialise(Shaders.All);
+            _vao.Initialise(Shaders.Shaders.All);
             _vao.Load();
         }
 
         public void Render(FrameBufferObject fbo)
         {
-            Shaders.FBORender.Bind();
+            Shaders.Shaders.FBORender.Bind();
             GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, fbo.Id);
             GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
             GL.BlitFramebuffer(0, 0, 1920, 1080, 0, 0, 1920, 1080, ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
-         }
+        }
     }
 }

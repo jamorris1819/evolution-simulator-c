@@ -167,7 +167,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
                 }
                 else
                 {
-                    _footPosition += deltaAim.Normalized() * deltaTime * (0.25f + bodySpeed) * 4f;
+                    _footPosition += deltaAim.Normalized() * deltaTime * (0.25f + bodySpeed) * 4f;// * (float)Math.Pow(0.8f + _length, 2);
                 }
             }
         }

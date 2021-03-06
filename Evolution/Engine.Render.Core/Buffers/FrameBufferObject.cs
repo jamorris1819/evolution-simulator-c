@@ -50,7 +50,7 @@ namespace Engine.Render.Core.Buffers
         public void Clear()
         {
             Bind();
-            GL.ClearColor(0.3f, 0.5f, 0.1f, 1.0f);
+            GL.ClearColor(3 / 255.0f, 94 / 255.0f, 123 / 255.0f, 1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
         }
 

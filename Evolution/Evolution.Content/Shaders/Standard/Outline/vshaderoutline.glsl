@@ -16,5 +16,5 @@ void main(void)
 	//vec4 N = transpose(inverse(uProjection * uView * uModel)) * vec4(vNormal, 0, 1);
 
 	gl_Position = uProjection * uView * uModel * vec4(vPosition + vNormal * 0.01, 0, 1);
-	oColour = vec3(0, 0, 0);
+	oColour = vColour * vec3(0.25, 0.25, 0.25);
 }

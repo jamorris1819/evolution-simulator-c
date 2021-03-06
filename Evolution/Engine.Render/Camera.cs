@@ -2,6 +2,7 @@
 using Engine.Render.Core.Shaders.Enums;
 using OpenTK.Mathematics;
 using Redbus.Interfaces;
+using System;
 using System.Linq;
 
 namespace Engine.Render
@@ -100,7 +101,7 @@ namespace Engine.Render
             float boundaryHeight = zoomHeight / PixelsPerMetre;
 
 
-            Projection = Matrix4.CreateOrthographic(boundaryWidth, boundaryHeight, -1.0f, 1.0f);
+            Projection =  Matrix4.CreateOrthographic(boundaryWidth, boundaryHeight, -1.0f, 1.0f);
             Viewport = new Vector4(
                 (_width - zoomWidth) / PixelsPerMetre,
                 (_height - zoomHeight) / PixelsPerMetre,
