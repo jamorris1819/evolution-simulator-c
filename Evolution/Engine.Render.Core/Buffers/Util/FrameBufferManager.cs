@@ -58,6 +58,7 @@ namespace Engine.Render.Core.Buffers.Util
                 // Copy the rendered FBO
                 IntermediateBuffer.Clear();
                 FrameBufferCopier.Copy(_fbos[key], IntermediateBuffer);
+                IntermediateBuffer.Alpha = _fbos[key].Alpha;
 
                 // Draw it to the combined buffer
                 _fboRenderer.Render(IntermediateBuffer, CombinedBuffer);

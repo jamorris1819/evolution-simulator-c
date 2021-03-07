@@ -75,8 +75,10 @@ namespace Evolution.Environment.Life.Creatures.Legs
             {
                 SortingLayer = 1
             });
-            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
             {
+                SortingLayer = -1
             });
             _entities[0].AddComponent(rc);
 
@@ -88,8 +90,10 @@ namespace Evolution.Environment.Life.Creatures.Legs
             {
                 SortingLayer = 1
             });
-            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
             {
+                SortingLayer = -1
             });
             _entities[1].AddComponent(rc);
 
@@ -103,8 +107,10 @@ namespace Evolution.Environment.Life.Creatures.Legs
             {
                 SortingLayer = 1
             });
-            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
             {
+                SortingLayer = -1
             });
             _entities[2].AddComponent(rc);
 
@@ -146,7 +152,8 @@ namespace Evolution.Environment.Life.Creatures.Legs
                 {
                     _isDown = false;
 
-                    ((WalkingLimb)Counterpart)?.StepDown();
+                    if(bodySpeed >0f)
+                        ((WalkingLimb)Counterpart)?.StepDown();
                 }
             }
             else

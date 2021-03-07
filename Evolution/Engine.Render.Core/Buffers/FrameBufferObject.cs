@@ -19,6 +19,8 @@ namespace Engine.Render.Core.Buffers
 
         public RenderBufferObject RenderBuffer => _rbo;
 
+        public float Alpha { get; set; } = 1f;
+
         public FrameBufferObject(Texture tex, RenderBufferObject rbo)
         {
             _texture = tex;

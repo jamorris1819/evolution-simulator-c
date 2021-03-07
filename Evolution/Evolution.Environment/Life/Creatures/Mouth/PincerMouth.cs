@@ -4,6 +4,7 @@ using Engine.Core.Managers;
 using Engine.Render;
 using Engine.Render.Core;
 using Engine.Render.Core.Data;
+using Engine.Render.Core.Shaders;
 using Evolution.Environment.Life.Creatures.Mouth.ConstructionModels;
 using Evolution.Genetics;
 using Evolution.Genetics.Creature;
@@ -73,8 +74,18 @@ namespace Evolution.Environment.Life.Creatures.Mouth
         {
             var entity = new Entity("claw");
             entity.AddComponent(new TransformComponent(0, 0));
-            entity.AddComponent(new RenderComponent(va) { Layer = 2 });
-            //entity.GetComponent<RenderComponent>().Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Standard);
+            var rc = new RenderComponent(va) { Layer = 2 };
+            entity.AddComponent(rc);
+
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
+            {
+                SortingLayer = 1
+            });
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
+            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
+            {
+                SortingLayer = -1
+            });
             entity.Parent = MouthEntity;
             _positions.Add(entity.GetComponent<TransformComponent>());
             _entities.Add(entity);

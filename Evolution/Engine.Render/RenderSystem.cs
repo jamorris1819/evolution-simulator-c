@@ -77,6 +77,7 @@ namespace Engine.Render
 
             var fbo = _fboManager.GetFBO(sortingLayer);
             fbo.Clear();
+            if (sortingLayer == -1) fbo.Alpha = 0.4f;
 
             for (int i = 0; i < layers.Length; i++)
             {

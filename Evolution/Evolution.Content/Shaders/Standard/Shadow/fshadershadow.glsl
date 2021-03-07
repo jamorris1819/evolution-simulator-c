@@ -9,5 +9,5 @@ uniform float alpha;
  
 void main(void)
 {
-	color = vec4(oColour, 1 - 0.65 * oHeight);
+	color = vec4(oColour, 1);
 }

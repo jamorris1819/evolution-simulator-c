@@ -29,6 +29,7 @@ namespace Engine.Render.Core.Buffers.Util
             GL.BlendFunc(BlendingFactor.One, BlendingFactor.OneMinusSrcAlpha);
 
             Shaders.Shaders.FBORender.Bind();
+            Shaders.Shaders.FBORender.SetUniform("alpha", fbo.Alpha);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, fboToRenderTo);
             fbo.Texture.Bind();
             fbo.RenderBuffer.Bind();
