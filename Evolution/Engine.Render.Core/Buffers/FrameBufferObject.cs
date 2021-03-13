@@ -1,4 +1,5 @@
 ﻿using Engine.Render.Core.Buffers.RenderBuffers;
+using Engine.Render.Core.Shaders;
 using Engine.Render.Core.Textures;
 using OpenTK.Graphics.OpenGL4;
 
@@ -20,6 +21,8 @@ namespace Engine.Render.Core.Buffers
         public RenderBufferObject RenderBuffer => _rbo;
 
         public float Alpha { get; set; } = 1f;
+
+        public PostShader[] PostShaders { get; set; } = new PostShader[0];
 
         public FrameBufferObject(Texture tex, RenderBufferObject rbo)
         {

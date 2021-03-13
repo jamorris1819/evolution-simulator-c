@@ -1,6 +1,8 @@
 ﻿using Engine.Render.Core.Data.Primitives;
+using Engine.Render.Core.Shaders;
 using Engine.Render.Core.VAO;
 using OpenTK.Graphics.OpenGL4;
+using System.Collections.Generic;
 
 namespace Engine.Render.Core.Buffers.Util
 {
@@ -20,16 +22,19 @@ namespace Engine.Render.Core.Buffers.Util
             _vao.Load();
         }
 
-        public void Render(FrameBufferObject fbo1, FrameBufferObject fbo2) => Render(fbo1, fbo2.Id);
+        public void Render(FrameBufferObject fbo1, FrameBufferObject fbo2) => Render(fbo1, fbo2, Shaders.Shaders.FBORender);
 
-        public void RenderToScreen(FrameBufferObject fbo) => Render(fbo, 0);
+        public void Render(FrameBufferObject fbo1, FrameBufferObject fbo2, PostShader shader) => Render(fbo1, fbo2.Id, shader);
 
-        private void Render(FrameBufferObject fbo, int fboToRenderTo)
+        public void RenderToScreen(FrameBufferObject fbo) => Render(fbo, 0, Shaders.Shaders.FBORender);
+
+        private void Render(FrameBufferObject fbo, int fboToRenderTo, PostShader shader)
         {
             GL.BlendFunc(BlendingFactor.One, BlendingFactor.OneMinusSrcAlpha);
 
-            Shaders.Shaders.FBORender.Bind();
-            Shaders.Shaders.FBORender.SetUniform("alpha", fbo.Alpha);
+            shader.Bind();
+            shader.SetUniform("alpha", fbo.Alpha);
+
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, fboToRenderTo);
             fbo.Texture.Bind();
             fbo.RenderBuffer.Bind();
