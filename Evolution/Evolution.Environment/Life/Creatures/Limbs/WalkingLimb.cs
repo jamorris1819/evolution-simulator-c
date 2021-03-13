@@ -75,7 +75,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
             {
                 SortingLayer = 1
             });
-            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
+            //rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
             rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
             {
                 SortingLayer = -1
@@ -90,7 +90,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
             {
                 SortingLayer = 1
             });
-            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
+            //rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
             rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
             {
                 SortingLayer = -1
@@ -107,7 +107,7 @@ namespace Evolution.Environment.Life.Creatures.Legs
             {
                 SortingLayer = 1
             });
-            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
+            //rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline));
             rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
             {
                 SortingLayer = -1

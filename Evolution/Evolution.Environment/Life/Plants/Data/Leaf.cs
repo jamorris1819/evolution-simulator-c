@@ -39,6 +39,7 @@ namespace Evolution.Environment.Life.Plants.Data
             var allPoints = new List<Vector2>();
             allPoints.AddRange(points);
             allPoints.AddRange(flippedPoints);
+            allPoints.Reverse();
 
             return Polygon.Generate(allPoints.ToList());
         }

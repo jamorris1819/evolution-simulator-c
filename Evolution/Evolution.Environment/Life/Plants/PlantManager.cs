@@ -118,7 +118,8 @@ namespace Evolution.Environment.Life.Plants
             entity.AddComponent(new TransformComponent());
             var shape = plant.GenerateShape();
             var renderComponent = new RenderComponent(shape, instanceSettings);
-            renderComponent.Shaders.Add(new ShaderConfiguration(Shaders.InstancedRotated));
+            renderComponent.Shaders.Add(new ShaderConfiguration(Shaders.InstancedRotated) { SortingLayer = 1 });
+            //renderComponent.Shaders.Add(new ShaderConfiguration(Shaders.InstancedRotatedOutline));
 
             if (dna.MinHeight.HasValue && dna.MaxHeight.HasValue)
             {

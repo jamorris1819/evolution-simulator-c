@@ -90,7 +90,10 @@ namespace Engine.Render.Core
 
             var newPos = new Vector3(pos.X * c - pos.Y * s, pos.X * s + pos.Y * c, v.Position.Z);
 
-            return new Vertex(newPos, v.Colour, v.Normal);
+            var norm = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
+            var newNorm = (v.Normal + norm).Normalized();
+
+            return new Vertex(newPos, v.Colour, newNorm);
         }
     }
 }

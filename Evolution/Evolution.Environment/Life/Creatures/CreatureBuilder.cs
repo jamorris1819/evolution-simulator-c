@@ -102,9 +102,9 @@ namespace Evolution.Environment.Life.Creatures
             rc.Shaders.Add(new ShaderConfiguration(Shaders.Standard)
             { SortingLayer = 1
             });
-            rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
+            /*rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardOutline)
             {
-            });
+            });*/
             rc.Shaders.Add(new ShaderConfiguration(Shaders.StandardShadow)
             {
                 SortingLayer = -1

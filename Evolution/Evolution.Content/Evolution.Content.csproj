@@ -11,6 +11,18 @@
     <None Update="Shaders\Instanced\fshaderinstanced.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Shaders\Instanced\Outline\fshaderinstancedoutline.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Shaders\Instanced\Outline\vshaderinstancedoutline.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Shaders\Instanced\RotatedOutline\fshaderinstancedrotatedoutline.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Shaders\Instanced\RotatedOutline\vshaderinstancedrotatedoutline.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Shaders\Instanced\Rotated\fshaderinstancedrotated.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

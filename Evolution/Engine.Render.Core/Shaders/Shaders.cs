@@ -13,6 +13,8 @@
         // Instanced shaders
         public static StandardShader Instanced = new StandardShader("Shaders/Instanced/vshaderinstanced.glsl", "Shaders/Instanced/fshaderinstanced.glsl");
         public static StandardShader InstancedRotated = new StandardShader("Shaders/Instanced/Rotated/vshaderinstancedrotated.glsl", "Shaders/Instanced/Rotated/fshaderinstancedrotated.glsl");
+        public static StandardShader InstancedOutline = new StandardShader("Shaders/Instanced/Outline/vshaderinstancedoutline.glsl", "Shaders/Instanced/Outline/fshaderinstancedoutline.glsl");
+        public static StandardShader InstancedRotatedOutline = new StandardShader("Shaders/Instanced/RotatedOutline/vshaderinstancedrotatedoutline.glsl", "Shaders/Instanced/RotatedOutline/fshaderinstancedrotatedoutline.glsl");
 
         public static PostShader FBORender = new PostShader("Shaders/vshaderfbo.glsl", "Shaders/fshaderfbo.glsl");
 
@@ -25,6 +27,8 @@
 
             Instanced,
             InstancedRotated,
+            InstancedOutline,
+            InstancedRotatedOutline,
 
             FBORender
         };

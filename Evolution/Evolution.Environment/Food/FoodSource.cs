@@ -2,6 +2,7 @@
 using Engine.Core.Components;
 using Engine.Render;
 using Engine.Render.Core.Data;
+using Engine.Render.Core.Shaders;
 using Engine.Render.Core.VAO.Instanced;
 using OpenTK.Mathematics;
 using System;
@@ -45,6 +46,8 @@ namespace Evolution.Environment.Food
             //renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.Outline);
             //renderComponent.Shaders.Add(Engine.Render.Core.Shaders.Enums.ShaderType.InstancedRotated);
             //renderComponent.MinZoom = 0.15f;
+            //renderComponent.Shaders.Add(new ShaderConfiguration(Shaders.Instanced) { SortingLayer = 2 });
+            //renderComponent.Shaders.Add(new ShaderConfiguration(Shaders.InstancedOutline) { SortingLayer = 1 });
             Entity.AddComponent(renderComponent);
             Entity.AddComponent(new TransformComponent(Position));
         }
