@@ -23,6 +23,12 @@
     <None Update="Shaders\Instanced\RotatedOutline\vshaderinstancedrotatedoutline.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Shaders\Instanced\RotatedShadow\fshaderinstancedrotatedshadow.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Shaders\Instanced\RotatedShadow\vshaderinstancedrotatedshadow.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Shaders\Instanced\Rotated\fshaderinstancedrotated.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

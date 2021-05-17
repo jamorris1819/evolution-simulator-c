@@ -92,7 +92,7 @@ namespace Engine.Render.Core
 
             var norm = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
             var newNorm = (v.Normal + norm).Normalized();
-
+            // TODO: don't think this normal calculation is right
             return new Vertex(newPos, v.Colour, newNorm);
         }
     }

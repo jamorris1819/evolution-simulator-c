@@ -14,7 +14,7 @@ out float oHeight;
  
 void main(void)
 {	
-	float modifier = 0.15f;
+	float modifier = 0.075f;
 	vec2 lightDirection = normalize(vec2(1, 1));
 	vec2 offset = lightDirection * vPosition.z * modifier;
 
